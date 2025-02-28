@@ -88,7 +88,15 @@ const getState = ({ getStore, getActions, setStore }) => {
 			logOut: () => {
 				setStore({ user: null, message: 'Has cerrado sesión' });
 				localStorage.removeItem('token'); // Eliminar el token del almacenamiento
-			},
+			}, 
+			adminDeleteUser: async()=>{  
+				try{ 
+
+				}catch(error){ 
+					console.error(error)
+				}
+
+			}
 		},
 	};
 };
