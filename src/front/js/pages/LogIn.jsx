@@ -13,12 +13,12 @@ const LogIn = () => {
         e.preventDefault();
         await actions.logIn(name, email, password);
         if (store.user) {
-            navigate("/");
+            navigate("/edituser");
     };
-};
+}; 
     
 
-    return (
+    return ( 
         <div className='container'>
             <h1>Iniciar sesion User</h1>
             <form onSubmit={handleSubmit}>
@@ -43,9 +43,9 @@ const LogIn = () => {
                     onChange={(e) => setPassword(e.target.value)}
                     required
                 /> <br />
-                <button className='btn btn-primary mt-3' type="submit">Iniciar Sesión</button>
-                {store.message && <p>{store.message}</p>}
-            </form>
+                <button onClick={handleSubmit} className='btn btn-primary mt-3' type="submit">Iniciar Sesión</button>
+                {store.message && <p>{store.message}</p>} 
+             </form>
         </div>
     );
 };

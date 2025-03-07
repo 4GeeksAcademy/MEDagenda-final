@@ -2,8 +2,7 @@ import React, { useContext } from "react";
 import { Context } from "../store/appContext";
 import { Link, useNavigate } from "react-router-dom";
 import "../../styles/home.css";
-import LogInAdmin from "./LogInAdmin.jsx";
-import AddDoctor from "./AddDoctor.jsx";
+
 
 export const Home = () => {
 	const { store, actions } = useContext(Context);
@@ -24,9 +23,10 @@ export const Home = () => {
 				<button className="btn btn-primary btn-lg">Log In</button>
 			</Link>
 
-		<p> <LogInAdmin /> </p>
 
-		<p> < AddDoctor /> </p>
+		
+
+		
 
 		</div>
 	);

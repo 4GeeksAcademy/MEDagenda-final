@@ -15,7 +15,7 @@ function AddDoctor() {
         await actions.AddDoctor(name, email, specialty, password);
 
         if (store.doctor) {
-            navigate("/");
+            navigate("/logInDoc");
         }
     };
 
@@ -41,15 +41,25 @@ function AddDoctor() {
                         required
                     />
                 </div>
-                <div>
-                    <label>Specialty</label><br />
-                    <input
-                        type="text"
-                        value={specialty}
-                        onChange={(e) => setSpecialty(e.target.value)}
-                        required
-                    />
+                
+
+                <div className="input-group mb-3 mt-3">
+                    <button className="btn btn-outline-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">Especialidad</button>
+                    <ul className="dropdown-menu" aria-labelledby="specialtiesDropdown">
+                        <li className="dropdown-item"> Medicina General</li>
+                        <li className="dropdown-item"> Pediatría</li>
+                        <li className="dropdown-item"> Ginecología y Obstetricia</li>
+                        <li className="dropdown-item"> Cardiología</li>
+                        <li className="dropdown-item"> Dermatología</li>
+                        <li className="dropdown-item"> Ortopedia y Traumatología</li>
+                        <li className="dropdown-item"> Neurología</li>
+                        <li className="dropdown-item"> Oftalmología</li>
+                        <li className="dropdown-item"> Otorrinolaringología</li>
+                        <li className="dropdown-item"> Endocrinología</li>
+                    </ul>
+
                 </div>
+
                 <div>
                     <label>Password:</label><br />
                     <input
