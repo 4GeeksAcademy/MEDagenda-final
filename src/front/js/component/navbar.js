@@ -6,11 +6,12 @@ import { useNavigate } from 'react-router-dom'
 
 export const Navbar = () => {
     const {actions, store } = useContext(Context); // Acceder al estado global de Flux
-    const role = store.user?.role;
+    const user = store.user?.role, doctor = store.doctor?.role, admin = store.admin?.role;
+    const role = user || doctor || admin;
     const navigate = useNavigate();
     const handleLogout = () => {
         actions.logOut();
-        navigate("/logIn"); 
+        navigate("/"); 
     };
     return (
         <nav className="navbar navbar-expand-lg bg-black navbar-dark">

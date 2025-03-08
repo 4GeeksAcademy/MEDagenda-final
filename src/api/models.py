@@ -31,6 +31,7 @@ class Doctor(db.Model):
     email = db.Column(db.String(100), unique=True, nullable=False)
     specialty = db.Column(db.String(100), nullable=False)
     password = db.Column(db.String(100), nullable=False)
+    role=db.Column(db.String(100),nullable=False, default='doctor')
     # Relaciones
     appointments = db.relationship('Appointment', backref='doctor', lazy=True)
     availabilities = db.relationship('Availability', backref='doctor', lazy=True)
@@ -44,6 +45,7 @@ class Doctor(db.Model):
             "name": self.name,
             "email": self.email,
             "specialty": self.specialty,
+            "role":self.role
         }
 
 class Administrator(db.Model):

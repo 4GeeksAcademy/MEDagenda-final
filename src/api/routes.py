@@ -219,12 +219,13 @@ def get_token_doctor():
      if true_o_false: 
          expires=timedelta(days=1) 
          doctor_id=login_doctor.doctor_id 
-         access_token = create_access_token(identity={'id': doctor_id, 'role': 'Doctor'}, expires_delta=expires)  
+         access_token = create_access_token(identity={'id': doctor_id, 'role':login_doctor.role}, expires_delta=expires) 
         
          doctor_data= {
                "name": login_doctor.name,
                "email": login_doctor.email,
                "id": login_doctor.doctor_id,
+               "role": login_doctor.role,
                "access_token": access_token
             } 
            
@@ -324,13 +325,13 @@ def get_token_admin():
             expires = timedelta(days=1)
             admin_id = login_admin.admin_id  # Corregido
             access_token = create_access_token(identity={'id': admin_id, 'role': 'User '}, expires_delta=expires)
-            user_data = {
+            admin_data = {
                 "name": login_admin.name,
                 "email": login_admin.email,
-                "id": login_admin.user_id,
+                "id": login_admin.admin_id,
                 "access_token": access_token  # Corregido
             }
-            return jsonify(user_data), 200  # Corregido
+            return jsonify(admin_data), 200  # Corregido
         else: 
             return jsonify({"error": "Contraseña incorrecta"}), 404
 
@@ -372,7 +373,7 @@ def create_post():
         date_obj = datetime.strptime(date_str, '%Y-%m-%d').date() if date_str else None
 
         new_post = Post(
-            user_id=data.get('user_id'),
+            admin_id=data.get('admin_id'),
             date=date_obj,
             content=data.get('content')
         )

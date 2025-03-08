@@ -38,11 +38,15 @@ const getState = ({ getStore, getActions, setStore }) => {
 					}
 
 					const data = await response.json();
-
 					let store = getStore()
-					setStore({ ...store, admin: { name, email }, token: data.access_token, message: 'Inicio de sesión exitoso' });
+					setStore({
+                        admin: { name, email, role: data.role },
+                        token: data.access_token,
+                        message: "Inicio de sesión exitoso",
+                    });
 
 					localStorage.setItem('token', data.access_token);
+					localStorage.setItem("admin", JSON.stringify({ name, email, role: data.role }));
 					localStorage.setItem('name', data.name);
 					localStorage.setItem('email', data.email);
 				} catch (error) {
@@ -69,9 +73,17 @@ const getState = ({ getStore, getActions, setStore }) => {
 					}
 
 					const data = await response.json();
-					let store = getStore()
-					setStore({ ...store, doctor: { name, email }, token: data.access_token, message: 'Inicio de sesión exitoso' });
-					localStorage.setItem('token', data.access_token);
+					
+                    setStore({ 
+                        user: { name, email, role: data.role },
+                        token: data.access_token,
+                        message: "Inicio de sesión exitoso",
+                    });
+					console.log("usuario creado", data)
+
+                    // Guardar en localStorage
+                    localStorage.setItem("token", data.access_token);
+                    localStorage.setItem("doctor", JSON.stringify({ name, email, role: data.role }));
 					localStorage.setItem('name', data.name);
 					localStorage.setItem('email', data.email);
 					localStorage.setItem('id', data.id);
@@ -100,7 +112,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 			
 					const data = await response.json();
 					let store = getStore()
-                    setStore({
+                    setStore({ ...store,
                         user: { name, email, role: data.role },
                         token: data.access_token,
                         message: "Inicio de sesión exitoso",
@@ -284,9 +296,17 @@ const getState = ({ getStore, getActions, setStore }) => {
 
 					}
 					console.log("El usuario se edito correctamente")
-
-					actions.logIn(name, email, password);
-
+		
+					localStorage.setItem('name', userBody.name);
+					localStorage.setItem('email', userBody.email);
+					setStore({
+						user: {
+							...getStore().user,
+							name: userBody.name,
+							email: userBody.email
+						}
+					});
+					actions.logIn(userBody.name, userBody.email, userBody.password);
 					return true
 
 
@@ -373,30 +393,12 @@ const getState = ({ getStore, getActions, setStore }) => {
 					setStore({ message: error.message });
 				}
 			},
-			// doctorsGet: async () => {
-			// 	const baseURL = process.env.REACT_APP_BASE_URL;
-				
-			// 	try {
-			// 		let response = await fetch(`${baseURL}api/doctors`)
-			// 		if (!response.ok) {//si algo es diferente del .ok entonces tire un nuevo error
-			// 			throw new Error("Error en Doctors!");
-			// 		}
-			// 		let data = await response.json();  //llamamos data y lo traducimos a json
-			// 		let store = getStore() //llamamos la funcion getstore
-			// 		setStore({ ...store, doctor: data })//le decimos que store que tiene  getstore, traiga el array personajes, y sea reamplazado con data. result la propiedad del link
-
-
-
-			// 	} catch (error) {
-			// 		console.error(error);
-			// 	}
-
-			// }
+			
 			doctorsGet: async () => {
 				const baseURL = process.env.REACT_APP_BASE_URL;
 			
 				try {
-					let response = await fetch("https://fuzzy-fortnight-r4ppq7gg65vxhr64-3001.app.github.dev/api/doctors");
+					let response = await fetch(`${baseURL}api/doctors`);
 					
 					if (!response.ok) {
 						// Si la respuesta no es correcta, mostrar el texto de respuesta

@@ -1,4 +1,4 @@
-import React, { useState, useContext } from 'react';
+import React, { useState, useContext, useEffect } from 'react';
 import { Context } from '../store/appContext'; 
 import { Link, useNavigate } from "react-router-dom";
 
@@ -13,9 +13,20 @@ const LogInAdmin = () => {
         e.preventDefault();
         await actions.logInAdmin(name, email, password); 
         if (store.admin) {
-            navigate("/panelAdmin");
+            navigate("/panel/admin");
     };
 };
+ useEffect(() => {
+        if (store.admin && store.admin.role) {
+            if (store.user.role === 'admin') {
+                navigate("/panel/admin");
+            } else if (store.user.role === 'user') {
+                navigate("/");
+            } else {
+                navigate("/logInAdmin");
+            }
+        }
+    }, [store.user, navigate]);
     
 
     return (
