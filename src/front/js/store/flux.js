@@ -79,7 +79,7 @@ const getState = ({ getStore, getActions, setStore }) => {
                         token: data.access_token,
                         message: "Inicio de sesión exitoso",
                     });
-					console.log("usuario creado", data)
+					console.log("usuario creado")
 
                     // Guardar en localStorage
                     localStorage.setItem("token", data.access_token);

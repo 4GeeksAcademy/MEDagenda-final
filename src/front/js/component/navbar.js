@@ -49,7 +49,7 @@ export const Navbar = () => {
                         )}
                         {role === "doctor" && (
                             <li className="nav-item">
-                                <Link to="/doctor/dashboard" className="nav-link">Dashboard Doctor</Link>
+                                <Link to="/editdoc" className="nav-link">Mi perfil</Link>
                             </li>
                         )}
                         {role === "admin" && (
