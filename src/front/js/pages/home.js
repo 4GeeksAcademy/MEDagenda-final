@@ -19,9 +19,7 @@ export const Home = () => {
 						<p className="card-text"><small>Los mejores profesionales a tu disposicion</small></p>
 					</div>
 			</div>
-			<Link to="/login">
-				<button className="btn btn-primary btn-lg">Log In</button>
-			</Link>
+			
 
 
 		

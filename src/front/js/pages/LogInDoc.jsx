@@ -1,6 +1,6 @@
-import React, { useState, useContext } from 'react';
+import React, { useState, useContext, useEffect } from 'react';
 import { Context } from '../store/appContext'; // Asegúrate de importar el contexto de tu store
-import { Link, useNavigate } from "react-router-dom";
+import {  useNavigate } from "react-router-dom";
 
 const LogInDoc = () => {
     const [name, setName] = useState('');
@@ -16,6 +16,17 @@ const LogInDoc = () => {
             navigate("/editdoc");
         };
     };
+     useEffect(() => {
+            if (store.doctor && store.doctor.role) {
+                if (store.doctor.role === 'doctor') {
+                    navigate("/panel/admin");
+                } else if (store.doctor.role === 'doctor') {
+                    navigate("/");
+                } else {
+                    navigate("/logInDoc");
+                }
+            }
+        }, [store.doctor, navigate]);
 
 
     return (

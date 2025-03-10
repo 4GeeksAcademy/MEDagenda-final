@@ -41,7 +41,7 @@ const MedicinaGeneral = () => {
             </ul> */}
               <ul>
             {store.doctor && store.doctor.map((item) => (
-                <li key={item.id}>{item.name} - {item.email}-{item.specialty}</li>
+                <li key={item.id}>{item.name} - {item.email}- {item.specialty}</li>
             ))}
         </ul>
         </div>
