@@ -1,4 +1,4 @@
-import React, { useState, useContext } from 'react';
+import React, { useState, useContext, useEffect } from 'react';
 import { Context } from '../store/appContext';
 import { Link, useNavigate } from "react-router-dom";
 
@@ -10,17 +10,29 @@ function AddDoctor() {
     const { actions, store } = useContext(Context);
     const navigate = useNavigate();
 
+
+    // Verificar si el usuario es admin
+    const isAdmin = store.admin?.role === "admin";
+
+    useEffect(() => {
+        if (!isAdmin) {
+            navigate("/"); // Redirigir a la página de inicio si no es admin
+        }
+    }, [isAdmin, navigate]);
+
     const handleSubmit = async (e) => {
         e.preventDefault();
         await actions.AddDoctor(name, email, specialty, password);
-
         if (store.doctor) {
-            navigate("/logInDoc");
+            navigate("/");
         }
     };
 
+    // Si no es admin, no renderiza nada mientras redirige
+    if (!isAdmin) return null;
+
     return (
-        <div className='container'>
+        <div className='container col-md-6 card card-body mt-3'>
             <h2>Registro de Doctores</h2>
             <form onSubmit={handleSubmit}>
                 <div>
@@ -42,22 +54,25 @@ function AddDoctor() {
                     />
                 </div>
                 
-
-                <div className="input-group mb-3 mt-3">
-                    <button className="btn btn-outline-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">Especialidad</button>
-                    <ul className="dropdown-menu" aria-labelledby="specialtiesDropdown">
-                        <li className="dropdown-item"> Medicina General</li>
-                        <li className="dropdown-item"> Pediatría</li>
-                        <li className="dropdown-item"> Ginecología y Obstetricia</li>
-                        <li className="dropdown-item"> Cardiología</li>
-                        <li className="dropdown-item"> Dermatología</li>
-                        <li className="dropdown-item"> Ortopedia y Traumatología</li>
-                        <li className="dropdown-item"> Neurología</li>
-                        <li className="dropdown-item"> Oftalmología</li>
-                        <li className="dropdown-item"> Otorrinolaringología</li>
-                        <li className="dropdown-item"> Endocrinología</li>
-                    </ul>
-
+                <div>
+                    <label>Especialidad:</label><br />
+                    <select 
+                        value={specialty} 
+                        onChange={(e) => setSpecialty(e.target.value)} 
+                        required
+                    >
+                        <option value="">Selecciona una especialidad</option>
+                        <option value="Medicina General">Medicina General</option>
+                        <option value="Pediatría">Pediatría</option>
+                        <option value="Ginecología y Obstetricia">Ginecología y Obstetricia</option>
+                        <option value="Cardiología">Cardiología</option>
+                        <option value="Dermatología">Dermatología</option>
+                        <option value="Ortopedia y Traumatología">Ortopedia y Traumatología</option>
+                        <option value="Neurología">Neurología</option>
+                        <option value="Oftalmología">Oftalmología</option>
+                        <option value="Otorrinolaringología">Otorrinolaringología</option>
+                        <option value="Endocrinología">Endocrinología</option>
+                    </select>
                 </div>
 
                 <div>

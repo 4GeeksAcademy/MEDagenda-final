@@ -38,7 +38,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 					}
 
 					const data = await response.json();
-					let store = getStore()
+					console.log("DATOS DE RESPUESTA", data)
 					setStore({
                         admin: { name, email, role: data.role },
                         token: data.access_token,
@@ -73,13 +73,13 @@ const getState = ({ getStore, getActions, setStore }) => {
 					}
 
 					const data = await response.json();
-					
+					console.log("DATOS DE RESPUESTA", data)
                     setStore({ 
-                        user: { name, email, role: data.role },
+                        doctor: { name, email, role: data.role },
                         token: data.access_token,
                         message: "Inicio de sesión exitoso",
                     });
-					console.log("usuario creado")
+					console.log("inicio de sesion exitoso")
 
                     // Guardar en localStorage
                     localStorage.setItem("token", data.access_token);
@@ -112,7 +112,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 			
 					const data = await response.json();
 					let store = getStore()
-                    setStore({ ...store,
+                    setStore({
                         user: { name, email, role: data.role },
                         token: data.access_token,
                         message: "Inicio de sesión exitoso",
@@ -143,16 +143,18 @@ const getState = ({ getStore, getActions, setStore }) => {
 			},
 
             loadSession: () => {
-                const storedUser = localStorage.getItem("user");
-                const storedToken = localStorage.getItem("token");
-
-                if (storedUser && storedToken) {
-                    setStore({
-                        user: JSON.parse(storedUser),
-                        token: storedToken,
-                    });
-                }
-            },
+				const storeAdmin = localStorage.getItem("admin");
+				const storeDoctor = localStorage.getItem("doctor");
+				const storedUser = localStorage.getItem("user");
+				const storedToken = localStorage.getItem("token");
+			
+				setStore({
+					admin: storeAdmin ? JSON.parse(storeAdmin) : null,
+					doctor: storeDoctor ? JSON.parse(storeDoctor) : null,
+					user: storedUser ? JSON.parse(storedUser) : null,
+					token: storedToken || null,
+				});
+			},
 
 			// revisar el password
 			// Registro de pacientes
