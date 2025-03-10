@@ -2,24 +2,26 @@ import React, { useContext, useEffect } from "react";
 import DoctorCard from "../component/DoctorCard.jsx";
 import { Context } from '../store/appContext'
 const doctores = [
-    { id: 1, name: "Doctor Juan Pérez", especialidad: "Medicina General" },
-    { id: 2, name: "Doctora Ana Gómez", especialidad: "Medicina General" },
+    { id: 1, name: "Doctor Diego Vazquez", especialidad: "Pediatra" },
+    { id: 2, name: "Doctora Yarely Martinez", especialidad: "Pediatra" },
 ];
 
-const MedicinaGeneral = () => {
+const MedicinaGeneral = () => { 
     const { store, actions } = useContext(Context);
-    
 
-    const doctor = async () => {
-        try {
-          await actions.doctorsGet() 
-        } catch (error) {
-          console.error(error);
-        }
-      }
-    useEffect(()=>{doctor()
-        
-    },[])
+
+
+
+        const doctor = async () => {
+            try {
+              await actions.doctorsGet() 
+            } catch (error) {
+              console.error(error);
+            }
+          }
+        useEffect(()=>{doctor()
+            
+        },[])
     return (
         <div>
             <h2>Medicina General</h2>
@@ -27,23 +29,20 @@ const MedicinaGeneral = () => {
                 {doctores.map((doctor) => (
                     <DoctorCard key={doctor.id} doctor={doctor} />
                 ))}
-            </ul>
-            {/* <ul>
-                {
-                    store.doctor.map((item, index)=>{
-                        return(<div key={index}>
-                        <p>{item.name}</p>
-                        <p>{item.email}</p>
-                        <p>{item.specialty}</p>
-                        </div>)
-                    })
-                }
-            </ul> */}
-              <ul>
-            {store.doctor && store.doctor.map((item) => (
-                <li key={item.id}>{item.name} - {item.email}-{item.specialty}</li>
+            </ul> 
+            <div> 
+            <ul>
+            {Array.isArray (store.doctor) && store.doctor.filter((item) => item.specialty === "MedicinaGeneral").map((item) => (
+                <li style={{
+                    listStyleType: "none", 
+                    padding: "50px", 
+                    border: "1px solid #ddd", 
+                    borderRadius: "5px", 
+                    marginBottom: "10px",
+                }} key={item.id}><h3> {item.name} </h3> {item.email}  {item.specialty}</li>
             ))}
-        </ul>
+        </ul> 
+            </div>
         </div>
     );
 };
