@@ -1,7 +1,21 @@
-import React from "react";
+import React, { useContext, useEffect } from "react";
 import { Link } from "react-router-dom";
+import { Context } from "../store/appContext";
+import { useNavigate } from "react-router-dom";
 
 export const Navbar = () => {
+    const { actions, store } = useContext(Context);
+    const user = store.user?.role, doctor = store.doctor?.role, admin = store.admin?.role;
+    const role = admin || doctor || user;
+
+    const navigate = useNavigate();
+
+    const handleLogout = () => {
+        actions.logOut();
+        navigate("/");
+    };
+   
+
     return (
         <nav className="navbar navbar-expand-lg bg-black navbar-dark">
             <div className="container-fluid">
@@ -19,42 +33,85 @@ export const Navbar = () => {
                 </button>
                 <div className="collapse navbar-collapse" id="navbarNav">
                     <ul className="navbar-nav">
-                        <li className="nav-item">
-                            <Link to="/login" className="nav-link active" aria-current="page">LogIn</Link>
-                        </li>
-                        <li className="nav-item">
-                            <Link to="/loginDoc" className="nav-link">DOCTOR</Link>
-                        </li>
-                        <li className="nav-item">
-                            <Link to="/panel" className="nav-link">ADMIN</Link>
-                        </li>
-                        <li className="nav-item">
-                            <Link to="/registroPacientes" className="nav-link">Registrate</Link>
-                        </li>
-                        <li className="nav-item dropdown">
-                            <a
-                                className="nav-link dropdown-toggle"
-                                href="#"
-                                id="specialtiesDropdown"
-                                role="button"
-                                data-bs-toggle="dropdown"
-                                aria-expanded="false"
-                            >
-                                Especialidades
-                            </a>
-                            <ul className="dropdown-menu" aria-labelledby="specialtiesDropdown">
-                                <li><Link className="dropdown-item" to="/medicina-general">Medicina General</Link></li>
-                                <li><Link className="dropdown-item" to="/pediatria">Pediatría</Link></li>
-                                <li><Link className="dropdown-item" to="/ginecologia">Ginecología y Obstetricia</Link></li>
-                                <li><Link className="dropdown-item" to="/cardiologia">Cardiología</Link></li>
-                                <li><Link className="dropdown-item" to="/dermatologia">Dermatología</Link></li>
-                                <li><Link className="dropdown-item" to="/ortopedia">Ortopedia y Traumatología</Link></li>
-                                <li><Link className="dropdown-item" to="/neurologia">Neurología</Link></li>
-                                <li><Link className="dropdown-item" to="/oftalmologia">Oftalmología</Link></li>
-                                <li><Link className="dropdown-item" to="/otorrinolaringologia">Otorrinolaringología</Link></li>
-                                <li><Link className="dropdown-item" to="/endocrinologia">Endocrinología</Link></li>
-                            </ul>
-                        </li>
+                        
+                        {/* Mostrar opciones de inicio de sesión si no hay usuario autenticado */}
+                        {!role && (
+                            <>
+                                <li className="nav-item">
+                                    <Link to="/logInDoc" className="nav-link">LogIn Doctor</Link>
+                                </li>
+                                <li className="nav-item">
+                                    <Link to="/logInAdmin" className="nav-link">LogIn Admin</Link>
+                                </li>
+                                <li className="nav-item">
+                                    <Link to="/login" className="nav-link">LogIn</Link>
+                                </li>
+                                <li className="nav-item">
+                                    <Link to="/registroPacientes" className="nav-link">Registrate</Link>
+                                </li>
+                            </>
+                        )}
+
+                        {/* Opciones específicas para cada rol */}
+                        {role === "doctor" && (
+                            <li className="nav-item">
+                                <Link to="/editdoc" className="nav-link">Mi Perfil</Link>
+                            </li>
+                        )}
+
+                        {role === "admin" && (
+                            <li className="nav-item">
+                                <Link to="/panel/admin" className="nav-link">Panel Admin</Link>
+                            </li>
+                        )}
+
+                        {role === "user" && (
+                            <>
+                                <li className="nav-item">
+                                    <Link to="/edituser" className="nav-link">Mi Perfil</Link>
+                                </li>
+                                <li className="nav-item">
+                                    <Link to="/calendar" className="nav-link">Agenda</Link>
+                                </li>
+                                <li className="nav-item dropdown">
+                                    <a
+                                        className="nav-link dropdown-toggle"
+                                        href="#"
+                                        id="specialtiesDropdown"
+                                        role="button"
+                                        data-bs-toggle="dropdown"
+                                        aria-expanded="false"
+                                    >
+                                        Especialidades
+                                    </a>
+                                    <ul className="dropdown-menu" aria-labelledby="specialtiesDropdown">
+                                        {[
+                                            { name: "Medicina General", path: "/medicina-general" },
+                                            { name: "Pediatría", path: "/pediatria" },
+                                            { name: "Ginecología y Obstetricia", path: "/ginecologia" },
+                                            { name: "Cardiología", path: "/cardiologia" },
+                                            { name: "Dermatología", path: "/dermatologia" },
+                                            { name: "Ortopedia y Traumatología", path: "/ortopedia" },
+                                            { name: "Neurología", path: "/neurologia" },
+                                            { name: "Oftalmología", path: "/oftalmologia" },
+                                            { name: "Otorrinolaringología", path: "/otorrinolaringologia" },
+                                            { name: "Endocrinología", path: "/endocrinologia" }
+                                        ].map((item, index) => (
+                                            <li key={index}>
+                                                <Link className="dropdown-item" to={item.path}>{item.name}</Link>
+                                            </li>
+                                        ))}
+                                    </ul>
+                                </li>
+                            </>
+                        )}
+
+                        {/* Botón de cerrar sesión (visible solo si hay usuario autenticado) */}
+                        {role && (
+                            <li className="nav-item">
+                                <button className="nav-link btn btn-link" onClick={handleLogout}>Cerrar Sesión</button>
+                            </li>
+                        )}
                     </ul>
                 </div>
             </div>

@@ -29,6 +29,7 @@ const MedicinaGeneral = () => {
                 {doctores.map((doctor) => (
                     <DoctorCard key={doctor.id} doctor={doctor} />
                 ))}
+
             </ul> 
             <div> 
             <ul>
@@ -40,6 +41,12 @@ const MedicinaGeneral = () => {
                     borderRadius: "5px", 
                     marginBottom: "10px",
                 }} key={item.id}><h3> {item.name} </h3> {item.email}  {item.specialty}</li>
+             </ul>
+           
+              <ul>
+            {store.doctor && store.doctor.map((item) => (
+                <li key={item.id}>{item.name} - {item.email}- {item.specialty}</li>
+
             ))}
         </ul> 
             </div>

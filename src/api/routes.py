@@ -100,19 +100,21 @@ def get_token_usuario():
 
         if not login_user: 
             return jsonify({'error': 'Invalid email.'}), 404   
-        print("llegue hasta aca")
+        
         password_from_db = login_user.password 
-        print(f'el valor de password fron db es: {password_from_db}')
+
         true_o_false = bcrypt.check_password_hash(password_from_db, password)  
-        print(f'este es bcrypt {true_o_false}')
+
         if true_o_false: 
             expires = timedelta(days=1) 
             user_id = login_user.user_id 
-            access_token = create_access_token(identity={'id': user_id, 'role': 'User '}, expires_delta=expires)
+            access_token = create_access_token(identity={'id': user_id, 'role':login_user.role}, expires_delta=expires)
+
             user_data= {
                "name": login_user.name,
                "email": login_user.email,
                "id": login_user.user_id,
+               "role": login_user.role,
                "access_token": access_token
             } 
             return jsonify(user_data), 200  
@@ -217,8 +219,17 @@ def get_token_doctor():
      if true_o_false: 
          expires=timedelta(days=1) 
          doctor_id=login_doctor.doctor_id 
-         access_token = create_access_token(identity={'id': doctor_id, 'role': 'Doctor'}, expires_delta=expires) 
-         return jsonify({'access_token': access_token, 'role': 'Doctor'}), 200
+         access_token = create_access_token(identity={'id': doctor_id, 'role':login_doctor.role}, expires_delta=expires) 
+        
+         doctor_data= {
+               "name": login_doctor.name,
+               "email": login_doctor.email,
+               "id": login_doctor.doctor_id,
+               "role": login_doctor.role,
+               "access_token": access_token
+            } 
+           
+         return jsonify(doctor_data), 200
      else: 
          return{"Error":"Contraseña incorrecta"},404
 
@@ -292,35 +303,40 @@ def create_admin():
     
 
     #Generador de Token ADMIN
-@api.route('/logIn/admin',methods=['POST']) 
+@api.route('/logIn/admin', methods=['POST']) 
 def get_token_admin(): 
     try: 
-     
-     email=request.json.get('email') 
-     password=request.json.get('password')
-     
-     if not email or not password: 
-         return jsonify({'error':'Email and password are required'}),400 
+        name = request.json.get('name')
+        email = request.json.get('email') 
+        password = request.json.get('password')
+        
+        if not email or not password or not name: 
+            return jsonify({'error': 'Email, password, and name are required'}), 400 
 
-     login_admin=Administrator.query.filter_by(email=request.json['email']).first()
+        login_admin = Administrator.query.filter_by(email=email).first()
 
-     if not login_admin: 
-         return jsonify({'error':'Invalid email.'}),404   
-     password_from_db=login_admin.password 
-     true_o_false=bcrypt.check_password_hash(password_from_db, password)  
+        if not login_admin: 
+            return jsonify({'error': 'Invalid email.'}), 404   
 
-     if true_o_false: 
-         expires=timedelta(days=1) 
+        password_from_db = login_admin.password 
+        true_o_false = bcrypt.check_password_hash(password_from_db, password)  
 
-         admin_id=login_admin.admin_id 
-         access_token = create_access_token(identity={'id': admin_id, 'role': 'Admin'}, expires_delta=expires) 
-         return jsonify({'access_token': access_token, 'role': 'Admin'}), 200 
-     else: 
-         return{"Error":"Contraseña incorrecta"},404
+        if true_o_false: 
+            expires = timedelta(days=1)
+            admin_id = login_admin.admin_id  # Corregido
+            access_token = create_access_token(identity={'id': admin_id, 'role': 'User '}, expires_delta=expires)
+            admin_data = {
+                "name": login_admin.name,
+                "email": login_admin.email,
+                "id": login_admin.admin_id,
+                "access_token": access_token  # Corregido
+            }
+            return jsonify(admin_data), 200  # Corregido
+        else: 
+            return jsonify({"error": "Contraseña incorrecta"}), 404
 
     except Exception as e: 
-        return ({'Error':'El email proporcionado no corresponde a ninguno registrado:'+ str(e)}),500  
-   
+        return jsonify({'error': 'Ocurrió un error en el servidor: ' + str(e)}), 500    
 #     #Ruta restringida por Token Admin
 @api.route('/administrators2') 
 @jwt_required() 
@@ -357,7 +373,7 @@ def create_post():
         date_obj = datetime.strptime(date_str, '%Y-%m-%d').date() if date_str else None
 
         new_post = Post(
-            user_id=data.get('user_id'),
+            admin_id=data.get('admin_id'),
             date=date_obj,
             content=data.get('content')
         )
@@ -370,12 +386,17 @@ def create_post():
 
 # Endpoints para el modelo Appointment
 @api.route('/appointments', methods=['GET'])
+@jwt_required()
 def get_appointments():
-    try:
-        appointments = Appointment.query.all()
-        return jsonify([appointment.serialize() for appointment in appointments]), 200
-    except Exception as e:
-        return jsonify({"error": str(e)}), 500
+    current_user = get_jwt_identity()
+    
+    if current_user['role'] == 'Doctor':
+        appointments = Appointment.query.filter_by(doctor_id=current_user['id']).all()
+    else:
+        appointments = Appointment.query.filter_by(user_id=current_user['id']).all()
+    
+    return jsonify([appointment.serialize() for appointment in appointments]), 200
+
 
 @api.route('/appointments', methods=['POST'])
 def create_appointment():
@@ -409,6 +430,34 @@ def get_availabilities():
         return jsonify([availability.serialize() for availability in availabilities]), 200
     except Exception as e:
         return jsonify({"error": str(e)}), 500
+##############eliminar cita################
+@api.route('/appointments/<int:appointment_id>', methods=['DELETE'])
+@jwt_required()
+def delete_appointment(appointment_id):
+    current_user = get_jwt_identity()
+    appointment = Appointment.query.get(appointment_id)
+    if not appointment or appointment.user_id != current_user['id']:
+        return jsonify({"error": "Cita no encontrada o acceso no autorizado"}), 404
+    db.session.delete(appointment)
+    db.session.commit()
+    return jsonify({"message": "Cita eliminada correctamente"}), 200
+##########editar cita############
+@api.route('/appointments/<int:appointment_id>', methods=['PUT'])
+@jwt_required()
+def update_appointment(appointment_id):
+    current_user = get_jwt_identity()
+    appointment = Appointment.query.get(appointment_id)
+    if not appointment or appointment.user_id != current_user['id']:
+        return jsonify({"error": "Cita no encontrada o acceso no autorizado"}), 404
+    data = request.get_json()
+    # Actualiza los campos necesarios, por ejemplo:
+    if data.get("date"):
+        appointment.date = datetime.strptime(data.get("date"), '%Y-%m-%d').date()
+    if data.get("time"):
+        appointment.time = datetime.strptime(data.get("time"), '%H:%M:%S').time()
+    db.session.commit()
+    return jsonify({"message": "Cita actualizada correctamente"}), 200
+
 
 @api.route('/availabilities', methods=['POST'])
 def create_availability():
@@ -437,14 +486,15 @@ def create_availability():
      
 #Delete User 
 
-@api.route('/delete_user/<int:user_id>', methods=['DELETE']) 
-def delete_user(user_id):
+@api.route('/delete_user/<int:user_id>', methods=['DELETE'])  
+def delete_user(user_id): 
     user=User.query.get(user_id) 
-    if user:  
-        db.session.delete(user)
-        db.session.commit() 
-        return jsonify('Usuario Borrado'),200 
-    return jsonify('no se encontro Usuario'),404 
+    if not user: 
+        return jsonify({"error":"Usuario no encontrado"}),404 
+      
+    db.session.delete(user)
+    db.session.commit() 
+    return jsonify({"message":'Usuario Borrado Correctamente', "user_id":user_id}),200 
 
 #Delete Doctor 
 
@@ -456,7 +506,7 @@ def delete_doctor(doctor_id):
         db.session.delete(doctor)
         db.session.commit() 
         return jsonify('Doctor Borrado'),200 
-    return jsonify('no se encontro Doctor'),404 
+    return jsonify({"message":'Usuario Borrado Correctamente', "doctor_id":doctor_id}),404 
 
 
 #Delete Admin for Admin 

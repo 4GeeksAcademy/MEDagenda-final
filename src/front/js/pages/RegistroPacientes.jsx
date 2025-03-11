@@ -1,6 +1,6 @@
 import React, { useState, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Context } from '../store/appContext'; // Asegúrate de importar el contexto de tu store
+import { Context } from '../store/appContext';
 
 function RegistroPacientes() {
   const [name, setName] = useState('');
@@ -27,7 +27,7 @@ function RegistroPacientes() {
       <h2>Registro de Pacientes</h2>
       <form onSubmit={handleSubmit}>
         <div>
-          <label>Nombre:</label>
+          <label>Nombre:</label><br />
           <input
             type="text"
             value={name}
@@ -36,7 +36,7 @@ function RegistroPacientes() {
           />
         </div> 
         <div>
-          <label>Email:</label>
+          <label>Email:</label><br />
           <input
             type="email"
             value={email}
@@ -45,7 +45,7 @@ function RegistroPacientes() {
           />
         </div>
         <div>
-          <label>Password:</label>
+          <label>Password:</label><br />
           <input
             type="password"
             value={password}
@@ -53,7 +53,7 @@ function RegistroPacientes() {
             required
           />
         </div>
-        <button type="submit">Registrar</button>  
+        <button className='btn btn-primary btn-lg mt-4 ms-4' type="submit">Registrar</button>  
 
       </form>
     </div>

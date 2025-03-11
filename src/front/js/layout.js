@@ -1,4 +1,5 @@
-import React from "react";
+import React, {useEffect, useContext} from "react";
+import { Context } from "./store/appContext";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import ScrollToTop from "./component/scrollToTop";
 import { BackendURL } from "./component/backendURL";
@@ -14,8 +15,9 @@ import LogInDoc from "./pages/LogInDoc.jsx";
 import AddDoctor from "./pages/AddDoctor.jsx";
 import RegistroPacientes from "./pages/RegistroPacientes.jsx"
 import EditUser from "./pages/EditUser.jsx";
-import PanelAdmin from "./pages/PanelAdmin.jsx";
-
+import PanelAdmin from "./pages/PanelAdmin.jsx"; 
+import EditDoctor from "./pages/EditDoctor.jsx";
+import Calendar from "./pages/Calendar.jsx";
 
 // vistas de especialidades
 import MedicinaGeneral from "./pages/MedicinaGeneral.jsx";
@@ -32,8 +34,13 @@ import Endocrinologia from "./pages/Endocrinologia.jsx";
 
 
 
+
 const Layout = () => {
     const basename = process.env.BASENAME || "";
+    const { actions } = useContext(Context);
+    useEffect(() => {
+        actions.loadSession();  // Cargar sesión desde localStorage
+    }, []);
 
     if(!process.env.BACKEND_URL || process.env.BACKEND_URL === "") return <BackendURL />;
 
@@ -44,15 +51,17 @@ const Layout = () => {
                     <Navbar />
                     <Routes>
                         <Route element={<Home />} path="/" />
-                        <Route element={<PanelAdmin />} path="/panel" />
+                        <Route element={<PanelAdmin />} path="/panel/admin" />
                         <Route element={<LogIn />} path="/login" />
                         <Route element={<AddDoctor />} path="/addDoctor" />
                         <Route element={<LogInDoc />} path="/logInDoc" />
                         <Route element={<LogInAdmin />} path="/logInAdmin" />
                         <Route element={<RegistroPacientes />} path = "/registroPacientes"/> 
-                        <Route element={<EditUser/>} path="/edituser"/>
+                        <Route element={<EditUser/>} path="/edituser"/>  
+                        <Route element={<EditDoctor/>} path="/editdoc"/> 
+                        <Route element={<Calendar/>} path="/calendar"/>
 
-                        
+                    
 
 
                         {/* Rutas para las especialidades médicas */}
