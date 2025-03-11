@@ -1,6 +1,6 @@
 import React, { useState, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Context } from '../store/appContext'; // Asegúrate de importar el contexto de tu store
+import { Context } from '../store/appContext';
 
 function RegistroPacientes() {
   const [name, setName] = useState('');

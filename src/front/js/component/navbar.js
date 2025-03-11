@@ -77,6 +77,9 @@ export const Navbar = () => {
                                 <li className="nav-item">
                                     <Link to="/edituser" className="nav-link">Mi Perfil</Link>
                                 </li>
+                                <li className="nav-item">
+                                    <Link to="/calendar" className="nav-link">Agenda</Link>
+                                </li>
                                 <li className="nav-item dropdown">
                                     <a
                                         className="nav-link dropdown-toggle"
