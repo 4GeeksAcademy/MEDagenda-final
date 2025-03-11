@@ -93,7 +93,7 @@ let email= localStorage.getItem('email')
 
 
             <button className='btn-danger btn-lg my-2' onClick={deleteUs} type="submit">Delete User</button> 
-            <button className='btn btn-warning'  type="submit">Log Out</button>     
+              
             </div>
           </>) : (
           <p>no funciono.......</p>

@@ -476,7 +476,29 @@ const getState = ({ getStore, getActions, setStore }) => {
 				} catch (error) {
 					console.error("Error obteniendo doctores:", error);
 				}
+			}, 
+			pacientesGet: async () => {
+				const baseURL = process.env.REACT_APP_BASE_URL;
+			
+				try {
+					let response = await fetch(`${baseURL}api/user`);
+					
+					if (!response.ok) {
+						// Si la respuesta no es correcta, mostrar el texto de respuesta
+						let errorText = await response.text();
+						throw new Error(`Error en Users: ${errorText}`);
+					}
+			
+					let data = await response.json();  // Convertimos la respuesta a JSON
+					let store = getStore(); // Obtenemos el estado actual del store
+			
+					setStore({ ...store, user: data }); // Guardamos la lista de doctores en el store
+			
+				} catch (error) {
+					console.error("Error obteniendo doctores:", error);
+				}
 			},
+
 
 			//funcion para eliminar citas 
 

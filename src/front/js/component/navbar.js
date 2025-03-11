@@ -11,6 +11,7 @@ export const Navbar = () => {
     const navigate = useNavigate();
 
     const handleLogout = () => {
+       
         actions.logOut();
         navigate("/");
     };
@@ -55,8 +56,14 @@ export const Navbar = () => {
                         {/* Opciones específicas para cada rol */}
                         {role === "doctor" && (
                             <li className="nav-item">
-                                <Link to="/editdoc" className="nav-link">Mi Perfil</Link>
-                            </li>
+                                <Link to="/editdoc" className="nav-link">Mi Perfil</Link> 
+                               <li> 
+
+                               <Link to="/pacientes" className="nav-link">Mis Pacientes</Link>
+
+                               </li>
+                            </li>  
+                           
                         )}
 
                         {role === "admin" && (
