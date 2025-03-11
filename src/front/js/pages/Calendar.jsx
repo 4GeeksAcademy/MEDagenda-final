@@ -1,62 +1,67 @@
 import React, { useContext, useEffect } from "react";
 import FullCalendar from "@fullcalendar/react";
 import dayGridPlugin from "@fullcalendar/daygrid";
-import interactionPlugin from "@fullcalendar/interaction"; // Para interacción (clics, arrastrar, etc.)
-import { Context } from "../store/appContext"; // Ajusta la ruta según tu estructura
+import interactionPlugin from "@fullcalendar/interaction";
+import { Context } from "../store/appContext";
 
 const Calendar = () => {
   const { store, actions } = useContext(Context);
 
-  // Al montar el componente, carga las citas del usuario autenticado
   useEffect(() => {
-    actions.fetchAppointments();
-  }, []);
+    if (store.token) {
+        actions.fetchAppointments();
+    }
+}, [store.token]); // Ejecutar solo cuando el token cambie
 
   // Función para agregar cita al hacer click en una fecha del calendario
-  const handleDateClick = (arg) => {
+  const handleDateClick = async (arg) => {
     const title = prompt("Ingresa el título de la cita:");
     if (title) {
-      const newEvent = {
-        id: new Date().getTime().toString(), // Id temporal; en producción lo asigna el backend
-        title: title,
-        date: arg.dateStr,
-      };
-      actions.addAppointment(newEvent);
+      const userId = store.user?.id || localStorage.getItem("id"); // Obtener usuario autenticado
+      const doctorId = prompt("Ingresa el ID del doctor:");
+
+      if (!doctorId || !userId) {
+        alert("Falta información de usuario o doctor.");
+        return;
+      }
+
+      await actions.addAppointment(userId, doctorId, arg.dateStr, "09:00:00", "Pendiente");
     }
   };
 
-  // Función para manejar el clic en un evento (cita existente)
-  const handleEventClick = (clickInfo) => {
+  // Función para manejar edición o eliminación de citas
+  const handleEventClick = async (clickInfo) => {
     const action = prompt(
       "¿Qué deseas hacer?\nEscribe 'eliminar' para borrar o 'editar' para modificar la cita:"
     );
-    if (action && action.toLowerCase() === "eliminar") {
+
+    if (action?.toLowerCase() === "eliminar") {
       if (window.confirm("¿Estás seguro de eliminar esta cita?")) {
-        actions.deleteAppointment(clickInfo.event.id);
+        await actions.deleteAppointment(clickInfo.event.id);
       }
-    } else if (action && action.toLowerCase() === "editar") {
+    } else if (action?.toLowerCase() === "editar") {
       const newTitle = prompt("Ingresa el nuevo título para la cita:", clickInfo.event.title);
       if (newTitle) {
         const updatedData = {
           title: newTitle,
-          date: clickInfo.event.startStr, // Se mantiene la misma fecha
+          date: clickInfo.event.start.toISOString().split("T")[0], // Formato YYYY-MM-DD
         };
-        actions.updateAppointment(clickInfo.event.id, updatedData);
+        await actions.updateAppointment(clickInfo.event.id, updatedData);
       }
     }
   };
 
-  // Botón visible para agregar cita manualmente (sin necesidad de hacer click en una fecha)
-  const handleAddButton = () => {
+  // Botón visible para agregar cita manual
+  const handleAddButton = async () => {
     const date = prompt("Ingresa la fecha para la cita (YYYY-MM-DD):");
     const title = prompt("Ingresa el título de la cita:");
-    if (date && title) {
-      const newEvent = {
-        id: new Date().getTime().toString(),
-        title,
-        date,
-      };
-      actions.addAppointment(newEvent);
+    const userId = store.user?.id || localStorage.getItem("id");
+    const doctorId = prompt("Ingresa el ID del doctor:");
+
+    if (date && title && userId && doctorId) {
+      await actions.addAppointment(userId, doctorId, date, "09:00:00", "Pendiente");
+    } else {
+      alert("Faltan datos para crear la cita.");
     }
   };
 
