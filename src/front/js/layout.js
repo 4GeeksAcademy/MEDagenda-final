@@ -61,13 +61,9 @@ const Layout = () => {
                         <Route element={<EditUser/>} path="/edituser"/>  
                         <Route element={<EditDoctor/>} path="/editdoc"/> 
                         <Route element={<Calendar/>} path="/calendar"/>
-                        
-
-                        
-                        
 
 
-                        
+                    
 
 
                         {/* Rutas para las especialidades médicas */}
