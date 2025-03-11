@@ -18,6 +18,7 @@ import EditUser from "./pages/EditUser.jsx";
 import PanelAdmin from "./pages/PanelAdmin.jsx"; 
 import EditDoctor from "./pages/EditDoctor.jsx";
 import Calendar from "./pages/Calendar.jsx";
+import Footer from "./component/Footer.jsx";
 
 // vistas de especialidades
 import MedicinaGeneral from "./pages/MedicinaGeneral.jsx";
@@ -61,6 +62,7 @@ const Layout = () => {
                         <Route element={<EditDoctor/>} path="/editdoc"/> 
                         <Route element={<Calendar/>} path="/calendar"/>
 
+
                     
 
 
@@ -79,6 +81,7 @@ const Layout = () => {
                         <Route element={<h1>Not found!</h1>} path="*" />
 
                     </Routes>
+                    <Footer />
                 </ScrollToTop>
             </BrowserRouter>
         </div>
