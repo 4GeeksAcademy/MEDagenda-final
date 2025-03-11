@@ -22,30 +22,37 @@ const getState = ({ getStore, getActions, setStore }) => {
 
 			fetchAppointments: async () => {
 				const baseURL = process.env.REACT_APP_BASE_URL;
+				const token = getStore().token;
 				try {
 					const response = await fetch(`${baseURL}api/appointments`, {
 						method: "GET",
 						headers: {
 							"Content-Type": "application/json",
+							"Authorization": `Bearer ${token}`
 						},
 					});
 					if (!response.ok) throw new Error("Error al cargar citas");
 					const data = await response.json();
-					// Transformamos cada cita en un objeto con el formato que espera FullCalendar
-					// AsegURARSE de que la fecha de la cita venga en formato YYYYMMDD
+					
 					const calendarEvents = data.map((appointment) => ({
-						id: appointment.appointment_id || appointment.id,
-						title: `Cita con el Dr. ${appointment.doctor_name || ""}`, 
-						date: appointment.date, 
+						id: appointment.appointment_id,
+						title: `Cita ${appointment.doctor_name ? `con Dr. ${appointment.doctor_name}` : ''}`,
+						date: appointment.date,
+						extendedProps: {
+							status: appointment.status,
+							time: appointment.time
+						}
 					}));
 					setStore({ events: calendarEvents });
 				} catch (error) {
 					console.error("Error en fetchAppointments:", error);
 				}
 			},
+			
+			
 
 			//aacción para agregar una cita en el backend y actualizar el store
-			addAppointment: async (newAppointment) => {
+			addAppointment: async (userId, doctorId, date, time, status) => {
 				const baseURL = process.env.REACT_APP_BASE_URL;
 				try {
 					const response = await fetch(`${baseURL}api/appointments`, {
@@ -53,7 +60,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 						headers: {
 							"Content-Type": "application/json",
 						},
-						body: JSON.stringify(newAppointment),
+						body: JSON.stringify({ user_id: userId, doctor_id: doctorId, date, time, status }),
 					});
 					if (!response.ok) throw new Error("Error al agregar cita");
 					const data = await response.json();

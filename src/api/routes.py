@@ -387,8 +387,13 @@ def create_post():
 @api.route('/appointments', methods=['GET'])
 @jwt_required()
 def get_appointments():
-    current_user = get_jwt_identity()  
-    appointments = Appointment.query.filter_by(user_id=current_user['id']).all()
+    current_user = get_jwt_identity()
+    
+    if current_user['role'] == 'Doctor':
+        appointments = Appointment.query.filter_by(doctor_id=current_user['id']).all()
+    else:
+        appointments = Appointment.query.filter_by(user_id=current_user['id']).all()
+    
     return jsonify([appointment.serialize() for appointment in appointments]), 200
 
 
