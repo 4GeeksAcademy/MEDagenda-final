@@ -23,11 +23,11 @@ const MedicinaGeneral = () => {
     return (
         <div>
             <h2>Medicina General</h2>
-            <ul>
+            {/* <ul>
                 {doctores.map((doctor) => (
                     <DoctorCard key={doctor.id} doctor={doctor} />
                 ))}
-            </ul>
+            </ul> */}
             {/* <ul>
                 {
                     store.doctor.map((item, index)=>{
@@ -40,10 +40,20 @@ const MedicinaGeneral = () => {
                 }
             </ul> */}
               <ul>
-            {store.doctor && store.doctor.map((item) => (
-                <li key={item.id}>{item.name} - {item.email}- {item.specialty}</li>
+            {Array.isArray(store.doctor) && store.doctor.filter((item) => item.specialty === "Medicina General").map((item) => (
+                <li className="card card-body my-3" key={item.id}>{item.name} - {item.email}- {item.specialty}</li>
             ))}
-        </ul>
+        </ul> 
+{/* 
+                    <ul>
+                {Array.isArray(store.doctor) && store.doctor.filter((item) => item.specialty === "Medicina General").map((item) => (
+                        <DoctorCard 
+                            key={item.id} 
+                            doctor={item.name}  
+                        />
+                    ))
+                }
+            </ul> */}
         </div>
     );
 };

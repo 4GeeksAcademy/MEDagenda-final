@@ -12,13 +12,13 @@ function AddDoctor() {
 
 
     // Verificar si el usuario es admin
-    const isAdmin = store.admin?.role === "admin";
+    // const isAdmin = store.admin?.role === "admin";
 
-    useEffect(() => {
-        if (!isAdmin) {
-            navigate("/"); // Redirigir a la página de inicio si no es admin
-        }
-    }, [isAdmin, navigate]);
+    // useEffect(() => {
+    //     if (!isAdmin) {
+    //         navigate("/"); // Redirigir a la página de inicio si no es admin
+    //     }
+    // }, [isAdmin, navigate]);
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -29,7 +29,7 @@ function AddDoctor() {
     };
 
     // Si no es admin, no renderiza nada mientras redirige
-    if (!isAdmin) return null;
+    // if (!isAdmin) return null;
 
     return (
         <div className='container col-md-6 card card-body mt-3'>

@@ -60,8 +60,8 @@ const EditDoctor = () => {
         }
     }, [store.doctor]);
 
-   let name = store.doctor?.name || localStorage.getItem('name');
-   let email = store.doctor?.email || localStorage.getItem('email');
+    let name = store.doctor?.name || localStorage.getItem('name');
+    let email = store.doctor?.email || localStorage.getItem('email');
 
 
     return (
@@ -69,7 +69,10 @@ const EditDoctor = () => {
             <i className="fa-solid fa-user"></i><h3>Mi Perfil</h3>
             {
                 name ? (
-                    <>
+                    <> 
+                    <div className='card card-body'> 
+                    <h2>Mi Perfil</h2>
+                    <h2> <i className="fa-solid fa-user"></i> </h2>
                         <p className='name'>
                             User: {isEditing ? <input type='text' name='name' value={docData.name} onChange={handleChange} /> : name}
                         </p>
@@ -79,20 +82,19 @@ const EditDoctor = () => {
 
                         {isEditing ? (
                             <>
-                                <button onClick={handleSave}>Guardar</button>
-                                <button onClick={handleEdit}>Cancelar</button>
+                                <button className='btn btn-primary btn-lg w-40 ' style={{ width: "50%" }} onClick={handleSave}>Guardar</button>
+                                <button className='btn btn-secondary btn-lg' onClick={handleEdit}>Cancelar</button>
                             </>
 
                         ) : (
-                            <button className='btn btn-primary' onClick={handleEdit} type="submit">Edit User</button>
+                            <button className='btn btn-lg btn-primary' onClick={handleEdit} type="submit">Edit User</button>
 
 
                         )}
 
 
-                        <button className='btn btn-danger mx-5' onClick={deleteUs} type="submit">Delete User</button>     
-                        <button className='btn btn-warning'  type="submit">Log Out</button>
-
+                        <button className='btn-danger btn-lg my-2' onClick={deleteUs} type="submit">Delete User</button>
+                        </div>
                     </>) : (
                     <p>no funciono.......</p>
                 )}
