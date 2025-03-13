@@ -1,6 +1,7 @@
 import React, { useContext, useState, useEffect } from 'react'
 import { Context } from '../store/appContext'
 import { useNavigate } from 'react-router-dom'
+
 const EditDoctor = () => {
     const { store, actions } = useContext(Context);
     const navigate = useNavigate();

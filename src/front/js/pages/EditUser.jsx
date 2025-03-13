@@ -13,8 +13,6 @@ const EditUser = () => {
   }) 
 
 
-
-
   const handleEdit = () => setIsEditing(!isEditing)
 
   const handleChange = (e) => {

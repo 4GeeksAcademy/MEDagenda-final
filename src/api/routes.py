@@ -124,6 +124,15 @@ def get_token_usuario():
     except Exception as e: 
         return jsonify({'Error': 'El email proporcionado no corresponde a ninguno registrado: ' + str(e)}), 500   
 
+@api.route('/current_user')
+@jwt_required()
+def get_current_user():
+    current_user = get_jwt_identity()
+    user = User.query.get(current_user['id'])
+    if not user: 
+        return jsonify(msg='User not found'), 404
+    return jsonify(user.serialize()), 200
+
 #Ruta restringida por Token Usuario 
 @api.route('/users2') 
 @jwt_required() 
@@ -399,17 +408,20 @@ def get_appointments():
 
 
 @api.route('/appointments', methods=['POST'])
+@jwt_required()
 def create_appointment():
     data = request.get_json()
+    current_user = get_jwt_identity()
+
     try:
-        # Convertir fecha y hora de string a objetos date y time
         date_str = data.get('date')
         time_str = data.get('time')
         date_obj = datetime.strptime(date_str, '%Y-%m-%d').date() if date_str else None
         time_obj = datetime.strptime(time_str, '%H:%M:%S').time() if time_str else None
 
+        # OJO el user_id se toma de current_user['id']no del JSON 
         new_appointment = Appointment(
-            user_id=data.get('user_id'),
+            user_id=current_user['id'],
             doctor_id=data.get('doctor_id'),
             date=date_obj,
             time=time_obj,
