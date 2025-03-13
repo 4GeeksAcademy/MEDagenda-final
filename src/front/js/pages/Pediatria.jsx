@@ -1,6 +1,5 @@
 import React, { useContext, useEffect } from "react";
 import { Context } from '../store/appContext'
-
 const doctores = [
     { id: 1, name: "Doctor Diego Vazquez", especialidad: "Pediatra" },
     { id: 2, name: "Doctora Yarely Martinez", especialidad: "Pediatra" },

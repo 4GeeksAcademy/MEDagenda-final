@@ -408,8 +408,11 @@ def get_appointments():
 
 
 @api.route('/appointments', methods=['POST'])
+
 @jwt_required()
+
 def create_appointment():
+    print(request.headers)  # Verificar si el frontend está enviando el token
     data = request.get_json()
     current_user = get_jwt_identity()
 
@@ -433,7 +436,7 @@ def create_appointment():
     except Exception as e:
         db.session.rollback()
         return jsonify({"error": str(e)}), 400
-
+        
 # Endpoints para el modelo Availability
 @api.route('/availabilities', methods=['GET'])
 def get_availabilities():

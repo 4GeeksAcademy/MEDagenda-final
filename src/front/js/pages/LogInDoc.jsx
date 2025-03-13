@@ -19,9 +19,7 @@ const LogInDoc = () => {
      useEffect(() => {
             if (store.doctor && store.doctor.role) {
                 if (store.doctor.role === 'doctor') {
-                    navigate("/panel/admin");
-                } else if (store.doctor.role === 'doctor') {
-                    navigate("/");
+                    navigate("/editdoc");
                 } else {
                     navigate("/logInDoc");
                 }

@@ -1,5 +1,6 @@
 import React, { useContext, useEffect } from "react";
-import { Context } from '../store/appContext.js'
+import DoctorCard from "../component/DoctorCard.jsx";
+import { Context } from '../store/appContext'
 
 
 const MedicinaGeneral = () => {

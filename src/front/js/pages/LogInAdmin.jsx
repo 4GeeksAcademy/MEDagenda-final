@@ -20,8 +20,6 @@ const LogInAdmin = () => {
         if (store.admin && store.admin.role) {
             if (store.user.role === 'admin') {
                 navigate("/panel/admin");
-            } else if (store.user.role === 'user') {
-                navigate("/");
             } else {
                 navigate("/logInAdmin");
             }
