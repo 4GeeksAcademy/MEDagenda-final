@@ -5,8 +5,7 @@ import ScrollToTop from "./component/scrollToTop";
 import { BackendURL } from "./component/backendURL";
 
 // pages
-
-import { Home } from "./pages/home";
+import Home from "./pages/Home.jsx";
 import injectContext from "./store/appContext";
 import { Navbar } from "./component/navbar";
 import LogInAdmin from "./pages/LogInAdmin.jsx";
@@ -17,6 +16,7 @@ import RegistroPacientes from "./pages/RegistroPacientes.jsx"
 import EditUser from "./pages/EditUser.jsx";
 import PanelAdmin from "./pages/PanelAdmin.jsx"; 
 import EditDoctor from "./pages/EditDoctor.jsx";
+import Footer from "./component/Footer.jsx"
 import Calendar from "./pages/Calendar.jsx"; 
 import Pacientes from "./component/Pacientes.jsx";
 import Footer from "./component/Footer.jsx";
@@ -66,10 +66,6 @@ const Layout = () => {
 
                         <Route element={<Calendar/>} path="/Calendar"/> 
                         <Route element={<Pacientes/>} path="/pacientes"/>
-
-
-
-                    
 
 
                         {/* Rutas para las especialidades médicas */}

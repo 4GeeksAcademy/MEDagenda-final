@@ -1,16 +1,14 @@
 import React, { useContext, useEffect } from "react";
 import DoctorCard from "../component/DoctorCard.jsx";
 import { Context } from '../store/appContext'
-const doctores = [
-    { id: 1, name: "Doctor Diego Vazquez", especialidad: "Pediatra" },
-    { id: 2, name: "Doctora Yarely Martinez", especialidad: "Pediatra" },
-];
+
 
 const MedicinaGeneral = () => {
+    const doctores = [
+        { id: 1, name: "Doctor Diego Vazquez", especialidad: "Pediatra" },
+        { id: 2, name: "Doctora Yarely Martinez", especialidad: "Pediatra" },
+    ];
     const { store, actions } = useContext(Context);
-
-
-
 
     const doctor = async () => {
         try {

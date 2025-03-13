@@ -61,6 +61,8 @@ const getState = ({ getStore, getActions, setStore }) => {
 						method: "POST",
 						headers: {
 							"Content-Type": "application/json",
+							'Authorization': `Bearer ${localStorage.getItem("token")}`,
+
 						},
 						body: JSON.stringify({ user_id: userId, doctor_id: doctorId, date, time, status }),
 					});
@@ -230,7 +232,36 @@ const getState = ({ getStore, getActions, setStore }) => {
 					token: storedToken || null,
 				});
 			},
+			getCurrentUser: async () => {
+				const baseURL = process.env.REACT_APP_BASE_URL;
+				try {
+					const response = await fetch(`${baseURL}api/current_user`, {
+						method: 'GET',
+						headers: {
+							'Authorization': `Bearer ${localStorage.getItem("token")}`,
+						},
+					});
 
+					if (!response.ok) {
+						let errorMessage = 'Error desconocido';
+						try {
+							const errorData = await response.json();
+							errorMessage = errorData.error || errorData.message || 'Error en la solicitud';
+						} catch (err) {
+							errorMessage = 'Error al procesar la respuesta del servidor';
+						}
+						throw new Error(errorMessage);
+					}
+
+					const data = await response.json();
+					setStore(data)
+
+
+				} catch (error) {
+					console.error('Error al registrar paciente:', error);
+					setStore({ message: error.message });
+				}
+			},
 			// revisar el password
 			// Registro de pacientes
 			RegistroPacientes: async (name, email, password) => {

@@ -8,9 +8,6 @@ const doctores = [
 const Pediatria = () => {
     const { store, actions } = useContext(Context);
 
-
-
-
     const doctor = async () => {
         try {
             await actions.doctorsGet()

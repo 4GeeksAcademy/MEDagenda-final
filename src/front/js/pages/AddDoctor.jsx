@@ -2,7 +2,7 @@ import React, { useState, useContext, useEffect } from 'react';
 import { Context } from '../store/appContext';
 import { Link, useNavigate } from "react-router-dom";
 
-function AddDoctor() {
+const AddDoctor = () => {
     const [name, setName] = useState('');
     const [email, setEmail] = useState('');
     const [specialty, setSpecialty] = useState('');
