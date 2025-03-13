@@ -23,7 +23,9 @@ const EditUser = () => {
 
   const handleSave = async () => {
     try {
-
+      if(userData.password.trim() == ''){ 
+        delete userData.password
+      }
       await actions.editUser(userData,store.user?.id || localStorage.getItem('id') )
       setIsEditing(false)
 
@@ -77,6 +79,9 @@ let email= localStorage.getItem('email')
             </p>
             <p className='email'>
               Email: {isEditing ? <input type='email' name='email' value={userData.email} onChange={handleChange} /> : email}
+            </p> 
+            <p className='password'>
+              Password: {isEditing && <input type='password' name='password' value={userData.password} onChange={handleChange} />}
             </p>
             
             {isEditing ? (

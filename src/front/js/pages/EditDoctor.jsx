@@ -22,7 +22,9 @@ const EditDoctor = () => {
 
     const handleSave = async () => {
         try {
-
+            if(docData.password.trim() == ''){ 
+                delete docData.password
+              }
             await actions.editDoctor(docData, store.doctor?.id || localStorage.getItem('id'))
             setIsEditing(false)
 
@@ -69,31 +71,34 @@ const EditDoctor = () => {
             <i className="fa-solid fa-user"></i><h3>Mi Perfil</h3>
             {
                 name ? (
-                    <> 
-                    <div className='card card-body'> 
-                    <h2>Mi Perfil</h2>
-                    <h2> <i className="fa-solid fa-user"></i> </h2>
-                        <p className='name'>
-                            User: {isEditing ? <input type='text' name='name' value={docData.name} onChange={handleChange} /> : name}
-                        </p>
-                        <p className='email'>
-                            Email: {isEditing ? <input type='email' name='email' value={docData.email} onChange={handleChange} /> : email}
-                        </p>
+                    <>
+                        <div className='card card-body'>
+                            <h2>Mi Perfil</h2>
+                            <h2> <i className="fa-solid fa-user"></i> </h2>
+                            <p className='name'>
+                                User: {isEditing ? <input type='text' name='name' value={docData.name} onChange={handleChange} /> : name}
+                            </p>
+                            <p className='email'>
+                                Email: {isEditing ? <input type='email' name='email' value={docData.email} onChange={handleChange} /> : email}
+                            </p>
+                            <p className='password'>
+                                Password: {isEditing && <input type='password' name='password' value={docData.password} onChange={handleChange} />}
+                            </p>
 
-                        {isEditing ? (
-                            <>
-                                <button className='btn btn-primary btn-lg w-40 ' style={{ width: "50%" }} onClick={handleSave}>Guardar</button>
-                                <button className='btn btn-secondary btn-lg' onClick={handleEdit}>Cancelar</button>
-                            </>
+                            {isEditing ? (
+                                <>
+                                    <button className='btn btn-primary btn-lg w-40 ' style={{ width: "50%" }} onClick={handleSave}>Guardar</button>
+                                    <button className='btn btn-secondary btn-lg' onClick={handleEdit}>Cancelar</button>
+                                </>
 
-                        ) : (
-                            <button className='btn btn-lg btn-primary' onClick={handleEdit} type="submit">Edit User</button>
-
-
-                        )}
+                            ) : (
+                                <button className='btn btn-lg btn-primary' onClick={handleEdit} type="submit">Edit User</button>
 
 
-                        <button className='btn-danger btn-lg my-2' onClick={deleteUs} type="submit">Delete User</button>
+                            )}
+
+
+                            <button className='btn-danger btn-lg my-2' onClick={deleteUs} type="submit">Delete User</button>
                         </div>
                     </>) : (
                     <p>no funciono.......</p>

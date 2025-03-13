@@ -23,21 +23,26 @@ const Pacientes = () => {
     }
   } 
 
-  const deleteUser = async (id) => {
+  const deleteUser3 = async (user_id) => {
+    if (!user_id || isNaN(user_id)) {  
+        console.error("Error: ID de usuario inválido", user_id);
+        return;
+    }
+
     const confirmDelete = window.confirm("¿Estás seguro de que deseas eliminar este usuario?");
     
     if (confirmDelete) {
-      try {
-        await actions.deleteUser(id);
-        setPatients(prevPatients => prevPatients.filter(item => item.id !== id)); // Actualiza el estado eliminando el usuario
-      } catch (error) {
-        console.error("No se pudo eliminar el usuario correctamente", error);
-      }
+        try {
+            await actions.deleteUser2(user_id);
+            setPatients(prevPatients => prevPatients.filter(item => item.user_id !== user_id));
+        } catch (error) {
+            console.error("No se pudo eliminar el usuario correctamente", error);
+        }
     }
-  };
+};
   useEffect(() => {
     patient()
-  }, [store.user])
+  }, [store.users])
 
 
   return (
@@ -69,7 +74,14 @@ const Pacientes = () => {
                   {item.email} 
                 
                 </div> 
-                <div className='mx-2'>  <i class="fa-solid fa-trash" onClick={()=> deleteUser(item.id)} ></i></div>
+                <div className='mx-2'>  <i class="fa-solid fa-trash" onClick={() => {
+                            if (item.user_id) {
+                                deleteUser3(item.user_id);
+                            } else {
+                                console.error("Error: ID de usuario no definido", item);
+                            }
+                        }}
+                        ></i></div>
               </div>
             </li>
           ))}
