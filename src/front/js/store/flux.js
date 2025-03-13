@@ -281,9 +281,10 @@ const getState = ({ getStore, getActions, setStore }) => {
 					if (!response.ok) {
 						let errorMessage = 'Error desconocido';
 						try {
-							const errorData = await response.json();
+							const errorData = await response.json(); 
+							console.log('No registra',errorData)
 							errorMessage = errorData.error || errorData.message || 'Error en la solicitud';
-						} catch (err) {
+						} catch (error) {
 							errorMessage = 'Error al procesar la respuesta del servidor';
 							console.log('Datos del paciente:', data);
 						}
@@ -394,6 +395,47 @@ const getState = ({ getStore, getActions, setStore }) => {
 					console.error("error al eliminar usuario")
 				}
 
+			}, 
+			deleteUser2: async (idUser) => {
+				const baseURL = process.env.REACT_APP_BASE_URL;
+				idUser = idUser || getStore().user?.id || localStorage.getItem('id');
+			
+				if (!idUser) {
+					console.error("ID de usuario inválido:", idUser);
+					return;
+				}
+			
+				try {
+					const token = getStore().token;
+			
+					const response = await fetch(`${baseURL}api/delete_user/${idUser}`, {
+						method: 'DELETE',
+						headers: {
+							'Content-Type': 'application/json',
+							'Authorization': `Bearer ${token}`,
+						},
+					});
+			
+					if (!response.ok) {
+						const errorData = await response.json();
+						throw new Error(errorData.error || "No se eliminó el usuario correctamente");
+					}
+			
+					console.log("Usuario eliminado correctamente");
+			
+					const store = getStore();
+					if (Array.isArray(store.users)) {
+						setStore({ users: store.users.filter(user => user.id !== parseInt(idUser)) });
+					}
+			
+					if (store.user && store.user.id === parseInt(idUser)) {
+						localStorage.removeItem("token");
+						setStore({ user: null, token: null });
+					}
+			
+				} catch (error) {
+					console.error("Error al eliminar usuario", error);
+				}
 			},
 
 			deleteDoctor: async (idDoctor) => {
@@ -467,7 +509,6 @@ const getState = ({ getStore, getActions, setStore }) => {
 							email: userBody.email
 						}
 					});
-					actions.logIn(userBody.name, userBody.email, userBody.password);
 					return true
 
 
@@ -493,7 +534,8 @@ const getState = ({ getStore, getActions, setStore }) => {
 					})
 					console.log(response)
 					if (!response.ok) {
-						const errorData = await response.json()
+						const errorData = await response.json() 
+						console.log("no me edite",errorData)
 						throw new Error(errorData.error || "Error al editar usuario del Doctor")
 					}
 					console.log("El usuario de Doctor se edito correctamente")
@@ -509,7 +551,6 @@ const getState = ({ getStore, getActions, setStore }) => {
 						}
 					});
 
-					actions.logInDoc(docBody.name, docBody.email, docBody.password);
 					return true
 
 				} catch (error) {

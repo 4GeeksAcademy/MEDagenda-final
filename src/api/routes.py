@@ -543,12 +543,18 @@ def edit_user(user_id):
     if not user: 
         return jsonify ({'error':'Usuario no encontrado'}),400 
     
-    data=request.json  
+    data=request.json
+    if "name" in data: 
+        user.name = data["name"] 
+    if "email" in data: 
+        user.email = data["email"] 
+    if "password" in data:  
+        password_hash = bcrypt.generate_password_hash(data.get('password')).decode('utf-8')
+        user.password = password_hash
    
     if not isinstance(data, dict):  
         return jsonify({"error": "Los datos deben ser un diccionario"}), 400
     try:
-        User.query.filter_by(user_id=user_id).update(dict(data))
         db.session.commit()
         return jsonify({"message": "El usuario se actualizó correctamente"}), 200
     except Exception as e:
@@ -563,14 +569,20 @@ def edit_doctor(doctor_id):
     if not doctor: 
         return jsonify ({'error':'Usuario no encontrado'}),400 
     
-    data = request.json  
-
+    data=request.json
+    if "name" in data: 
+        doctor.name = data["name"] 
+    if "email" in data: 
+        doctor.email = data["email"] 
+    if "password" in data:  
+        password_hash = bcrypt.generate_password_hash(data.get('password')).decode('utf-8')
+        doctor.password = password_hash
+   
     if not isinstance(data, dict):  
         return jsonify({"error": "Los datos deben ser un diccionario"}), 400
     try:
-        Doctor.query.filter_by(doctor_id=doctor_id).update(dict(data))
         db.session.commit()
-        return jsonify({"message": "El usuario de doctor se actualizó correctamente"}), 200
+        return jsonify({"message": "El usuario de Doctor se actualizó correctamente"}), 200
     except Exception as e:
         db.session.rollback()
         return jsonify({"error": str(e)}), 500
