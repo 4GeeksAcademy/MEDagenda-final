@@ -16,7 +16,8 @@ const getState = ({ getStore, getActions, setStore }) => {
 		},
 		actions: {
 			setRole: (newRole) => {
-                setStore({ role: newRole });
+				let store = getStore();
+                setStore({...store, role: newRole });
                 localStorage.setItem("role", newRole); // Guardar en localStorage
             },
 
@@ -43,7 +44,8 @@ const getState = ({ getStore, getActions, setStore }) => {
 							time: appointment.time
 						}
 					}));
-					setStore({ events: calendarEvents });
+					let store = getStore();
+					setStore ({...store, events: calendarEvents });
 				} catch (error) {
 					console.error("Error en fetchAppointments:", error);
 				}
@@ -70,7 +72,11 @@ const getState = ({ getStore, getActions, setStore }) => {
 						date: data.date,
 					};
 					const store = getStore();
-					setStore({ events: [...store.events, event] });
+					
+					setStore({
+						 ...store, events: [...store.events, event]
+
+						});
 				} catch (error) {
 					console.error("Error en addAppointment:", error);
 				}
@@ -99,7 +105,9 @@ const getState = ({ getStore, getActions, setStore }) => {
 
 					const data = await response.json();
 					console.log("DATOS DE RESPUESTA", data)
+					let store = getStore();
 					setStore({
+						...store,
                         admin: { name, email, role: data.role },
                         token: data.access_token,
                         message: "Inicio de sesión exitoso",
@@ -111,7 +119,8 @@ const getState = ({ getStore, getActions, setStore }) => {
 					localStorage.setItem('email', data.email);
 				} catch (error) {
 					console.error('Error al iniciar sesión:', error);
-					setStore({ message: error.message });
+					let store = getStore();
+					setStore({...store, message: error.message });
 				}
 			},
 
@@ -134,7 +143,9 @@ const getState = ({ getStore, getActions, setStore }) => {
 
 					const data = await response.json();
 					console.log("DATOS DE RESPUESTA", data)
+					let store = getStore();
                     setStore({ 
+						...store,
                         doctor: { name, email, role: data.role },
                         token: data.access_token,
                         message: "Inicio de sesión exitoso",
@@ -149,7 +160,8 @@ const getState = ({ getStore, getActions, setStore }) => {
 					localStorage.setItem('id', data.id);
 				} catch (error) {
 					console.error('Error al iniciar sesión:', error);
-					setStore({ message: error.message });
+					let store = getStore();
+					setStore({...store, message: error.message });
 				}
 			},
 
@@ -173,6 +185,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 					const data = await response.json();
 					let store = getStore()
                     setStore({
+						...store,
                         user: { name, email, role: data.role },
                         token: data.access_token,
                         message: "Inicio de sesión exitoso",
@@ -187,7 +200,8 @@ const getState = ({ getStore, getActions, setStore }) => {
 					
                 } catch (error) {
                     console.error("Error al iniciar sesión:", error);
-                    setStore({ message: error.message });
+					let store = getStore();
+                    setStore({...store, message: error.message });
                 }
             },
 
@@ -196,8 +210,8 @@ const getState = ({ getStore, getActions, setStore }) => {
 				localStorage.removeItem("name");
 				localStorage.removeItem("email");
 				localStorage.removeItem("id");
-			
-				setStore({ user: null, doctor: null, admin: null, token: null });
+				let store = getStore();
+				setStore({...store, user: null, doctor: null, admin: null, token: null });
 			
 				console.log("Sesión cerrada exitosamente");
 			},
@@ -207,8 +221,9 @@ const getState = ({ getStore, getActions, setStore }) => {
 				const storeDoctor = localStorage.getItem("doctor");
 				const storedUser = localStorage.getItem("user");
 				const storedToken = localStorage.getItem("token");
-			
+				let store = getStore();
 				setStore({
+					...store,
 					admin: storeAdmin ? JSON.parse(storeAdmin) : null,
 					doctor: storeDoctor ? JSON.parse(storeDoctor) : null,
 					user: storedUser ? JSON.parse(storedUser) : null,
@@ -245,13 +260,15 @@ const getState = ({ getStore, getActions, setStore }) => {
 					}
 
 					const data = await response.json();
-					setStore({ user: { name, email, password }, users: [...getStore().users, { name, email, password }], token: data.access_token, message: 'Paciente registrado exitosamente' });
+					let store = getStore();
+					setStore({...store, user: { name, email, password }, users: [...getStore().users, { name, email, password }], token: data.access_token, message: 'Paciente registrado exitosamente' });
 					localStorage.setItem('token', data.access_token);
 					console.log("usuario creado", data)
 
 				} catch (error) {
 					console.error('Error al registrar paciente:', error);
-					setStore({ message: error.message });
+					let store = getStore();
+					setStore({...store, message: error.message });
 				}
 			},
 
@@ -283,12 +300,61 @@ const getState = ({ getStore, getActions, setStore }) => {
 
 					const store = getStore();
 					if (Array.isArray(store.users)) {
-
-						setStore({ users: [...store.users.filter(user => user.id !== idUser)] })
+						let store = getStore();
+						setStore({...store, users: [...store.users.filter(user => user.id !== idUser)] })
 					}
 					if (store.user && store.user.id === idUser) {
 						localStorage.removeItem("token")
-						setStore({ user: null, token: null })
+						let store = getStore();
+						setStore({...store, user: null, token: null })
+					}
+
+
+
+				} catch (error) {
+					console.error("error al eliminar usuario")
+				}
+
+			},
+
+			deleteUser2: async (idUser) => {
+				const baseURL = process.env.REACT_APP_BASE_URL;
+				idUser = idUser || getStore().user?.id || localStorage.getItem('id');
+
+				if (!idUser) {
+					console.error("Id usuario invalido:", idUser)
+					return;
+				}
+				idUser = parseInt(idUser); // Convertir a número para evitar errores con la API
+
+
+				try {
+					const token = getStore().token
+
+					const response = await fetch(`${baseURL}api/delete_user/${idUser}`, {
+						method: 'DELETE',
+						headers: {
+							'Content-Type': 'application/json',
+							'Authorization': `Bearer ${token}`,
+						},
+					})
+					if (!response.ok) {
+
+						const errorData = await response.json()
+						console.log("errorData", errorData)
+						throw new Error(errorData.error || "no se elimino el Usuario correctamente")
+					}
+					console.log("Usuario Eliminado Correctamente")
+
+					const store = getStore();
+					if (Array.isArray(store.users)) {
+						let store = getStore();
+						setStore({...store, users: [...store.users.filter(user => user.id !== idUser)] })
+					}
+					if (store.user && store.user.id === idUser) {
+						localStorage.removeItem("token")
+						let store = getStore();
+						setStore({...store, user: null, token: null })
 					}
 
 
@@ -323,12 +389,13 @@ const getState = ({ getStore, getActions, setStore }) => {
 					const store = getStore();
 					console.log(" se Elimino el usuario del Doctor correctamente")
 					if (Array.isArray(store.doctors)) {
-
-						setStore({ doctors: [...store.doctors.filter(doctor => doctor.id !== idDoctor)] })
+						let store = getStore();
+						setStore({...store, doctors: [...store.doctors.filter(doctor => doctor.id !== idDoctor)] })
 					}
 					if (store.doctor && store.doctor.id === idDoctor) {
 						localStorage.removeItem("token")
-						setStore({ doctor: null, token: null })
+						let store = getStore();
+						setStore({...store, doctor: null, token: null })
 					}
 
 				} catch (error) {
@@ -361,7 +428,8 @@ const getState = ({ getStore, getActions, setStore }) => {
 		
 					localStorage.setItem('name', userBody.name);
 					localStorage.setItem('email', userBody.email);
-					setStore({
+					let store = getStore();
+					setStore({...store,
 						user: {
 							...getStore().user,
 							name: userBody.name,
@@ -401,8 +469,8 @@ const getState = ({ getStore, getActions, setStore }) => {
 
 					localStorage.setItem('name', docBody.name);
 					localStorage.setItem('email', docBody.email);
-
-					setStore({
+					let store = getStore();
+					setStore({...store,
 						doctor: {
 							...getStore().doctor,
 							name: docBody.name,
@@ -447,12 +515,14 @@ const getState = ({ getStore, getActions, setStore }) => {
 					}
 
 					const data = await response.json();
-					setStore({ doctor: { name, email, specialty }, token: data.access_token, message: 'Doctor registrado exitosamente' });
+					let store = getStore();
+					setStore({...store, doctor: {...store, name, email, specialty }, token: data.access_token, message: 'Doctor registrado exitosamente' });
 					localStorage.setItem('token', data.access_token);
 
 				} catch (error) {
 					console.error('Error al registrar doctor:', error);
-					setStore({ message: error.message });
+					let store = getStore();
+					setStore({...store, message: error.message });
 				}
 			},
 			
@@ -470,7 +540,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 			
 					let data = await response.json();  // Convertimos la respuesta a JSON
 					let store = getStore(); // Obtenemos el estado actual del store
-			
+					
 					setStore({ ...store, doctor: data }); // Guardamos la lista de doctores en el store
 			
 				} catch (error) {
@@ -519,7 +589,8 @@ const getState = ({ getStore, getActions, setStore }) => {
 				  setStore({ events: store.events.filter(event => event.id !== appointmentId) });
 				} catch (error) {
 				  console.error("Error en deleteAppointment:", error);
-				  setStore({ message: error.message });
+				  let store = getStore();
+				  setStore({...store, message: error.message });
 				}
 			  },
 
@@ -543,7 +614,8 @@ const getState = ({ getStore, getActions, setStore }) => {
 				  actions.fetchAppointments();
 				} catch (error) {
 				  console.error("Error en updateAppointment:", error);
-				  setStore({ message: error.message });
+				  let store = getStore();
+				  setStore({...store, message: error.message });
 				}
 			  },
 			  

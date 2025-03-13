@@ -17,9 +17,9 @@ import RegistroPacientes from "./pages/RegistroPacientes.jsx"
 import EditUser from "./pages/EditUser.jsx";
 import PanelAdmin from "./pages/PanelAdmin.jsx"; 
 import EditDoctor from "./pages/EditDoctor.jsx";
-
 import Calendar from "./pages/Calendar.jsx"; 
 import Pacientes from "./component/Pacientes.jsx";
+import Footer from "./component/Footer.jsx";
 
 
 
@@ -42,9 +42,9 @@ import Endocrinologia from "./pages/Endocrinologia.jsx";
 const Layout = () => {
     const basename = process.env.BASENAME || "";
     const { actions } = useContext(Context);
-    useEffect(() => {
-        actions.loadSession();  // Cargar sesión desde localStorage
-    }, []);
+    // useEffect(() => {
+    //     actions.loadSession();  // Cargar sesión desde localStorage
+    // }, []);
 
     if(!process.env.BACKEND_URL || process.env.BACKEND_URL === "") return <BackendURL />;
 
