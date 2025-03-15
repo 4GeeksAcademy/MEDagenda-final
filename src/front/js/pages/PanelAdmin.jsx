@@ -1,12 +1,18 @@
 import React from 'react';
 import AddDoctor from './AddDoctor.jsx';
 
-const PanelAdmin = () => {
+import { useNavigate } from 'react-router-dom';
+const PanelAdmin = () => {  
+
+
+
+
     return (
-        <div className='comtainer'>
+        <div className='container'>
             <h1>Panel de Administración</h1>
             <p>Bienvenido al panel de administración.</p>
-            <h2> < AddDoctor /> </h2>
+            <h2> < AddDoctor /> </h2> 
+         
         </div>
     );
 };
