@@ -41,7 +41,7 @@ const EditDoctor = () => {
 
         if (confirmDelete) {
             try {
-                await actions.deleteDoctor(idDoc)
+                await actions.deleteAdmin(idDoc)
                 navigate('/')
             } catch (error) {
                 console.error("No se elimino Correctamente", error)
@@ -51,7 +51,13 @@ const EditDoctor = () => {
             console.log("Eliminacion de Cuenta Cancelada")
 
         }
-    }
+    } 
+    const handleLogout = () => {
+
+        actions.logOut();
+        navigate("/");
+    };
+
 
     useEffect(() => {
         if (store.doctor) {
@@ -99,7 +105,8 @@ const EditDoctor = () => {
                             )}
 
 
-                            <button className='btn-danger btn-lg my-2' onClick={deleteUs} type="submit">Delete User</button>
+                            <button className='btn-danger btn-lg my-2' onClick={deleteUs} type="submit">Delete User</button> 
+                            
                         </div>
                     </>) : (
                     <p>no funciono.......</p>

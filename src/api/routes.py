@@ -597,11 +597,17 @@ def edit_admin(admin_id):
         return jsonify ({'error':'Usuario no encontrado'}),400 
     
     data = request.json  
+    if "name" in data: 
+        admin.name = data["name"] 
+    if "email" in data: 
+        admin.email = data["email"] 
+    if "password" in data:  
+        password_hash = bcrypt.generate_password_hash(data.get('password')).decode('utf-8')
+        admin.password = password_hash 
     
     if not isinstance(data, dict):  
         return jsonify({"error": "Los datos deben ser un diccionario"}), 400
     try:
-        Administrator.query.filter_by(admin_id=admin_id).update(dict(data))
         db.session.commit()
         return jsonify({"message": "El usuario de Admin se actualizó correctamente"}), 200
     except Exception as e:
