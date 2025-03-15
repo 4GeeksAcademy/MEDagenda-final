@@ -34,7 +34,11 @@ const injectContext = PassedComponent => {
 
 		// 	state.actions.getCurrentUser(); // <---- calling this function from the flux.js actions
 
+
+		// 	state.actions.getCurrentUser(); // <---- calling this function from the flux.js actions
+
 		// 	// state.actions.getCurrentUser(); // <---- calling this function from the flux.js actions
+
 
 		// }, []);
 

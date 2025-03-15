@@ -23,17 +23,18 @@ const getState = ({ getStore, getActions, setStore }) => {
 			fetchAppointments: async () => {
 				const baseURL = process.env.REACT_APP_BASE_URL;
 				const token = getStore().token;
+				console.log("baseURL", baseURL)
+				console.log("token", token)
 				try {
 					const response = await fetch(`${baseURL}api/appointments`, {
 						method: "GET",
 						headers: {
-							"Content-Type": "application/json",
 							"Authorization": `Bearer ${token}`
 						},
 					});
 					if (!response.ok) throw new Error("Error al cargar citas");
 					const data = await response.json();
-					
+					console.log("data entrante", data)
 					const calendarEvents = data.map((appointment) => ({
 						id: appointment.appointment_id,
 						title: `Cita ${appointment.doctor_name ? `con Dr. ${appointment.doctor_name}` : ''}`,

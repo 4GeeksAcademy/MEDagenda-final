@@ -6,8 +6,9 @@ from flask_cors import CORS
 from datetime import datetime  
 # from flask_sqlalchemy import SQLAlchemy
 from flask_bcrypt import Bcrypt  
-from flask_jwt_extended import JWTManager, create_access_token,jwt_required,get_jwt_identity  
+from flask_jwt_extended import JWTManager, create_access_token,jwt_required,get_jwt_identity,get_jwt  
 from datetime import timedelta
+
 
 app=Flask(__name__)
 api = Blueprint('api', __name__)  
@@ -108,8 +109,11 @@ def get_token_usuario():
         if true_o_false: 
             expires = timedelta(days=1) 
             user_id = login_user.user_id 
-            access_token = create_access_token(identity={'id': user_id, 'role':login_user.role}, expires_delta=expires)
-
+            access_token = create_access_token(
+                identity=str(user_id),
+                additional_claims={'role': login_user.role},
+                expires_delta=expires
+            )
             user_data= {
                "name": login_user.name,
                "email": login_user.email,
@@ -398,20 +402,18 @@ def create_post():
 @api.route('/appointments', methods=['GET'])
 @jwt_required()
 def get_appointments():
-    current_user = get_jwt_identity()
-    
-    if current_user['role'] == 'Doctor':
-        appointments = Appointment.query.filter_by(doctor_id=current_user['id']).all()
+    current_user_id = get_jwt_identity()
+    claims = get_jwt()
+    print(f"Este es el current_user ID: {current_user_id}, role: {claims.get('role')}")
+    if claims.get('role') == 'Doctor':
+       appointments = Appointment.query.filter_by(doctor_id=current_user_id).all()
     else:
-        appointments = Appointment.query.filter_by(user_id=current_user['id']).all()
-    
+       appointments = Appointment.query.filter_by(user_id=current_user_id).all()
     return jsonify([appointment.serialize() for appointment in appointments]), 200
 
 
 @api.route('/appointments', methods=['POST'])
-
 @jwt_required()
-
 def create_appointment():
     print(request.headers)  # Verificar si el frontend está enviando el token
     data = request.get_json()
