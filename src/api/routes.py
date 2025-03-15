@@ -333,11 +333,12 @@ def get_token_admin():
         if true_o_false: 
             expires = timedelta(days=1)
             admin_id = login_admin.admin_id  # Corregido
-            access_token = create_access_token(identity={'id': admin_id, 'role': 'User '}, expires_delta=expires)
+            access_token = create_access_token(identity={'id': admin_id, 'role': 'admin'}, expires_delta=expires)
             admin_data = {
                 "name": login_admin.name,
                 "email": login_admin.email,
                 "id": login_admin.admin_id,
+                "role": login_admin.role,
                 "access_token": access_token  # Corregido
             }
             return jsonify(admin_data), 200  # Corregido

@@ -9,9 +9,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 			token: localStorage.getItem('token') || null,
 			doctor: null,
 			admin: null,
-
 			events: [],
-
 			role: localStorage.getItem("role") || null // Obtener el rol almacenado
 
 		},
@@ -103,6 +101,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 					if (!response.ok) {
 						console.log("primera parada")
 						const errorData = await response.json();
+						console.log("error", errorData)
 						throw new Error(errorData.error || 'Error en el inicio de sesión');
 					}
 
@@ -119,8 +118,11 @@ const getState = ({ getStore, getActions, setStore }) => {
 					localStorage.setItem('token', data.access_token);
 					localStorage.setItem("admin", JSON.stringify({ name, email, role: data.role }));
 					localStorage.setItem('name', data.name);
-					localStorage.setItem('email', data.email); 
+
+					localStorage.setItem('email', data.email);
 					localStorage.setItem('id', data.id);
+					localStorage.setItem('role', data.role)
+
 				} catch (error) {
 					console.error('Error al iniciar sesión:', error);
 					let store = getStore();
@@ -162,6 +164,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 					localStorage.setItem('name', data.name);
 					localStorage.setItem('email', data.email);
 					localStorage.setItem('id', data.id);
+					localStorage.setItem('role', data.role)
 				} catch (error) {
 					console.error('Error al iniciar sesión:', error);
 					let store = getStore();
@@ -187,6 +190,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 					}
 			
 					const data = await response.json();
+					console.log("DATOS DE RESPUESTA", data)
 					let store = getStore()
                     setStore({
 						...store,
@@ -201,6 +205,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 					localStorage.setItem('name', data.name);
 					localStorage.setItem('email', data.email);
 					localStorage.setItem('id', data.id);
+					localStorage.setItem('role', data.role)
 					
                 } catch (error) {
                     console.error("Error al iniciar sesión:", error);
@@ -210,14 +215,9 @@ const getState = ({ getStore, getActions, setStore }) => {
             },
 
 			logOut: () => {
-				localStorage.removeItem("token");
-				localStorage.removeItem("name");
-				localStorage.removeItem("email");
-				localStorage.removeItem("id");
-				let store = getStore();
-				setStore({...store, user: null, doctor: null, admin: null, token: null });
-			
-				console.log("Sesión cerrada exitosamente");
+				localStorage.removeItem("userData");
+				localStorage.removeItem("role");
+				setStore({ admin: null, doctor: null, user: null });
 			},
 
             loadSession: () => {
@@ -234,37 +234,38 @@ const getState = ({ getStore, getActions, setStore }) => {
 					token: storedToken || null,
 				});
 			},
-			getCurrentUser: async () => {
-				const baseURL = process.env.REACT_APP_BASE_URL;
-				try {
-					const response = await fetch(`${baseURL}api/current_user`, {
-						method: 'GET',
-						headers: {
-							'Authorization': `Bearer ${localStorage.getItem("token")}`,
-						},
-					});
 
-					if (!response.ok) {
-						let errorMessage = 'Error desconocido';
-						try {
-							const errorData = await response.json(); 
-							console.log('error aqui',errorData)
-							errorMessage = errorData.error || errorData.message || 'Error en la solicitud';
-						} catch (err) {
-							errorMessage = 'Error al procesar la respuesta del servidor';
-						}
-						throw new Error(errorMessage);
-					}
+			// getCurrentUser: async () => {
+			// 	const baseURL = process.env.REACT_APP_BASE_URL;
+			// 	try {
+			// 		const response = await fetch(`${baseURL}api/current_user`, {
+			// 			method: 'GET',
+			// 			headers: {
+			// 				'Authorization': `Bearer ${localStorage.getItem("token")}`,
+			// 			},
+			// 		});
 
-					const data = await response.json();
-					setStore(data)
+			// 		if (!response.ok) {
+			// 			let errorMessage = 'Error desconocido';
+			// 			try {
+			// 				const errorData = await response.json();
+			// 				errorMessage = errorData.error || errorData.message || 'Error en la solicitud';
+			// 			} catch (err) {
+			// 				errorMessage = 'Error al procesar la respuesta del servidor';
+			// 			}
+			// 			throw new Error(errorMessage);
+			// 		}
+
+			// 		const data = await response.json();
+			// 		setStore(data)
 
 
-				} catch (error) {
-					console.error('Error al registrar paciente:', error);
-					setStore({ message: error.message });
-				}
-			},
+			// 	} catch (error) {
+			// 		console.error('Error al registrar paciente:', error);
+			// 		setStore({ message: error.message });
+			// 	}
+			// },
+
 			// revisar el password
 			// Registro de pacientes
 			RegistroPacientes: async (name, email, password) => {

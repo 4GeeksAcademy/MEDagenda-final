@@ -4,8 +4,11 @@ import { Context } from "../store/appContext";
 import { useNavigate } from "react-router-dom";
 
 export const Navbar = () => {
-    const { actions, store } = useContext(Context);
-    const user = store.user?.role, doctor = store.doctor?.role, admin = store.admin?.role;
+    const { actions } = useContext(Context);
+    const admin = localStorage.getItem('role')
+    let user = localStorage.getItem('user')?.role
+    let doctor = localStorage.getItem('doctor')?.role;
+
     const role = admin || doctor || user;
 
     const navigate = useNavigate();
@@ -15,6 +18,7 @@ export const Navbar = () => {
         actions.logOut();
         navigate("/");
     };
+
 
 
     return (
@@ -55,20 +59,23 @@ export const Navbar = () => {
 
                         {/* Opciones específicas para cada rol */}
                         {role === "doctor" && (
-                            <li className="nav-item">
-                                <Link to="/editdoc" className="nav-link">Mi Perfil</Link>
-                                <li>
 
+                            <>
+                                <li className="nav-item">
+                                    <Link to="/editdoc" className="nav-link">Mi Perfil</Link>
+                                </li>  {/* ✅ Se cierra correctamente */}
+
+                                <li className="nav-item">
                                     <Link to="/pacientes" className="nav-link">Mis Pacientes</Link>
-
                                 </li>
-                            </li>
+                            </>
 
                         )}
 
                         {role === "admin" && (
                             <>
                                 <li className="nav-item">
+
                                     <Link to="/panel/admin" className="nav-link">Panel Admin</Link> 
                                     <li> 
                                         <Link to="/editadmin" className="nav-link">Mi Perfil</Link>
@@ -109,6 +116,7 @@ export const Navbar = () => {
                                         </ul>
                                     </li>
                                 </li>
+
 
 
                             </>
