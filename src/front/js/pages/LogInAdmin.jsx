@@ -18,13 +18,13 @@ const LogInAdmin = () => {
 };
  useEffect(() => {
         if (store.admin && store.admin.role) {
-            if (store.user.role === 'admin') {
+            if (store.admin.role === 'admin') {
                 navigate("/panel/admin");
             } else {
                 navigate("/logInAdmin");
             }
         }
-    }, [store.user, navigate]);
+    }, [store.admin, navigate]);
     
 
     return (

@@ -54,6 +54,7 @@ class Administrator(db.Model):
     name = db.Column(db.String(100), nullable=False)
     email = db.Column(db.String(100), unique=True, nullable=False)
     password = db.Column(db.String(100), nullable=False)
+    role=db.Column(db.String(100),nullable=False, default='admin')
 
     def __repr__(self):
         return f'<Administrator {self.name}>'
@@ -63,6 +64,7 @@ class Administrator(db.Model):
             "admin_id": self.admin_id,
             "name": self.name,
             "email": self.email,
+            "role":self.role,
         }
 
 class Appointment(db.Model):

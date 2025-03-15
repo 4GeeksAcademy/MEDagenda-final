@@ -337,11 +337,12 @@ def get_token_admin():
         if true_o_false: 
             expires = timedelta(days=1)
             admin_id = login_admin.admin_id  # Corregido
-            access_token = create_access_token(identity={'id': admin_id, 'role': 'User '}, expires_delta=expires)
+            access_token = create_access_token(identity={'id': admin_id, 'role': 'admin'}, expires_delta=expires)
             admin_data = {
                 "name": login_admin.name,
                 "email": login_admin.email,
                 "id": login_admin.admin_id,
+                "role": login_admin.role,
                 "access_token": access_token  # Corregido
             }
             return jsonify(admin_data), 200  # Corregido
@@ -598,11 +599,17 @@ def edit_admin(admin_id):
         return jsonify ({'error':'Usuario no encontrado'}),400 
     
     data = request.json  
+    if "name" in data: 
+        admin.name = data["name"] 
+    if "email" in data: 
+        admin.email = data["email"] 
+    if "password" in data:  
+        password_hash = bcrypt.generate_password_hash(data.get('password')).decode('utf-8')
+        admin.password = password_hash 
     
     if not isinstance(data, dict):  
         return jsonify({"error": "Los datos deben ser un diccionario"}), 400
     try:
-        Administrator.query.filter_by(admin_id=admin_id).update(dict(data))
         db.session.commit()
         return jsonify({"message": "El usuario de Admin se actualizó correctamente"}), 200
     except Exception as e:
