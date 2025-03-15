@@ -4,18 +4,22 @@ import { Context } from "../store/appContext";
 import { useNavigate } from "react-router-dom";
 
 export const Navbar = () => {
-    const { actions, store } = useContext(Context);
-    const user = store.user?.role, doctor = store.doctor?.role, admin = store.admin?.role;
+    const { actions } = useContext(Context);
+    const admin = localStorage.getItem('role')
+    let user = localStorage.getItem('user')?.role
+    let doctor = localStorage.getItem('doctor')?.role;
+
     const role = admin || doctor || user;
 
     const navigate = useNavigate();
 
     const handleLogout = () => {
-       
+
         actions.logOut();
         navigate("/");
     };
-   
+
+
 
     return (
         <nav className="navbar navbar-expand-lg bg-black navbar-dark">
@@ -34,7 +38,7 @@ export const Navbar = () => {
                 </button>
                 <div className="collapse navbar-collapse" id="navbarNav">
                     <ul className="navbar-nav">
-                        
+
                         {/* Mostrar opciones de inicio de sesión si no hay usuario autenticado */}
                         {!role && (
                             <>
@@ -55,21 +59,23 @@ export const Navbar = () => {
 
                         {/* Opciones específicas para cada rol */}
                         {role === "doctor" && (
-                            <li className="nav-item">
-                                <Link to="/editdoc" className="nav-link">Mi Perfil</Link> 
-                               <li> 
+                            <>
+                                <li className="nav-item">
+                                    <Link to="/editdoc" className="nav-link">Mi Perfil</Link>
+                                </li>  {/* ✅ Se cierra correctamente */}
 
-                               <Link to="/pacientes" className="nav-link">Mis Pacientes</Link>
-
-                               </li>
-                            </li>  
-                           
+                                <li className="nav-item">
+                                    <Link to="/pacientes" className="nav-link">Mis Pacientes</Link>
+                                </li>
+                            </>
                         )}
 
                         {role === "admin" && (
-                            <li className="nav-item">
-                                <Link to="/panel/admin" className="nav-link">Panel Admin</Link>
-                            </li>
+                            <>
+                                <li className="nav-item">
+                                    <Link to="/panel/admin" className="nav-link">Panel Admin</Link>
+                                </li>
+                            </>
                         )}
 
                         {role === "user" && (
