@@ -410,12 +410,6 @@ def get_appointments():
        appointments = Appointment.query.filter_by(user_id=current_user_id).all()
     return jsonify([appointment.serialize() for appointment in appointments]), 200
 
-@api.route('/test', methods=['GET'])
-@jwt_required()
-def test():
-    current_user = get_jwt_identity()
-    return jsonify({"message": "You are in a restricted area", "user": current_user}), 200
-
 
 @api.route('/appointments', methods=['POST'])
 @jwt_required()
