@@ -18,7 +18,8 @@ import PanelAdmin from "./pages/PanelAdmin.jsx";
 import EditDoctor from "./pages/EditDoctor.jsx";
 import EditAdmin from "./pages/EditAdmin.jsx";
 import Calendar from "./pages/Calendar.jsx"; 
-import Pacientes from "./component/Pacientes.jsx";
+import Pacientes from "./component/Pacientes.jsx"; 
+import Footer from "./component/Footer.jsx"
 
 
 

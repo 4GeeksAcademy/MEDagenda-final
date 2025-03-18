@@ -75,8 +75,9 @@ export const Navbar = () => {
                         {role === "admin" && (
                             <>
                                 <li className="nav-item">
-
-                                    <Link to="/panel/admin" className="nav-link">Panel Admin</Link> 
+                                        
+                                    <Link to="/panel/admin" className="nav-link">Panel Admin</Link>  
+                                    </li>
                                     <li> 
                                         <Link to="/editadmin" className="nav-link">Mi Perfil</Link>
                                     </li>
@@ -115,7 +116,7 @@ export const Navbar = () => {
                                             ))}
                                         </ul>
                                     </li>
-                                </li>
+                               
 
 
 
