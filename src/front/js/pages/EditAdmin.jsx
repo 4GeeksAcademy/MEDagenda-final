@@ -102,7 +102,6 @@ const EditAdmin = () => {
 
 
               <button className='btn-danger btn-lg my-2' onClick={deleteUs} type="submit">Delete User</button> 
-              <button className='btn-warning btn-lg my-2' onClick={handleLogout} type="submit">LogOut</button>
 
             </div>
           </>) : (
