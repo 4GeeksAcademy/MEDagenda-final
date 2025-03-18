@@ -458,27 +458,43 @@ def create_appointment():
     print(request.headers)  # Verificar si el frontend está enviando el token
     data = request.get_json()
     current_user = get_jwt_identity()
+    user_id = int(current_user) if current_user.isdigit() else current_user.get("id")
+    print("ESTA ES LA INFORMACION", "current_user:", current_user, type(current_user))
 
     try:
         date_str = data.get('date')
         time_str = data.get('time')
+        doctor_id = data.get('doctor_id')
+
         date_obj = datetime.strptime(date_str, '%Y-%m-%d').date() if date_str else None
         time_obj = datetime.strptime(time_str, '%H:%M:%S').time() if time_str else None
 
-        # OJO el user_id se toma de current_user['id']no del JSON 
+        # Buscar el doctor en la base de datos
+        doctor = Doctor.query.get(doctor_id)
+        if not doctor:
+            return jsonify({"error": "Doctor no encontrado"}), 404
+
+        # Crear la cita
         new_appointment = Appointment(
-            user_id=current_user['id'],
-            doctor_id=data.get('doctor_id'),
+            user_id=user_id,
+            doctor_id=doctor_id,
             date=date_obj,
             time=time_obj,
             status=data.get('status')
         )
         db.session.add(new_appointment)
         db.session.commit()
-        return jsonify(new_appointment.serialize()), 201
+
+        # Serializar la respuesta incluyendo el nombre del doctor
+        response_data = new_appointment.serialize()
+        response_data["doctor_name"] = doctor.name  # Agregar el nombre del doctor
+
+        return jsonify(response_data), 201
+
     except Exception as e:
         db.session.rollback()
         return jsonify({"error": str(e)}), 400
+
         
 # Endpoints para el modelo Availability
 @api.route('/availabilities', methods=['GET'])

@@ -105,19 +105,21 @@ const getState = ({ getStore, getActions, setStore }) => {
 
 			//aacción para agregar una cita en el backend y actualizar el store
 			addAppointment: async (userId, doctorId, date, time, status) => {
+				console.log("estos son los datos", userId, doctorId, date, time, status)
+				let token = `Bearer ${localStorage.getItem("token")}`
 				const baseURL = process.env.REACT_APP_BASE_URL;
 				try {
 					const response = await fetch(`${baseURL}api/appointments`, {
 						method: "POST",
 						headers: {
 							"Content-Type": "application/json",
-							'Authorization': `Bearer ${localStorage.getItem("token")}`,
-
+							'Authorization': token
 						},
-						body: JSON.stringify({ user_id: userId, doctor_id: doctorId, date, time, status }),
+						body: JSON.stringify({ user_id: userId, doctor_id: doctorId, date: date, time: time, status: status }),
 					});
 					if (!response.ok) throw new Error("Error al agregar cita");
 					const data = await response.json();
+					console.log("ESTA ES LA DATA DE RESPUESTA DE ADDAPPOIMENT", data)
 					const event = {
 						id: data.appointment_id || data.id,
 						title: `Cita con el Dr. ${data.doctor_name || ""}`,
