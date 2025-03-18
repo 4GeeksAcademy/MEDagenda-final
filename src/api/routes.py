@@ -8,6 +8,7 @@ from datetime import datetime
 from flask_bcrypt import Bcrypt  
 from flask_jwt_extended import JWTManager, create_access_token,jwt_required,get_jwt_identity,get_jwt  
 from datetime import timedelta
+import mercadopago
 
 
 app=Flask(__name__)
@@ -26,7 +27,7 @@ bcrypt = Bcrypt()
 jwt = JWTManager()  
 jwt.init_app(app) 
 
-# db = SQLAlchemy(app)
+sdk = mercadopago.SDK("APP_USR-4468612021150748-031723-971572ed60ea5d19836c38c91228398d-2333789143")
 
 # Ruta de ejemplo
 @api.route('/hello', methods=['GET'])
@@ -35,6 +36,45 @@ def handle_hello():
         "message": "Hello! This message comes from the backend. Check the network tab in your browser to see the GET request."
     }
     return jsonify(response_body), 200
+
+@api.route("/create_preference", methods=["POST"])
+def create_preference():
+    try:
+        data = request.json  # Recibir los datos del frontend
+        if not data or "title" not in data or "quantity" not in data or "price" not in data:
+            return jsonify({"error": "Datos inválidos"}), 400
+
+        # Crear la preferencia de pago para Mercado Pago
+        preference_data = {
+            "items": [
+                {
+                    "title": data["title"],
+                    "quantity": data["quantity"],
+                    "currency_id": "ARS",  # ✅ Asegurar moneda correcta
+                    "unit_price": float(data["price"]),
+                }
+            ],
+            "back_urls": {
+                "success": "https://crispy-capybara-5gx45qjx4prpcw4p-3000.app.github.dev/",
+                "failure": "https://crispy-capybara-5gx45qjx4prpcw4p-3000.app.github.dev/",
+                "pending": "https://crispy-capybara-5gx45qjx4prpcw4p-3000.app.github.dev/"
+            },
+            "auto_return": "approved"
+        }
+
+        preference_response = sdk.preference().create(preference_data)
+
+        # 🔹 Imprimir la respuesta completa en la terminal para debug
+        print("🔹 Respuesta de Mercado Pago:", preference_response)
+
+        # ✅ Verificar si la clave "id" está en la respuesta
+        if "response" in preference_response and "id" in preference_response["response"]:
+            return jsonify({"id": preference_response["response"]["id"]})
+        else:
+            return jsonify({"error": "Mercado Pago no devolvió un ID válido", "details": preference_response}), 500
+
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
 
 # Endpoints para el modelo User
 @api.route('/user', methods=['GET'])
