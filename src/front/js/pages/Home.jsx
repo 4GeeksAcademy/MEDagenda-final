@@ -1,5 +1,6 @@
 import React from "react";
 import "../../styles/home.css";
+import Pagos from "../component/Pagos.jsx";
 
 
 const Home = () => {
@@ -14,6 +15,7 @@ const Home = () => {
                         <p className="card-text">This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
                         <p className="card-text"><small>Los mejores profesionales a tu disposicion</small></p>
                     </div>
+                   < Pagos /> 
             </div>
 
         </div>

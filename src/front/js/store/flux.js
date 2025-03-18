@@ -10,10 +10,60 @@ const getState = ({ getStore, getActions, setStore }) => {
 			doctor: null,
 			admin: null,
 			events: [],
-			role: localStorage.getItem("role") || null // Obtener el rol almacenado
+			role: localStorage.getItem("role") || null, // Obtener el rol almacenado
+			preferenceId: null,
 
 		},
 		actions: {
+
+			setPreferenceId: (id) => {
+				setStore({ preferenceId: id });  // ✅ Guarda el ID en Flux
+			},
+
+			createPreference: async () => {
+				const baseURL = process.env.REACT_APP_BASE_URL;
+				if (!baseURL) {
+				  console.error("❌ ERROR: REACT_APP_BASE_URL no está definido.");
+				  return null;
+				}
+		
+				try {
+				  console.log("🔹 Enviando solicitud a:", `${baseURL}api/create_preference`);
+		
+				  const response = await fetch(`${baseURL}api/create_preference`, {
+					method: "POST",
+					headers: {
+					  "Content-Type": "application/json",
+					},
+					body: JSON.stringify({
+					  title: "Consulta medica",
+					  quantity: 1,
+					  price: 50,
+					}),
+				  });
+		
+				  if (!response.ok) {
+					const errorText = await response.text();
+					throw new Error(`Error en la API: ${errorText}`);
+				  }
+		
+				  const data = await response.json();
+				  console.log("✅ Preferencia creada:", data);
+		
+				  // Guardar el ID de la preferencia en el store
+				  let store = getStore();
+				  setStore({ ...store, preferenceId: data.id });
+		
+				  return data.id;
+				} catch (error) {
+				  console.error("❌ Error en createPreference:", error.message);
+				  return null;
+				}
+			  },
+			  
+
+
+
 			setRole: (newRole) => {
 				let store = getStore();
                 setStore({...store, role: newRole });
