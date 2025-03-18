@@ -22,7 +22,7 @@ import Calendar from "./pages/Calendar.jsx";
 import Pacientes from "./component/Pacientes.jsx";
 import Footer from "./component/Footer.jsx";
 import Pagos from "./component/Pagos.jsx";
-p
+
 
 
 
