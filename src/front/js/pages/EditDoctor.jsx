@@ -41,7 +41,7 @@ const EditDoctor = () => {
 
         if (confirmDelete) {
             try {
-                await actions.deleteAdmin(idDoc)
+                await actions.deleteDoctor(idDoc)
                 navigate('/')
             } catch (error) {
                 console.error("No se elimino Correctamente", error)
