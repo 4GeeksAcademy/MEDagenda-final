@@ -1,10 +1,12 @@
 import React, { useContext, useState, useEffect } from "react";
 import DoctorCard from "../component/DoctorCard.jsx";
 import { Context } from '../store/appContext'
+import { useNavigate } from "react-router-dom";
 
 const Cardiologia = () => {
     const { store, actions } = useContext(Context);
     const [doc, setDoctors] = useState([]);
+    const navigate = useNavigate()
 
     let admin = (localStorage.getItem('role'))
     let user = JSON.parse(localStorage.getItem('user'))?.role
@@ -70,6 +72,12 @@ const Cardiologia = () => {
                                     }}
                                 ></i>
                             ) : null}   
+                              <button 
+                            onClick={() => navigate("/Calendar")} 
+                            style={{ marginLeft: "10px", padding: "5px 10px" }}>
+                            Agendar
+
+                        </button>
 
                         
                         
