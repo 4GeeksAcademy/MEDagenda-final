@@ -3,7 +3,7 @@ import React from 'react';
 
 const Footer = () => {
   return (
-    <footer className="bg-dark text-white py-4" style={{ position: 'relative', bottom: 0, width: '100%' }}>
+    <footer className="bg-black text-white py-4" style={{ position: 'fixed', bottom: 0, width: '100%' }}>
       <div className="container">
         <div className="row">
           <div className="col-md-6">
@@ -27,6 +27,9 @@ const Footer = () => {
             <a href="https://www.instagram.com" className="text-white" target="_blank" rel="noopener noreferrer">
               <i className="fab fa-instagram"></i> Instagram
             </a>
+            <a href="https://medicasur.com.mx/es/ms/Preguntas_Frecuentes_Asistencia" className="text-white" target="_blank" rel="noopener noreferrer">
+            <i className="fa-regular fa-thought-bubble"></i> FAQs
+                </a>
           </div>
         </div>
       </div>

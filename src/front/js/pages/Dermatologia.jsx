@@ -1,6 +1,7 @@
 import React, { useContext,useState, useEffect } from "react";
 import DoctorCard from "../component/DoctorCard.jsx";
 import { Context } from '../store/appContext'
+import { useNavigate } from "react-router-dom";
 const doctores = [
     { id: 1, name: "Doctor Diego Vazquez", especialidad: "Pediatra" },
     { id: 2, name: "Doctora Yarely Martinez", especialidad: "Pediatra" },
@@ -10,6 +11,7 @@ const Dermatologia = () => {
         const { store, actions } = useContext(Context);
         const [doc, setDoctors] = useState([]);
         const navigate = useNavigate()
+        
         let admin = (localStorage.getItem('role'))
         let user = JSON.parse(localStorage.getItem('user'))?.role
         let role = admin || user
