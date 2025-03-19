@@ -1,6 +1,7 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { use, useContext, useEffect, useState } from "react";
 import DoctorCard from "../component/DoctorCard.jsx";
 import { Context } from '../store/appContext'
+import { useNavigate } from "react-router-dom";
 
 
 const MedicinaGeneral = () => {
@@ -9,16 +10,18 @@ const MedicinaGeneral = () => {
         { id: 2, name: "Doctora Yarely Martinez", especialidad: "Pediatra" },
     ];
     const { store, actions } = useContext(Context);
-    const [doc, setDoctors] = useState([]);
+    const [doc, setDoctors] = useState([]); 
+    const navigate=useNavigate()
 
     let admin = (localStorage.getItem('role'))
-    let user = JSON.parse(localStorage.getItem('user'))?.role
-    let role = admin || user
+    let user = JSON.parse(localStorage.getItem('user'))?.role 
+    let doctor = JSON.parse(localStorage.getItem('doctor'))?.role
+    let role = admin || user || doctor
 
 
 
 
-    const doctor = async () => {
+    const getdoctor = async () => {
         try {
             await actions.doctorsGet()
         } catch (error) {
@@ -45,7 +48,7 @@ const MedicinaGeneral = () => {
 
 
     useEffect(() => {
-        doctor()
+        getdoctor()
 
     }, [store.doctors])
     
@@ -78,8 +81,14 @@ const MedicinaGeneral = () => {
                                     }}
                                 ></i>
                             ) : null}
+                            
+                            
+                            {role === 'doctor' ? ( 
+                            
+                            
+                            <button onClick={()=>navigate('/Calendar')} className="btn btn-primary">Mi Agenda</button>
 
-
+                            ):null}
                         </li>
 
                     ))}

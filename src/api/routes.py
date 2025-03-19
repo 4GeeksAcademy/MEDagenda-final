@@ -520,7 +520,7 @@ def delete_appointment(appointment_id):
 
 
 
-@api.route('/horarios', methods=['POST'])
+@api.route('/availabilities', methods=['POST'])
 def create_availability():
     data = request.get_json()
     try:

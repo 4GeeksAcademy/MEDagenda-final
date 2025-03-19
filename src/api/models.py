@@ -34,7 +34,7 @@ class Doctor(db.Model):
     role=db.Column(db.String(100),nullable=False, default='doctor')
     # Relaciones
     appointments = db.relationship('Appointment', backref='doctor', lazy=True)
-    availabilities = db.relationship('Availability', backref='doctor', lazy=True)
+    availabilities = db.relationship("Availability", back_populates="doctor")
     appointments = db.relationship("Appointment", back_populates="doctor")
 
     def __repr__(self):
@@ -98,7 +98,8 @@ class Availability(db.Model):
     doctor_id = db.Column(db.Integer, db.ForeignKey('doctor.doctor_id'), nullable=False)
     day = db.Column(db.String(50), nullable=False)
     start_time = db.Column(db.Time, nullable=False)
-    end_time = db.Column(db.Time, nullable=False)
+    end_time = db.Column(db.Time, nullable=False) 
+    doctor = db.relationship("Doctor", back_populates="availabilities")
 
     def __repr__(self):
         return f'<Availability {self.availability_id}>'
@@ -106,7 +107,8 @@ class Availability(db.Model):
     def serialize(self):
         return {
             "availability_id": self.availability_id,
-            "doctor_id": self.doctor_id,
+            "doctor_id": self.doctor_id, 
+            "doctor_name": self.doctor.name if self.doctor else None,
             "day": self.day,
             "start_time": self.start_time.strftime("%H:%M:%S") if self.start_time else None,
             "end_time": self.end_time.strftime("%H:%M:%S") if self.end_time else None,

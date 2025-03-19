@@ -63,7 +63,10 @@ export const Navbar = () => {
                             <>
                                 <li className="nav-item">
                                     <Link to="/editdoc" className="nav-link">Mi Perfil</Link>
-                                </li>  {/* ✅ Se cierra correctamente */}
+                                </li>  {/* ✅ Se cierra correctamente */} 
+                                <li className="nav-item">
+                                    <Link to="/calendar" className="nav-link">Agenda</Link>
+                                </li>
 
                                 <li className="nav-item">
                                     <Link to="/pacientes" className="nav-link">Mis Pacientes</Link>
