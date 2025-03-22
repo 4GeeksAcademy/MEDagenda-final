@@ -1,6 +1,7 @@
 import React, { useContext,useState, useEffect } from "react";
 import DoctorCard from "../component/DoctorCard.jsx";
 import { Context } from '../store/appContext'
+import { useNavigate } from "react-router-dom";
 const doctores = [
     { id: 1, name: "Doctor Diego Vazquez", especialidad: "Pediatra" },
     { id: 2, name: "Doctora Yarely Martinez", especialidad: "Pediatra" },
@@ -9,6 +10,7 @@ const doctores = [
 const Oftalmologia = () => { 
     const { store, actions } = useContext(Context);
                 const [doc, setDoctors] = useState([]);
+                const navigate = useNavigate()
             
                 let admin = (localStorage.getItem('role'))
                 let user = JSON.parse(localStorage.getItem('user'))?.role
@@ -77,6 +79,12 @@ const Oftalmologia = () => {
                                     }}
                                 ></i>
                             ) : null}  
+                            <button 
+                            onClick={() => navigate("/Calendar")} 
+                            style={{ marginLeft: "10px", padding: "5px 10px" }}>
+                            Agendar
+
+                        </button>
                 
                 
                 </li>

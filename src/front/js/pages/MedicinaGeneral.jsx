@@ -10,8 +10,12 @@ const MedicinaGeneral = () => {
         { id: 2, name: "Doctora Yarely Martinez", especialidad: "Pediatra" },
     ];
     const { store, actions } = useContext(Context);
+
     const [doc, setDoctors] = useState([]); 
     const navigate=useNavigate()
+=======
+
+
 
     let admin = (localStorage.getItem('role'))
     let user = JSON.parse(localStorage.getItem('user'))?.role 
@@ -86,7 +90,13 @@ const MedicinaGeneral = () => {
                             {role === 'doctor' || role === 'user' ? ( 
                             
                             
-                            <button onClick={()=>navigate('/Calendar')} className="btn btn-primary">Mi Agenda</button>
+                            <button 
+                            onClick={() => navigate("/Calendar")} 
+                            style={{ marginLeft: "10px", padding: "5px 10px" }}>
+                            Agendar
+
+                        </button>
+
 
                             ):null}
                         </li>
