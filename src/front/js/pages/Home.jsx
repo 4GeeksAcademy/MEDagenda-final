@@ -1,6 +1,10 @@
 import React from "react";
 import "../../styles/home.css";
+
 import { useNavigate } from "react-router-dom";
+
+
+
 
 
 const Home = () => {
@@ -15,7 +19,7 @@ const navigate = useNavigate ()
                     <h5>Agenda tu cita médica de forma rápida y sencilla con los mejores especialistas.</h5>
                     <button className="btn btn-primary btn-lg" onClick={()=> navigate("/registroPacientes")}>Agendar</button>
                     </div>
-                   
+
             </div>
 
         </div>

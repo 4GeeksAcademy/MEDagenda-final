@@ -10,15 +10,67 @@ const getState = ({ getStore, getActions, setStore }) => {
 			doctor: null,
 			admin: null,
 			events: [],
-			role: localStorage.getItem("role") || null // Obtener el rol almacenado
+			role: localStorage.getItem("role") || null, // Obtener el rol almacenado
+			preferenceId: null,
 
 		},
 		actions: {
+
+			setPreferenceId: (id) => {
+				setStore({ preferenceId: id });  // ✅ Guarda el ID en Flux
+			},
+
+			createPreference: async () => {
+				const baseURL = process.env.REACT_APP_BASE_URL;
+				if (!baseURL) {
+				  console.error("❌ ERROR: REACT_APP_BASE_URL no está definido.");
+				  return null;
+				}
+		
+				try {
+				  console.log("🔹 Enviando solicitud a:", `${baseURL}api/create_preference`);
+		
+				  const response = await fetch(`${baseURL}api/create_preference`, {
+					method: "POST",
+					headers: {
+					  "Content-Type": "application/json",
+					},
+					body: JSON.stringify({
+					  title: "Consulta medica",
+					  quantity: 1,
+					  price: 50,
+					}),
+				  });
+		
+				  if (!response.ok) {
+					const errorText = await response.text();
+					throw new Error(`Error en la API: ${errorText}`);
+				  }
+		
+				  const data = await response.json();
+				  console.log("✅ Preferencia creada:", data);
+		
+				  // Guardar el ID de la preferencia en el store
+				  let store = getStore();
+				  setStore({ ...store, preferenceId: data.id });
+		
+				  return data.id;
+				} catch (error) {
+				  console.error("❌ Error en createPreference:", error.message);
+				  return null;
+				}
+			  },
+			  
+
+
+
 			setRole: (newRole) => {
 				let store = getStore();
                 setStore({...store, role: newRole });
                 localStorage.setItem("role", newRole); // Guardar en localStorage
             },
+
+			
 
 			fetchAppointments: async () => {
 				const baseURL = process.env.REACT_APP_BASE_URL;
@@ -46,6 +98,8 @@ const getState = ({ getStore, getActions, setStore }) => {
 					}));
 					let store = getStore();
 					setStore ({...store, events: calendarEvents });
+
+					localStorage.setItem("appointments", JSON.stringify(calendarEvents));
 				} catch (error) {
 					console.error("Error en fetchAppointments:", error);
 				}
@@ -55,19 +109,21 @@ const getState = ({ getStore, getActions, setStore }) => {
 
 			//aacción para agregar una cita en el backend y actualizar el store
 			addAppointment: async (userId, doctorId, date, time, status) => {
+				console.log("estos son los datos", userId, doctorId, date, time, status)
+				let token = `Bearer ${localStorage.getItem("token")}`
 				const baseURL = process.env.REACT_APP_BASE_URL;
 				try {
 					const response = await fetch(`${baseURL}api/appointments`, {
 						method: "POST",
 						headers: {
 							"Content-Type": "application/json",
-							'Authorization': `Bearer ${localStorage.getItem("token")}`,
-
+							'Authorization': token
 						},
-						body: JSON.stringify({ user_id: userId, doctor_id: doctorId, date, time, status }),
+						body: JSON.stringify({ user_id: userId, doctor_id: doctorId, date: date, time: time, status: status }),
 					});
 					if (!response.ok) throw new Error("Error al agregar cita");
 					const data = await response.json();
+					console.log("ESTA ES LA DATA DE RESPUESTA DE ADDAPPOIMENT", data)
 					const event = {
 						id: data.appointment_id || data.id,
 						title: `Cita con el Dr. ${data.doctor_name || ""}`,
@@ -79,6 +135,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 						 ...store, events: [...store.events, event]
 
 						});
+
 				} catch (error) {
 					console.error("Error en addAppointment:", error);
 				}
@@ -236,38 +293,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 				});
 			},
 
-			// getCurrentUser: async () => {
-			// 	const baseURL = process.env.REACT_APP_BASE_URL;
-			// 	try {
-			// 		const response = await fetch(`${baseURL}api/current_user`, {
-			// 			method: 'GET',
-			// 			headers: {
-			// 				'Authorization': `Bearer ${localStorage.getItem("token")}`,
-			// 			},
-			// 		});
-
-			// 		if (!response.ok) {
-			// 			let errorMessage = 'Error desconocido';
-			// 			try {
-			// 				const errorData = await response.json();
-			// 				errorMessage = errorData.error || errorData.message || 'Error en la solicitud';
-			// 			} catch (err) {
-			// 				errorMessage = 'Error al procesar la respuesta del servidor';
-			// 			}
-			// 			throw new Error(errorMessage);
-			// 		}
-
-			// 		const data = await response.json();
-			// 		setStore(data)
-
-
-			// 	} catch (error) {
-			// 		console.error('Error al registrar paciente:', error);
-			// 		setStore({ message: error.message });
-			// 	}
-			// },
-
-			// revisar el password
+			
 			// Registro de pacientes
 			RegistroPacientes: async (name, email, password) => {
 				const baseURL = process.env.REACT_APP_BASE_URL;
@@ -728,9 +754,16 @@ const getState = ({ getStore, getActions, setStore }) => {
 			//funcion para eliminar citas 
 
 			deleteAppointment: async (appointmentId) => {
+				if (!appointmentId) {
+				  console.error("Error: appointmentId es inválido");
+				  return;
+				}
+			  
 				const baseURL = process.env.REACT_APP_BASE_URL;
+				const store = getStore();
+				const token = store.token;
+			  
 				try {
-				  const token = getStore().token;
 				  const response = await fetch(`${baseURL}api/appointments/${appointmentId}`, {
 					method: "DELETE",
 					headers: {
@@ -738,39 +771,21 @@ const getState = ({ getStore, getActions, setStore }) => {
 					  "Authorization": `Bearer ${token}`,
 					},
 				  });
-				  if (!response.ok) throw new Error("Error al eliminar la cita");
-				  // Actualiza el store eliminando el evento borrado
-				  const store = getStore();
-				  setStore({ events: store.events.filter(event => event.id !== appointmentId) });
+			  
+				  if (!response.ok) {
+					const errorData = await response.json();
+					throw new Error(errorData.message || "Error al eliminar la cita");
+				  }
+			  
+				  // Filtrar la cita eliminada y actualizar el store
+				  let store = getStore()
+				  setStore({...store, events: store.events.filter(event => event.id !== appointmentId) });
+			  
+				  console.log(`Cita con ID ${appointmentId} eliminada correctamente`);
 				} catch (error) {
 				  console.error("Error en deleteAppointment:", error);
-				  let store = getStore();
-				  setStore({...store, message: error.message });
-				}
-			  },
-
-
-			//editar citas 
-
-			updateAppointment: async (appointmentId, updatedData) => {
-				const baseURL = process.env.REACT_APP_BASE_URL;
-				try {
-				  const token = getStore().token;
-				  const response = await fetch(`${baseURL}api/appointments/${appointmentId}`, {
-					method: "PUT",
-					headers: {
-					  "Content-Type": "application/json",
-					  "Authorization": `Bearer ${token}`,
-					},
-					body: JSON.stringify(updatedData),
-				  });
-				  if (!response.ok) throw new Error("Error al actualizar la cita");
-				  // Actualiza el store: aquí podrías hacer un refetch de las citas o actualizar el evento en el store
-				  actions.fetchAppointments();
-				} catch (error) {
-				  console.error("Error en updateAppointment:", error);
-				  let store = getStore();
-				  setStore({...store, message: error.message });
+				  let store = getStore()
+				  setStore({ ...store, message: error.message });
 				}
 			  },
 			  

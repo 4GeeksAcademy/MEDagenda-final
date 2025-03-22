@@ -31,25 +31,10 @@ const Calendar = () => {
 
   // Función para manejar edición o eliminación de citas
   const handleEventClick = async (clickInfo) => {
-    const action = prompt(
-      "¿Qué deseas hacer?\nEscribe 'eliminar' para borrar o 'editar' para modificar la cita:"
-    );
-
-    if (action?.toLowerCase() === "eliminar") {
-      if (window.confirm("¿Estás seguro de eliminar esta cita?")) {
+    if (window.confirm("¿Estás seguro de eliminar esta cita?")) {
         await actions.deleteAppointment(clickInfo.event.id);
-      }
-    } else if (action?.toLowerCase() === "editar") {
-      const newTitle = prompt("Ingresa el nuevo título para la cita:", clickInfo.event.title);
-      if (newTitle) {
-        const updatedData = {
-          title: newTitle,
-          date: clickInfo.event.start.toISOString().split("T")[0], // Formato YYYY-MM-DD
-        };
-        await actions.updateAppointment(clickInfo.event.id, updatedData);
-      }
     }
-  };
+};
 
   // Botón visible para agregar cita manual
   const handleAddButton = async () => {
@@ -64,11 +49,20 @@ const Calendar = () => {
       alert("Faltan datos para crear la cita.");
     }
   };
+  
 
   return (
     <div className="calendar-container">
       <h2 className="calendar-title">📅 Mi Agenda :D</h2>
       <button onClick={handleAddButton}>Agregar Cita</button>
+  
+      {/* Mostrar el botón de eliminar solo si hay citas */}
+      {store.events.length > 0 && (
+        <button onClick={() => alert("Haz clic en una cita para eliminarla")}>
+          Eliminar Cita
+        </button>
+      )}
+  
       <div className="calendar-box">
         <FullCalendar
           plugins={[dayGridPlugin, interactionPlugin]}

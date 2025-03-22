@@ -18,8 +18,11 @@ import PanelAdmin from "./pages/PanelAdmin.jsx";
 import EditDoctor from "./pages/EditDoctor.jsx";
 import EditAdmin from "./pages/EditAdmin.jsx";
 import Calendar from "./pages/Calendar.jsx"; 
-import Pacientes from "./component/Pacientes.jsx"; 
-import Footer from "./component/Footer.jsx"
+
+import Pacientes from "./component/Pacientes.jsx";
+import Footer from "./component/Footer.jsx";
+import Pagos from "./component/Pagos.jsx";
+
 
 
 
@@ -66,6 +69,7 @@ const Layout = () => {
                         <Route element={<EditAdmin/>} path="/editadmin"/>
                         <Route element={<Calendar/>} path="/Calendar"/> 
                         <Route element={<Pacientes/>} path="/pacientes"/>
+                        <Route element={<Pagos/>} path="/pagos"/>
 
 
                         {/* Rutas para las especialidades médicas */}

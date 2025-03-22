@@ -8,6 +8,7 @@ from datetime import datetime
 from flask_bcrypt import Bcrypt  
 from flask_jwt_extended import JWTManager, create_access_token,jwt_required,get_jwt_identity,get_jwt  
 from datetime import timedelta
+import mercadopago
 
 
 app=Flask(__name__)
@@ -26,7 +27,7 @@ bcrypt = Bcrypt()
 jwt = JWTManager()  
 jwt.init_app(app) 
 
-# db = SQLAlchemy(app)
+sdk = mercadopago.SDK("APP_USR-4468612021150748-031723-971572ed60ea5d19836c38c91228398d-2333789143")
 
 # Ruta de ejemplo
 @api.route('/hello', methods=['GET'])
@@ -35,6 +36,45 @@ def handle_hello():
         "message": "Hello! This message comes from the backend. Check the network tab in your browser to see the GET request."
     }
     return jsonify(response_body), 200
+
+@api.route("/create_preference", methods=["POST"])
+def create_preference():
+    try:
+        data = request.json  # Recibir los datos del frontend
+        if not data or "title" not in data or "quantity" not in data or "price" not in data:
+            return jsonify({"error": "Datos inválidos"}), 400
+
+        # Crear la preferencia de pago para Mercado Pago
+        preference_data = {
+            "items": [
+                {
+                    "title": data["title"],
+                    "quantity": data["quantity"],
+                    "currency_id": "ARS",  # ✅ Asegurar moneda correcta
+                    "unit_price": float(data["price"]),
+                }
+            ],
+            "back_urls": {
+                "success": "https://crispy-capybara-5gx45qjx4prpcw4p-3000.app.github.dev/",
+                "failure": "https://crispy-capybara-5gx45qjx4prpcw4p-3000.app.github.dev/",
+                "pending": "https://crispy-capybara-5gx45qjx4prpcw4p-3000.app.github.dev/"
+            },
+            "auto_return": "approved"
+        }
+
+        preference_response = sdk.preference().create(preference_data)
+
+        # 🔹 Imprimir la respuesta completa en la terminal para debug
+        print("🔹 Respuesta de Mercado Pago:", preference_response)
+
+        # ✅ Verificar si la clave "id" está en la respuesta
+        if "response" in preference_response and "id" in preference_response["response"]:
+            return jsonify({"id": preference_response["response"]["id"]})
+        else:
+            return jsonify({"error": "Mercado Pago no devolvió un ID válido", "details": preference_response}), 500
+
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
 
 # Endpoints para el modelo User
 @api.route('/user', methods=['GET'])
@@ -418,27 +458,43 @@ def create_appointment():
     print(request.headers)  # Verificar si el frontend está enviando el token
     data = request.get_json()
     current_user = get_jwt_identity()
+    user_id = int(current_user) if current_user.isdigit() else current_user.get("id")
+    print("ESTA ES LA INFORMACION", "current_user:", current_user, type(current_user))
 
     try:
         date_str = data.get('date')
         time_str = data.get('time')
+        doctor_id = data.get('doctor_id')
+
         date_obj = datetime.strptime(date_str, '%Y-%m-%d').date() if date_str else None
         time_obj = datetime.strptime(time_str, '%H:%M:%S').time() if time_str else None
 
-        # OJO el user_id se toma de current_user['id']no del JSON 
+        # Buscar el doctor en la base de datos
+        doctor = Doctor.query.get(doctor_id)
+        if not doctor:
+            return jsonify({"error": "Doctor no encontrado"}), 404
+
+        # Crear la cita
         new_appointment = Appointment(
-            user_id=current_user['id'],
-            doctor_id=data.get('doctor_id'),
+            user_id=user_id,
+            doctor_id=doctor_id,
             date=date_obj,
             time=time_obj,
             status=data.get('status')
         )
         db.session.add(new_appointment)
         db.session.commit()
-        return jsonify(new_appointment.serialize()), 201
+
+        # Serializar la respuesta incluyendo el nombre del doctor
+        response_data = new_appointment.serialize()
+        response_data["doctor_name"] = doctor.name  # Agregar el nombre del doctor
+
+        return jsonify(response_data), 201
+
     except Exception as e:
         db.session.rollback()
         return jsonify({"error": str(e)}), 400
+
         
 # Endpoints para el modelo Availability
 @api.route('/availabilities', methods=['GET'])
@@ -448,7 +504,9 @@ def get_availabilities():
         return jsonify([availability.serialize() for availability in availabilities]), 200
     except Exception as e:
         return jsonify({"error": str(e)}), 500
+    
 ##############eliminar cita################
+
 @api.route('/appointments/<int:appointment_id>', methods=['DELETE'])
 @jwt_required()
 def delete_appointment(appointment_id):
@@ -459,25 +517,10 @@ def delete_appointment(appointment_id):
     db.session.delete(appointment)
     db.session.commit()
     return jsonify({"message": "Cita eliminada correctamente"}), 200
-##########editar cita############
-@api.route('/appointments/<int:appointment_id>', methods=['PUT'])
-@jwt_required()
-def update_appointment(appointment_id):
-    current_user = get_jwt_identity()
-    appointment = Appointment.query.get(appointment_id)
-    if not appointment or appointment.user_id != current_user['id']:
-        return jsonify({"error": "Cita no encontrada o acceso no autorizado"}), 404
-    data = request.get_json()
-    # Actualiza los campos necesarios, por ejemplo:
-    if data.get("date"):
-        appointment.date = datetime.strptime(data.get("date"), '%Y-%m-%d').date()
-    if data.get("time"):
-        appointment.time = datetime.strptime(data.get("time"), '%H:%M:%S').time()
-    db.session.commit()
-    return jsonify({"message": "Cita actualizada correctamente"}), 200
 
 
-@api.route('/availabilities', methods=['POST'])
+
+@api.route('/horarios', methods=['POST'])
 def create_availability():
     data = request.get_json()
     try:
