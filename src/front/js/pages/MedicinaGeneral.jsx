@@ -13,7 +13,6 @@ const MedicinaGeneral = () => {
 
     const [doc, setDoctors] = useState([]); 
     const navigate=useNavigate()
-=======
 
 
 

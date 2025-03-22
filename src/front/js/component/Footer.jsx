@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 
 
 const Footer = () => {
@@ -30,9 +31,7 @@ const Footer = () => {
               <i className="fab fa-instagram"></i> Instagram
             </a>
             <br />
-            <a href="https://medicasur.com.mx/es/ms/Preguntas_Frecuentes_Asistencia" className="text-white" target="_blank" rel="noopener noreferrer">
-            <i className="fa-regular fa-comment"></i> FAQ's
-                </a>
+            <Link to="/preguntasfrecuentes"> FAQ's</Link>
           </div>
         </div>
       </div>
