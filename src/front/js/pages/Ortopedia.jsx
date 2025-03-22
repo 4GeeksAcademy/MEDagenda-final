@@ -59,7 +59,7 @@ const Ortopedia = () => {
             </ul>  */}
             <div> 
             <ul>
-            {Array.isArray (store.doctor) && store.doctor.filter((item) => item.specialty === "Ortopedia y Traumatologia").map((item) => (
+            {Array.isArray (store.doctor) && store.doctor.filter((item) => item.specialty === "Ortopedia y Traumatología").map((item) => (
                 <li style={{
                     listStyleType: "none",
                     padding: "50px",
