@@ -446,42 +446,59 @@ def create_post():
 @api.route('/appointments', methods=['GET'])
 @jwt_required()
 def get_appointments(): 
-    print("Entre aca")
-    current_user_id = get_jwt_identity() 
-    print(f"Tipo de current_user_id: {type(current_user_id)}")
-
+    current_user_id = get_jwt_identity()
     claims = get_jwt()
-    print(f"Este es el current_user ID: {current_user_id}, role: {claims.get('role')}")
-    if claims.get('role') == 'Doctor':  
-        appointments = Appointment.query.filter_by(doctor_id=current_user_id).all() 
 
-    else:
-        appointments = Appointment.query.filter_by(user_id=current_user_id).all() 
-    
-    for appointment in appointments:
-        print(f"Cita ID: {appointment.appointment_id}, Doctor: {appointment.doctor.name}, Usuario: {appointment.user.name}")
-    return jsonify([appointment.serialize() for appointment in appointments]), 200,
+    try:
+        current_user_id = int(current_user_id)
+    except ValueError:
+        return jsonify({"error": "ID de usuario no válido"}), 400
+
+    print(f"Usuario ID: {current_user_id}, Role: {claims.get('role')}")
+
+    try:
+        if claims.get('role') == 'doctor':
+            appointments = Appointment.query.filter_by(doctor_id=current_user_id).options(
+                db.joinedload(Appointment.user)  # Carga relación con User
+            ).all()
+        else:
+            appointments = Appointment.query.filter_by(user_id=current_user_id).options(
+                db.joinedload(Appointment.doctor)  # Carga relación con Doctor
+            ).all()
+
+        return jsonify([appointment.serialize() for appointment in appointments]), 200
+
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
 
 
 
 @api.route('/appointments', methods=['POST'])
 @jwt_required()
 def create_appointment():
-    print(request.headers)  # Verificar si el frontend está enviando el token
     data = request.get_json()
     current_user = get_jwt_identity()
-    user_id = int(current_user) if current_user.isdigit() else current_user.get("id")
-    print("ESTA ES LA INFORMACION", "current_user:", current_user, type(current_user))
+
+    # Obtener el ID del usuario correctamente
+    try:
+        user_id = int(current_user) if str(current_user).isdigit() else current_user.get("id")
+    except Exception as e:
+        return jsonify({"error": f"Error procesando el usuario: {str(e)}"}), 400
 
     try:
+        # Obtener datos de la cita
         date_str = data.get('date')
         time_str = data.get('time')
         doctor_id = data.get('doctor_id')
 
+        if not doctor_id:
+            return jsonify({"error": "Falta el ID del doctor"}), 400
+
+        # Convertir fecha y hora
         date_obj = datetime.strptime(date_str, '%Y-%m-%d').date() if date_str else None
         time_obj = datetime.strptime(time_str, '%H:%M:%S').time() if time_str else None
 
-        # Buscar el doctor en la base de datos
+        # Verificar si el doctor existe
         doctor = Doctor.query.get(doctor_id)
         if not doctor:
             return jsonify({"error": "Doctor no encontrado"}), 404
@@ -489,15 +506,15 @@ def create_appointment():
         # Crear la cita
         new_appointment = Appointment(
             user_id=user_id,
-            doctor_id=doctor_id,
+            doctor_id=int(doctor_id),  # Asegurar que el ID es entero
             date=date_obj,
             time=time_obj,
             status=data.get('status')
         )
+
         db.session.add(new_appointment)
         db.session.commit()
 
-        # Serializar la respuesta incluyendo el nombre del doctor
         response_data = new_appointment.serialize()
         response_data["doctor_name"] = doctor.name  # Agregar el nombre del doctor
 
@@ -672,6 +689,28 @@ def edit_admin(admin_id):
     except Exception as e:
         db.session.rollback()
         return jsonify({"error": str(e)}), 500
+
+@api.route('/debug/appointments', methods=['GET'])
+def debug_appointments():
+    appointments = Appointment.query.all()
+    result = []
+    
+    for appointment in appointments:
+        result.append({
+            "appointment_id": appointment.appointment_id,
+            "user_id": appointment.user_id,
+            "doctor_id": appointment.doctor_id,
+            "doctor_name": appointment.doctor.name if appointment.doctor else "No doctor",
+            "user_name": appointment.user.name if appointment.user else "No user",
+            "date": appointment.date.isoformat() if appointment.date else None,
+            "time": appointment.time.strftime("%H:%M:%S") if appointment.time else None,
+            "status": appointment.status
+        })
+    
+    return jsonify(result), 200
+
+
+
 if __name__ == '__main__':
     app.run(debug=True)  
 # Mapeo de Docs

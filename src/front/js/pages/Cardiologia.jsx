@@ -51,17 +51,19 @@ const Cardiologia = () => {
 
             <div>
                 <ul>
-                    {Array.isArray(store.doctor) && store.doctor.filter((item) => item.specialty === "Cardiología").map((item) => (
-                        <li 
-                        style={{
-                            listStyleType: "none",
-                            padding: "50px",
-                            border: "1px solid #ddd",
-                            borderRadius: "5px",
-                            marginBottom: "10px",
-                        }} key={item.doctor_id}>{item.name} - {item.email}- {item.specialty} 
-                        
-                        {role === 'admin' ? (
+
+                    {Array.isArray(store.doctor) && store.doctor.filter((item) => item.specialty === "Cardiologia").map((item) => (
+                        <li
+                            style={{
+                                listStyleType: "none",
+                                padding: "50px",
+                                border: "1px solid #ddd",
+                                borderRadius: "5px",
+                                marginBottom: "10px",
+                            }} key={item.doctor_id}>{item.name} - {item.email}- {item.specialty}
+
+                            {role === 'admin' ? (
+
                                 <i className="fa-solid fa-trash" style={{ cursor: "pointer", marginLeft: "10px", color: "red" }}
                                     onClick={() => {
                                         if (item.doctor_id) {
@@ -71,16 +73,22 @@ const Cardiologia = () => {
                                         }
                                     }}
                                 ></i>
-                            ) : null}   
-                              <button 
+                            ) : null}
+                            {/* <button 
                             onClick={() => navigate("/Calendar")} 
                             style={{ marginLeft: "10px", padding: "5px 10px" }}>
                             Agendar
 
-                        </button>
+                        </button> */}
 
-                        
-                        
+                            {role === 'doctor' || role === 'user' ? (
+                                <button
+                                    onClick={() => navigate(`/Calendar/${item.doctor_id}`)} // Pasar el ID del doctor en la URL
+                                    className="btn btn-primary">
+                                    Mi Agenda
+                                </button>
+                            ) : null}
+
                         </li>
                     ))}
                 </ul>
