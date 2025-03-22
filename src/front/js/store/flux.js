@@ -126,12 +126,12 @@ const getState = ({ getStore, getActions, setStore }) => {
 						},
 					});
 					if (!response.ok) {
-						const errorData = response.json();
+						const errorData = await response.json();
 						console.log("Error", errorData)
 						throw new Error("Error al cargar citas");
 					}
 					const data = await response.json();
-					console.log("data entrante", data)
+					console.log("DATA ENTRANTE ES ESTE", data)
 					const calendarEvents = data.map((appointment) => ({
 						id: appointment.appointment_id,
 						title: `Cita ${appointment.user_name ? `con Paciente. ${appointment.user_name}` : ''}`,
@@ -142,6 +142,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 						}
 					})); 
 					console.log("Calendar Events",calendarEvents)
+					
 					let store = getStore();
 					setStore({ ...store, events: calendarEvents });
 

@@ -49,24 +49,9 @@ class Doctor(db.Model):
             "role":self.role
         }
 
-class Administrator(db.Model):
-    __tablename__ = 'administrator'
-    admin_id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String(100), nullable=False)
-    email = db.Column(db.String(100), unique=True, nullable=False)
-    password = db.Column(db.String(100), nullable=False)
-    role=db.Column(db.String(100),nullable=False, default='admin')
 
-    def __repr__(self):
-        return f'<Administrator {self.name}>'
 
-    def serialize(self):
-        return {
-            "admin_id": self.admin_id,
-            "name": self.name,
-            "email": self.email,
-            "role":self.role,
-        }
+    
 
 class Appointment(db.Model):
     __tablename__ = 'appointment'
@@ -92,6 +77,25 @@ class Appointment(db.Model):
             "date": self.date.isoformat() if self.date else None,
             "time": self.time.strftime("%H:%M:%S") if self.time else None,
             "status": self.status,
+        }
+    
+class Administrator(db.Model):
+    __tablename__ = 'administrator'
+    admin_id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(100), nullable=False)
+    email = db.Column(db.String(100), unique=True, nullable=False)
+    password = db.Column(db.String(100), nullable=False)
+    role=db.Column(db.String(100),nullable=False, default='admin')
+
+    def __repr__(self):
+        return f'<Administrator {self.name}>'
+    
+    def serialize(self):
+        return {
+            "admin_id": self.admin_id,
+            "name": self.name,
+            "email": self.email,
+            "role":self.role,
         }
 
 class Availability(db.Model):
