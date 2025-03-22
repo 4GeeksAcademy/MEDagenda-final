@@ -68,9 +68,7 @@ export const Navbar = () => {
                                     <Link to="/calendar" className="nav-link">Agenda</Link>
                                 </li>
 
-                                <li className="nav-item">
-                                    <Link to="/pacientes" className="nav-link">Mis Pacientes</Link>
-                                </li>
+                               
                             </>
 
                         )}
@@ -103,15 +101,15 @@ export const Navbar = () => {
                                         <ul className="dropdown-menu" aria-labelledby="specialtiesDropdown">
                                             {[
                                                 { name: "Medicina General", path: "/medicina-general" },
-                                                { name: "Pediatría", path: "/pediatria" },
-                                                { name: "Ginecología y Obstetricia", path: "/ginecologia" },
-                                                { name: "Cardiología", path: "/cardiologia" },
-                                                { name: "Dermatología", path: "/dermatologia" },
-                                                { name: "Ortopedia y Traumatología", path: "/ortopedia" },
-                                                { name: "Neurología", path: "/neurologia" },
-                                                { name: "Oftalmología", path: "/oftalmologia" },
-                                                { name: "Otorrinolaringología", path: "/otorrinolaringologia" },
-                                                { name: "Endocrinología", path: "/endocrinologia" }
+                                                { name: "Pediatria", path: "/pediatria" },
+                                                { name: "Ginecologia y Obstetricia", path: "/ginecologia" },
+                                                { name: "Cardiologia", path: "/cardiologia" },
+                                                { name: "Dermatologia", path: "/dermatologia" },
+                                                { name: "Ortopedia y Traumatologia", path: "/ortopedia" },
+                                                { name: "Neurologia", path: "/neurologia" },
+                                                { name: "Oftalmologia", path: "/oftalmologia" },
+                                                { name: "Otorrinolaringologia", path: "/otorrinolaringologia" },
+                                                { name: "Endocrinologia", path: "/endocrinologia" }
                                             ].map((item, index) => (
                                                 <li key={index}>
                                                     <Link className="dropdown-item" to={item.path}>{item.name}</Link>

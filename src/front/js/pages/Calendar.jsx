@@ -5,16 +5,24 @@ import interactionPlugin from "@fullcalendar/interaction";
 import { Context } from "../store/appContext";
 
 const Calendar = () => {
-  const { store, actions } = useContext(Context);
-
+  const { store, actions } = useContext(Context); 
   let admin = (localStorage.getItem('role'))
   let user = JSON.parse(localStorage.getItem('user'))?.role
   let doctor = JSON.parse(localStorage.getItem('doctor'))?.role
   let role = admin || user || doctor
 
   useEffect(() => {
+    let admin = (localStorage.getItem('role'))
+    let user = JSON.parse(localStorage.getItem('user'))?.role
+    let doctor = JSON.parse(localStorage.getItem('doctor'))?.role
+    let role = admin || user || doctor
+
     if (store.token) {
-      actions.fetchAppointments();
+      if (role === "user") {
+        actions.fetchAppointments();  // Si es usuario, trae sus citas
+      } else if (role === "doctor") {
+        actions.fetchAppointments2(); // Si es doctor, trae otras citas
+      }
     }
   }, [store.token]); // Ejecutar solo cuando el token cambie
 
@@ -59,15 +67,8 @@ const Calendar = () => {
   return (
     <div className="calendar-container">
       <h2 className="calendar-title">📅 Mi Agenda :D</h2>
-      {role === 'user' ? (
-        <button onClick={handleAddButton}>Agregar Cita</button>
-
-      ) : null} 
-
-      {role === 'doctor'?( 
-      <button>Agregar Cita</button>
-
-      ):null}
+      {role === "user" ? (<button onClick={handleAddButton}>Agregar Cita</button>
+      ) : null}
 
       {/* Mostrar el botón de eliminar solo si hay citas */}
       {store.events.length > 0 && (
@@ -81,7 +82,8 @@ const Calendar = () => {
           plugins={[dayGridPlugin, interactionPlugin]}
           initialView="dayGridMonth"
           events={store.events}
-          dateClick={handleDateClick}
+
+          dateClick={handleDateClick} 
           eventClick={handleEventClick}
           editable={true}
           selectable={true}

@@ -10,6 +10,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 			doctor: null,
 			admin: null,
 			events: [],
+			eventDoc: [],
 			availabilities: [],
 			role: localStorage.getItem("role") || null, // Obtener el rol almacenado
 			preferenceId: null,
@@ -77,7 +78,8 @@ const getState = ({ getStore, getActions, setStore }) => {
 				const baseURL = process.env.REACT_APP_BASE_URL;
 				const token = getStore().token;
 				console.log("baseURL", baseURL)
-				console.log("token", token)
+				console.log("token", token) 
+				
 				try {
 					const response = await fetch(`${baseURL}api/appointments`, {
 						method: "GET",
@@ -85,7 +87,11 @@ const getState = ({ getStore, getActions, setStore }) => {
 							"Authorization": `Bearer ${token}`
 						},
 					});
-					if (!response.ok) throw new Error("Error al cargar citas");
+					if (!response.ok) {
+						const errorData = response.json();
+						console.log("Error", errorData)
+						throw new Error("Error al cargar citas");
+					}
 					const data = await response.json();
 					console.log("data entrante", data)
 					const calendarEvents = data.map((appointment) => ({
@@ -105,6 +111,46 @@ const getState = ({ getStore, getActions, setStore }) => {
 					console.error("Error en fetchAppointments:", error);
 				}
 			},
+			fetchAppointments2: async () => {
+				const baseURL = process.env.REACT_APP_BASE_URL;
+				const token = getStore().token;
+				console.log("baseURL", baseURL)
+				console.log("token", token) 
+				
+				try {
+					const response = await fetch(`${baseURL}api/appointments`, {
+						method: "GET",
+						headers: {
+							"Authorization": `Bearer ${token}`, 
+							"Content-Type": "application/json" 
+						},
+					});
+					if (!response.ok) {
+						const errorData = response.json();
+						console.log("Error", errorData)
+						throw new Error("Error al cargar citas");
+					}
+					const data = await response.json();
+					console.log("data entrante", data)
+					const calendarEvents = data.map((appointment) => ({
+						id: appointment.appointment_id,
+						title: `Cita ${appointment.user_name ? `con Paciente. ${appointment.user_name}` : ''}`,
+						date: appointment.date,
+						extendedProps: {
+							status: appointment.status,
+							time: appointment.time
+						}
+					})); 
+					console.log("Calendar Events",calendarEvents)
+					let store = getStore();
+					setStore({ ...store, events: calendarEvents });
+
+					localStorage.setItem("appointments", JSON.stringify(calendarEvents));
+				} catch (error) {
+					console.error("Error en fetchAppointments:", error);
+				}
+			},
+
 
 
 
@@ -135,7 +181,14 @@ const getState = ({ getStore, getActions, setStore }) => {
 					setStore({
 						...store, events: [...store.events, event]
 
-					});
+					}); 
+					localStorage.setItem('user_id',data.user_id) 
+					localStorage.setItem('doctor_id',data.doctor_id) 
+					localStorage.setItem('date',data.data) 
+					localStorage.setItem('time',data.time) 
+					localStorage.setItem('status',data.status)
+
+
 
 				} catch (error) {
 					console.error("Error en addAppointment:", error);
@@ -793,74 +846,6 @@ const getState = ({ getStore, getActions, setStore }) => {
 				}
 			},
 
-			createAvaila: async (doctorId, day, startTime, endTime) => {
-				const baseURL = process.env.REACT_APP_BASE_URL;
-				const token = getStore().token
-				try {
-					const response = await fetch(`${baseURL}api/availabilities`, {
-						method: "POST",
-						headers: {
-							"Content-Type": "application/json",
-							"Authorization": `Bearer${token}`,
-						},
-						body: JSON.stringify({
-							doctor_id: doctorId,
-							day: day,
-							start_time: startTime,
-							end_time: endTime,
-						}),
-					})
-					if (!response.ok) {
-						const errorData = await response.json()
-						console.log("Error en availa POST", errorData)
-						throw new Error(errorData.message || "Error al agregar horario")
-					}
-					const data = await repsonse.json()
-					console.log("Disponiblilidad Creada", data)
-					let store = getStore();
-					setStore({
-						...store,
-						availabilities: [...store.availabilities, data],
-					});
-					localStorage.setItem('doctor_id', data.doctor_id);
-					localStorage.setItem('day', data.day);
-					localStorage.setItem('start_time', data.start_time);
-					localStorage.setItem('end_time', data.end_time);
-
-				} catch (error) {
-					console.error("Error al Crear horario", error);
-					let store = getStore();
-					setStore({ ...store, message: error.message });
-				}
-			},
-			fetchAvaila: async () => {
-				const baseURL = process.env.REACT_APP_BASE_URL;
-				const doctorId = localStorage.getItem("doctor_id"); // Obtener el doctor_id del doctor logueado
-
-				if (!doctorId) {
-					console.error("No se ha encontrado doctor_id en localStorage");
-					return;
-				}
-
-				try {
-					const response = fetch(`${baseURL}api/availabilities`)
-					if (!response.ok) {
-						const errorData = await response.json()
-						console.log("Error en ver la disponibilad  GET:", errorData)
-						throw new Error("Error en ver la disponibilidad:", errorData)
-					}
-					let data = await response.json();
-					const doctorAvailabilities = data.filter(availability => availability.doctor_id === doctorId);
-
-					let store = getStore();
-
-					setStore({ ...store, availabilities:doctorAvailabilities})
-
-				} catch (error) {
-					console.log("Error obteniendo disponiblidad", error)
-				}
-
-			}
 
 
 

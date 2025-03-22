@@ -52,7 +52,7 @@ const Pediatria = () => {
 
             <div>
                 <ul>
-                    {Array.isArray(store.doctor) && store.doctor.filter((item) => item.specialty === "Pediatría").map((item) => (
+                    {Array.isArray(store.doctor) && store.doctor.filter((item) => item.specialty === "Pediatria").map((item) => (
                         <li style={{
                             listStyleType: "none",
                             padding: "50px",

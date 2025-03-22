@@ -11,7 +11,8 @@ class User(db.Model):
     role=db.Column(db.String(100),nullable=False, default='user')
     # Relaciones
     posts = db.relationship('Post', backref='user', lazy=True)
-    appointments = db.relationship('Appointment', backref='user', lazy=True)
+    appointments = db.relationship("Appointment", back_populates="user")
+
 
     def __repr__(self):
         return f'<User {self.name}>'
@@ -33,7 +34,6 @@ class Doctor(db.Model):
     password = db.Column(db.String(100), nullable=False)
     role=db.Column(db.String(100),nullable=False, default='doctor')
     # Relaciones
-    appointments = db.relationship('Appointment', backref='doctor', lazy=True)
     availabilities = db.relationship("Availability", back_populates="doctor")
     appointments = db.relationship("Appointment", back_populates="doctor")
 
@@ -76,7 +76,8 @@ class Appointment(db.Model):
     date = db.Column(db.Date, nullable=False)
     time = db.Column(db.Time, nullable=False)
     status = db.Column(db.String(50), nullable=False)
-    doctor = db.relationship("Doctor", back_populates="appointments")
+    doctor = db.relationship("Doctor", back_populates="appointments") 
+    user = db.relationship("User", back_populates="appointments")
 
     def __repr__(self):
         return f'<Appointment {self.appointment_id}>'
@@ -86,7 +87,8 @@ class Appointment(db.Model):
             "appointment_id": self.appointment_id,
             "user_id": self.user_id,
             "doctor_id": self.doctor_id,
-            "doctor_name": self.doctor.name if self.doctor else None,
+            "doctor_name": self.doctor.name if self.doctor else None, 
+            "user_name": self.user.name if self.user else None,
             "date": self.date.isoformat() if self.date else None,
             "time": self.time.strftime("%H:%M:%S") if self.time else None,
             "status": self.status,

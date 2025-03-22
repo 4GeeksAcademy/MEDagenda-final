@@ -68,7 +68,7 @@ const MedicinaGeneral = () => {
                         }}
                             key={item.doctor_id}> 
                             
-                            <h3> {item.name} </h3> {item.email}  {item.specialty}
+                            <h3><strong>{item.name}</strong>  </h3> {item.email} <br></br> {item.specialty} ID: <strong>{item.doctor_id}</strong>
 
                             {role === 'admin' ? (
                                 <i className="fa-solid fa-trash" style={{ cursor: "pointer", marginLeft: "10px", color: "red" }}
@@ -83,7 +83,7 @@ const MedicinaGeneral = () => {
                             ) : null}
                             
                             
-                            {role === 'doctor' ? ( 
+                            {role === 'doctor' || role === 'user' ? ( 
                             
                             
                             <button onClick={()=>navigate('/Calendar')} className="btn btn-primary">Mi Agenda</button>
