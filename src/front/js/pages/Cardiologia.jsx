@@ -51,7 +51,7 @@ const Cardiologia = () => {
 
             <div>
                 <ul>
-                    {Array.isArray(store.doctor) && store.doctor.filter((item) => item.specialty === "Cardiologia").map((item) => (
+                    {Array.isArray(store.doctor) && store.doctor.filter((item) => item.specialty === "Cardiología").map((item) => (
                         <li 
                         style={{
                             listStyleType: "none",

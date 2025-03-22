@@ -51,7 +51,7 @@ const Ginecologia = () => {
 
             <div>
                 <ul>
-                    {Array.isArray(store.doctor) && store.doctor.filter((item) => item.specialty === "Ginecologia y Obstetricia").map((item) => (
+                    {Array.isArray(store.doctor) && store.doctor.filter((item) => item.specialty === "Ginecología y Obstetricia").map((item) => (
                         <li style={{
                             listStyleType: "none",
                             padding: "50px",

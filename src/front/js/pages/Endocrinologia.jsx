@@ -59,7 +59,7 @@ const Endocrinologia = () => {
             </ul>  */}
             <div> 
             <ul>
-            {Array.isArray (store.doctor) && store.doctor.filter((item) => item.specialty === "Endocrinologia").map((item) => (
+            {Array.isArray (store.doctor) && store.doctor.filter((item) => item.specialty === "Endocrinología").map((item) => (
                 <li style={{
                     listStyleType: "none",
                     padding: "50px",
