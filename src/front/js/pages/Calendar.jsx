@@ -5,13 +5,26 @@ import interactionPlugin from "@fullcalendar/interaction";
 import { Context } from "../store/appContext";
 
 const Calendar = () => {
-  const { store, actions } = useContext(Context);
+  const { store, actions } = useContext(Context); 
+  let admin = (localStorage.getItem('role'))
+  let user = JSON.parse(localStorage.getItem('user'))?.role
+  let doctor = JSON.parse(localStorage.getItem('doctor'))?.role
+  let role = admin || user || doctor
 
   useEffect(() => {
+    let admin = (localStorage.getItem('role'))
+    let user = JSON.parse(localStorage.getItem('user'))?.role
+    let doctor = JSON.parse(localStorage.getItem('doctor'))?.role
+    let role = admin || user || doctor
+
     if (store.token) {
-        actions.fetchAppointments();
+      if (role === "user") {
+        actions.fetchAppointments();  // Si es usuario, trae sus citas
+      } else if (role === "doctor") {
+        actions.fetchAppointments2(); // Si es doctor, trae otras citas
+      }
     }
-}, [store.token]); // Ejecutar solo cuando el token cambie
+  }, [store.token]); // Ejecutar solo cuando el token cambie
 
   // Función para agregar cita al hacer click en una fecha del calendario
   const handleDateClick = async (arg) => {
@@ -32,9 +45,9 @@ const Calendar = () => {
   // Función para manejar edición o eliminación de citas
   const handleEventClick = async (clickInfo) => {
     if (window.confirm("¿Estás seguro de eliminar esta cita?")) {
-        await actions.deleteAppointment(clickInfo.event.id);
+      await actions.deleteAppointment(clickInfo.event.id);
     }
-};
+  };
 
   // Botón visible para agregar cita manual
   const handleAddButton = async () => {
@@ -49,26 +62,28 @@ const Calendar = () => {
       alert("Faltan datos para crear la cita.");
     }
   };
-  
+
 
   return (
     <div className="calendar-container">
       <h2 className="calendar-title">📅 Mi Agenda :D</h2>
-      <button onClick={handleAddButton}>Agregar Cita</button>
-  
+      {role === "user" ? (<button onClick={handleAddButton}>Agregar Cita</button>
+      ) : null}
+
       {/* Mostrar el botón de eliminar solo si hay citas */}
       {store.events.length > 0 && (
         <button onClick={() => alert("Haz clic en una cita para eliminarla")}>
           Eliminar Cita
         </button>
       )}
-  
+
       <div className="calendar-box">
         <FullCalendar
           plugins={[dayGridPlugin, interactionPlugin]}
           initialView="dayGridMonth"
           events={store.events}
-          dateClick={handleDateClick}
+
+          dateClick={handleDateClick} 
           eventClick={handleEventClick}
           editable={true}
           selectable={true}

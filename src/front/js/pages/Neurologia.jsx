@@ -60,7 +60,7 @@ const Neurologia = () => {
             </ul>  */}
             <div> 
             <ul>
-            {Array.isArray (store.doctor) && store.doctor.filter((item) => item.specialty === "Neurología").map((item) => (
+            {Array.isArray (store.doctor) && store.doctor.filter((item) => item.specialty === "Neurologia").map((item) => (
                 <li style={{
                     listStyleType: "none",
                     padding: "50px",

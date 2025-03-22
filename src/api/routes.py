@@ -272,7 +272,11 @@ def get_token_doctor():
      if true_o_false: 
          expires=timedelta(days=1) 
          doctor_id=login_doctor.doctor_id 
-         access_token = create_access_token(identity={'id': doctor_id, 'role':login_doctor.role}, expires_delta=expires) 
+         access_token = create_access_token(
+                identity=str(doctor_id),
+                additional_claims={'role': login_doctor.role},
+                expires_delta=expires
+            )
         
          doctor_data= {
                "name": login_doctor.name,
@@ -377,7 +381,7 @@ def get_token_admin():
         if true_o_false: 
             expires = timedelta(days=1)
             admin_id = login_admin.admin_id  # Corregido
-            access_token = create_access_token(identity={'id': admin_id, 'role': 'admin'}, expires_delta=expires)
+            access_token = create_access_token(identity=str(admin_id),additional_claims={'role': login_admin.role}, expires_delta=expires)
             admin_data = {
                 "name": login_admin.name,
                 "email": login_admin.email,
@@ -441,15 +445,23 @@ def create_post():
 # Endpoints para el modelo Appointment
 @api.route('/appointments', methods=['GET'])
 @jwt_required()
-def get_appointments():
-    current_user_id = get_jwt_identity()
+def get_appointments(): 
+    print("Entre aca")
+    current_user_id = get_jwt_identity() 
+    print(f"Tipo de current_user_id: {type(current_user_id)}")
+
     claims = get_jwt()
     print(f"Este es el current_user ID: {current_user_id}, role: {claims.get('role')}")
-    if claims.get('role') == 'Doctor':
-       appointments = Appointment.query.filter_by(doctor_id=current_user_id).all()
+    if claims.get('role') == 'Doctor':  
+        appointments = Appointment.query.filter_by(doctor_id=current_user_id).all() 
+
     else:
-       appointments = Appointment.query.filter_by(user_id=current_user_id).all()
-    return jsonify([appointment.serialize() for appointment in appointments]), 200
+        appointments = Appointment.query.filter_by(user_id=current_user_id).all() 
+    
+    for appointment in appointments:
+        print(f"Cita ID: {appointment.appointment_id}, Doctor: {appointment.doctor.name}, Usuario: {appointment.user.name}")
+    return jsonify([appointment.serialize() for appointment in appointments]), 200,
+
 
 
 @api.route('/appointments', methods=['POST'])
@@ -520,9 +532,10 @@ def delete_appointment(appointment_id):
 
 
 
-@api.route('/horarios', methods=['POST'])
+@api.route('/availabilities', methods=['POST'])
 def create_availability():
-    data = request.get_json()
+    data = request.get_json() 
+    print("Datos recibidos en backend:", data)  
     try:
         # Convertir start_time y end_time de string a objeto time (formato 'HH:MM:SS')
         start_time_str = data.get('start_time')
@@ -535,7 +548,8 @@ def create_availability():
             day=data.get('day'),
             start_time=start_time_obj,
             end_time=end_time_obj
-        )
+        ) 
+        print("Id doctor",new_availability.doctor_id)
         db.session.add(new_availability)
         db.session.commit()
         return jsonify(new_availability.serialize()), 201

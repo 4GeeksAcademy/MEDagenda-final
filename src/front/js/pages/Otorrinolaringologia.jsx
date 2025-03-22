@@ -59,7 +59,7 @@ const Otorrinolaringolia = () => {
             </ul>  */}
             <div>
                 <ul>
-                    {Array.isArray(store.doctor) && store.doctor.filter((item) => item.specialty === "Otorrinolaringología").map((item) => (
+                    {Array.isArray(store.doctor) && store.doctor.filter((item) => item.specialty === "Otorrinolaringologia").map((item) => (
                         <li style={{
                             listStyleType: "none",
                             padding: "50px",
