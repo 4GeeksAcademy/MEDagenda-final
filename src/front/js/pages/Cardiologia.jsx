@@ -51,6 +51,7 @@ const Cardiologia = () => {
 
             <div>
                 <ul>
+
                     {Array.isArray(store.doctor) && store.doctor.filter((item) => item.specialty === "Cardiologia").map((item) => (
                         <li
                             style={{
@@ -62,6 +63,7 @@ const Cardiologia = () => {
                             }} key={item.doctor_id}>{item.name} - {item.email}- {item.specialty}
 
                             {role === 'admin' ? (
+
                                 <i className="fa-solid fa-trash" style={{ cursor: "pointer", marginLeft: "10px", color: "red" }}
                                     onClick={() => {
                                         if (item.doctor_id) {

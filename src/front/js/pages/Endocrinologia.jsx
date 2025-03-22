@@ -57,6 +57,7 @@ const Endocrinologia = () => {
                     <DoctorCard key={doctor.id} doctor={doctor} />
                 ))}
             </ul>  */}
+
             <div>
                 <ul>
                     {Array.isArray(store.doctor) && store.doctor.filter((item) => item.specialty === "Endocrinologia").map((item) => (
@@ -71,6 +72,7 @@ const Endocrinologia = () => {
 
 
                             {role === 'admin' ? (
+
                                 <i className="fa-solid fa-trash" style={{ cursor: "pointer", marginLeft: "10px", color: "red" }}
                                     onClick={() => {
                                         if (item.doctor_id) {
