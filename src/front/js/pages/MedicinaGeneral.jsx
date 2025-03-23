@@ -15,7 +15,6 @@ const MedicinaGeneral = () => {
     const navigate=useNavigate()
 
 
-
     let admin = (localStorage.getItem('role'))
     let user = JSON.parse(localStorage.getItem('user'))?.role 
     let doctor = JSON.parse(localStorage.getItem('doctor'))?.role
@@ -86,7 +85,7 @@ const MedicinaGeneral = () => {
                             ) : null}
                             
                             
-                            {role === 'doctor' || role === 'user' ? ( 
+                            {/* {role === 'doctor' || role === 'user' ? ( 
                             
                             
                             <button 
@@ -97,7 +96,14 @@ const MedicinaGeneral = () => {
                         </button>
 
 
-                            ):null}
+                            ):null} */}
+                            {role === 'doctor' || role === 'user' ? (
+                                <button
+                                    onClick={() => navigate(`/Calendar/${item.doctor_id}`)} // Pasar el ID del doctor en la URL
+                                    className="btn btn-primary">
+                                    Mi Agenda
+                                </button>
+                            ) : null}
                         </li>
 
                     ))}

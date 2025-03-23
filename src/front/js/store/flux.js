@@ -31,7 +31,6 @@ const getState = ({ getStore, getActions, setStore }) => {
 		},
 		actions: {
 
-			// En tu archivo de flux, dentro de actions:
 			agregarPregunta: (nuevaPregunta) => {
 				if (!nuevaPregunta.trim()) return;
 				const store = getStore();
@@ -54,7 +53,6 @@ const getState = ({ getStore, getActions, setStore }) => {
 				localStorage.setItem("faqs", JSON.stringify(faqsActualizadas));
 			},
 
-			// Nuevas acciones para borrar:
 			borrarPregunta: (index) => {
 				const store = getStore();
 				const updatedFaqs = store.faqs.filter((_, i) => i !== index);
@@ -184,12 +182,12 @@ const getState = ({ getStore, getActions, setStore }) => {
 						},
 					});
 					if (!response.ok) {
-						const errorData = response.json();
+						const errorData = await response.json();
 						console.log("Error", errorData)
 						throw new Error("Error al cargar citas");
 					}
 					const data = await response.json();
-					console.log("data entrante", data)
+					console.log("DATA ENTRANTE ES ESTE", data)
 					const calendarEvents = data.map((appointment) => ({
 						id: appointment.appointment_id,
 						title: `Cita ${appointment.user_name ? `con Paciente. ${appointment.user_name}` : ''}`,
@@ -198,8 +196,10 @@ const getState = ({ getStore, getActions, setStore }) => {
 							status: appointment.status,
 							time: appointment.time
 						}
-					}));
-					console.log("Calendar Events", calendarEvents)
+
+					})); 
+					console.log("Calendar Events",calendarEvents)
+					
 					let store = getStore();
 					setStore({ ...store, events: calendarEvents });
 

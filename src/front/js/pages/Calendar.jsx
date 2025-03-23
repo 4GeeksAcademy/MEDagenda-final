@@ -3,8 +3,10 @@ import FullCalendar from "@fullcalendar/react";
 import dayGridPlugin from "@fullcalendar/daygrid";
 import interactionPlugin from "@fullcalendar/interaction";
 import { Context } from "../store/appContext";
+import { useParams } from "react-router-dom";
+const Calendar = () => { 
+  const { doctor_id } = useParams();  // Obtener el doctor_id de la URL
 
-const Calendar = () => {
   const { store, actions } = useContext(Context); 
   let admin = (localStorage.getItem('role'))
   let user = JSON.parse(localStorage.getItem('user'))?.role
@@ -21,7 +23,7 @@ const Calendar = () => {
       if (role === "user") {
         actions.fetchAppointments();  // Si es usuario, trae sus citas
       } else if (role === "doctor") {
-        actions.fetchAppointments2(); // Si es doctor, trae otras citas
+        actions.fetchAppointmentsForDoctor(); // Si es doctor, trae otras citas
       }
     }
   }, [store.token]); // Ejecutar solo cuando el token cambie
@@ -31,17 +33,18 @@ const Calendar = () => {
     const title = prompt("Ingresa el título de la cita:");
     if (title) {
       const userId = store.user?.id || localStorage.getItem("id"); // Obtener usuario autenticado
-      const doctorId = prompt("Ingresa el ID del doctor:");
+
+      // Aquí usamos el doctor_id directamente sin pedirlo
+      const doctorId = doctor_id;
 
       if (!doctorId || !userId) {
-        alert("Falta información de usuario o doctor.");
+        alert("Porfavor ve a Especialidades y escoje tu Doctor");
         return;
       }
 
       await actions.addAppointment(userId, doctorId, arg.dateStr, "09:00:00", "Pendiente");
     }
   };
-
   // Función para manejar edición o eliminación de citas
   const handleEventClick = async (clickInfo) => {
     if (window.confirm("¿Estás seguro de eliminar esta cita?")) {

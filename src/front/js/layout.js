@@ -75,6 +75,7 @@ const Layout = () => {
 
 
                         {/* Rutas para las especialidades médicas */}
+                        <Route path="/Calendar/:doctor_id" element={<Calendar />} /> 
                         <Route element={<MedicinaGeneral />} path="/medicina-general" />
                         <Route element={<Pediatria />} path="/pediatria" />
                         <Route element={<Ginecologia />} path="/ginecologia" />

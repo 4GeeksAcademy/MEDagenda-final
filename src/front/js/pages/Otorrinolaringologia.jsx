@@ -59,7 +59,7 @@ const Otorrinolaringolia = () => {
             </ul>  */}
             <div>
                 <ul>
-                    {Array.isArray(store.doctor) && store.doctor.filter((item) => item.specialty === "Otorrinolaringologia").map((item) => (
+                    {Array.isArray(store.doctor) && store.doctor.filter((item) => item.specialty === "Otorrinolaringología").map((item) => (
                         <li style={{
                             listStyleType: "none",
                             padding: "50px",
@@ -79,12 +79,20 @@ const Otorrinolaringolia = () => {
                                     }}
                                 ></i>
                             ) : null}
-                            <button 
-                            onClick={() => navigate("/Calendar")} 
-                            style={{ marginLeft: "10px", padding: "5px 10px" }}>
-                            Agendar
+                            {/* <button
+                                onClick={() => navigate("/Calendar")}
+                                style={{ marginLeft: "10px", padding: "5px 10px" }}>
+                                Agendar
 
-                        </button>
+                            </button> */}
+
+                            {role === 'doctor' || role === 'user' ? (
+                                <button
+                                    onClick={() => navigate(`/Calendar/${item.doctor_id}`)} // Pasar el ID del doctor en la URL
+                                    className="btn btn-primary">
+                                    Mi Agenda
+                                </button>
+                            ) : null}
                         </li>
                     ))}
                 </ul>
