@@ -15,8 +15,6 @@ const MedicinaGeneral = () => {
     const navigate=useNavigate()
 
 
-
-
     let admin = (localStorage.getItem('role'))
     let user = JSON.parse(localStorage.getItem('user'))?.role 
     let doctor = JSON.parse(localStorage.getItem('doctor'))?.role

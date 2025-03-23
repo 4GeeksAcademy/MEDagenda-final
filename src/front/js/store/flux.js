@@ -12,11 +12,67 @@ const getState = ({ getStore, getActions, setStore }) => {
 			events: [],
 			eventDoc: [],
 			availabilities: [],
-			role: localStorage.getItem("role") || null, // Obtener el rol almacenado
+			role: localStorage.getItem("role") || null,
 			preferenceId: null,
-
+			faqs: localStorage.getItem("faqs")
+				? JSON.parse(localStorage.getItem("faqs"))
+				: [
+					{
+						pregunta: '¿Cómo puedo registrarme en el sistema?',
+						respuesta: 'Puede registrarse haciendo clic en el botón de registro ubicado en la parte superior derecha de la página de inicio y completando el formulario.',
+						respuestas: []
+					},
+					{
+						pregunta: '¿Cómo programo una cita médica?',
+						respuesta: 'Debe iniciar sesión, luego seleccionar la opción "Programar Cita", elegir un doctor y un horario disponible.',
+						respuestas: []
+					}
+				]
 		},
 		actions: {
+
+			agregarPregunta: (nuevaPregunta) => {
+				if (!nuevaPregunta.trim()) return;
+				const store = getStore();
+				const nuevaFaq = { pregunta: nuevaPregunta, respuesta: '', respuestas: [] };
+				const updatedFaqs = [...store.faqs, nuevaFaq];
+				setStore({ ...store, faqs: updatedFaqs });
+				localStorage.setItem("faqs", JSON.stringify(updatedFaqs));
+			},
+
+			agregarRespuesta: (index, nuevaRespuesta) => {
+				if (!nuevaRespuesta.trim()) return;
+				const store = getStore();
+				const faqsActualizadas = store.faqs.map((faq, i) => {
+					if (i === index) {
+						return { ...faq, respuestas: [...faq.respuestas, nuevaRespuesta] };
+					}
+					return faq;
+				});
+				setStore({ ...store, faqs: faqsActualizadas });
+				localStorage.setItem("faqs", JSON.stringify(faqsActualizadas));
+			},
+
+			borrarPregunta: (index) => {
+				const store = getStore();
+				const updatedFaqs = store.faqs.filter((_, i) => i !== index);
+				setStore({ ...store, faqs: updatedFaqs });
+				localStorage.setItem("faqs", JSON.stringify(updatedFaqs));
+			},
+
+			borrarRespuesta: (preguntaIndex, respuestaIndex) => {
+				const store = getStore();
+				const updatedFaqs = store.faqs.map((faq, i) => {
+					if (i === preguntaIndex) {
+						const nuevasRespuestas = faq.respuestas.filter((_, j) => j !== respuestaIndex);
+						return { ...faq, respuestas: nuevasRespuestas };
+					}
+					return faq;
+				});
+				setStore({ ...store, faqs: updatedFaqs });
+				localStorage.setItem("faqs", JSON.stringify(updatedFaqs));
+			},
+
 
 			setPreferenceId: (id) => {
 				setStore({ preferenceId: id });  // ✅ Guarda el ID en Flux
@@ -78,8 +134,8 @@ const getState = ({ getStore, getActions, setStore }) => {
 				const baseURL = process.env.REACT_APP_BASE_URL;
 				const token = getStore().token;
 				console.log("baseURL", baseURL)
-				console.log("token", token) 
-				
+				console.log("token", token)
+
 				try {
 					const response = await fetch(`${baseURL}api/appointments`, {
 						method: "GET",
@@ -115,14 +171,14 @@ const getState = ({ getStore, getActions, setStore }) => {
 				const baseURL = process.env.REACT_APP_BASE_URL;
 				const token = getStore().token;
 				console.log("baseURL", baseURL)
-				console.log("token", token) 
-				
+				console.log("token", token)
+
 				try {
 					const response = await fetch(`${baseURL}api/appointments`, {
 						method: "GET",
 						headers: {
-							"Authorization": `Bearer ${token}`, 
-							"Content-Type": "application/json" 
+							"Authorization": `Bearer ${token}`,
+							"Content-Type": "application/json"
 						},
 					});
 					if (!response.ok) {
@@ -140,6 +196,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 							status: appointment.status,
 							time: appointment.time
 						}
+
 					})); 
 					console.log("Calendar Events",calendarEvents)
 					
@@ -182,12 +239,12 @@ const getState = ({ getStore, getActions, setStore }) => {
 					setStore({
 						...store, events: [...store.events, event]
 
-					}); 
-					localStorage.setItem('user_id',data.user_id) 
-					localStorage.setItem('doctor_id',data.doctor_id) 
-					localStorage.setItem('date',data.data) 
-					localStorage.setItem('time',data.time) 
-					localStorage.setItem('status',data.status)
+					});
+					localStorage.setItem('user_id', data.user_id)
+					localStorage.setItem('doctor_id', data.doctor_id)
+					localStorage.setItem('date', data.data)
+					localStorage.setItem('time', data.time)
+					localStorage.setItem('status', data.status)
 
 
 
