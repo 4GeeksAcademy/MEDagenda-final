@@ -1,5 +1,6 @@
 import React, { useContext, useState } from 'react';
 import { Context } from '../store/appContext';
+import { FaTrashAlt } from 'react-icons/fa'; 
 import styles from '../../styles/PreguntasFrecuentes.module.css';
 
 const PreguntasFrecuentes = () => {
@@ -31,7 +32,7 @@ const PreguntasFrecuentes = () => {
   return (
     <div className={styles.container}>
       <h1 className={styles.header}>Foro de Preguntas Frecuentes</h1>
-      <section>
+      <section className={styles.section}>
         <input 
           className={styles.input}
           value={nuevaPregunta} 
@@ -39,7 +40,7 @@ const PreguntasFrecuentes = () => {
           placeholder="Haz una nueva pregunta..." 
         />
         <button 
-          className={styles.button}
+          className={styles.addButton}
           onClick={handleAgregarPregunta}
         >
           Agregar Pregunta
@@ -51,14 +52,15 @@ const PreguntasFrecuentes = () => {
             <div className={styles.questionRow}>
               <h2 className={styles.questionTitle}>{faq.pregunta}</h2>
               <button 
-                className={`${styles.button} ${styles.deleteButton}`}
+                className={styles.deleteButton}
                 onClick={() => handleBorrarPregunta(index)}
+                title="Eliminar pregunta"
               >
-                Borrar Pregunta
+                <FaTrashAlt />
               </button>
             </div>
             {faq.respuesta && <p className={styles.answerText}>{faq.respuesta}</p>}
-            <div>
+            <div className={styles.responseInputRow}>
               <input 
                 className={styles.input}
                 value={respuestasInputs[index] || ''}
@@ -68,23 +70,24 @@ const PreguntasFrecuentes = () => {
                 placeholder="Responde esta pregunta..." 
               />
               <button 
-                className={styles.button}
+                className={styles.addButton}
                 onClick={() => handleAgregarRespuesta(index)}
               >
                 Agregar Respuesta
               </button>
             </div>
             {faq.respuestas && faq.respuestas.length > 0 && (
-              <div>
+              <div className={styles.responsesContainer}>
                 <h3 className={styles.responsesHeader}>Respuestas:</h3>
                 {faq.respuestas.map((respuesta, i) => (
                   <div key={i} className={styles.responseRow}>
                     <p className={styles.responseText}>- {respuesta}</p>
                     <button 
-                      className={`${styles.button} ${styles.deleteButton}`}
+                      className={styles.deleteButton}
                       onClick={() => handleBorrarRespuesta(index, i)}
+                      title="Eliminar respuesta"
                     >
-                      Borrar Respuesta
+                      <FaTrashAlt />
                     </button>
                   </div>
                 ))}
