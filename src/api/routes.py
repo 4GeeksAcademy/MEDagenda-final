@@ -55,9 +55,9 @@ def create_preference():
                 }
             ],
             "back_urls": {
-                "success": "https://crispy-capybara-5gx45qjx4prpcw4p-3000.app.github.dev/",
-                "failure": "https://crispy-capybara-5gx45qjx4prpcw4p-3000.app.github.dev/",
-                "pending": "https://crispy-capybara-5gx45qjx4prpcw4p-3000.app.github.dev/"
+                "success": "https://psychic-happiness-7vprw96prpg5h99p-3000.app.github.dev/",
+                "failure": "https://psychic-happiness-7vprw96prpg5h99p-3000.app.github.dev/*",
+                "pending": "https://psychic-happiness-7vprw96prpg5h99p-3000.app.github.dev/calendar"
             },
             "auto_return": "approved"
         }
