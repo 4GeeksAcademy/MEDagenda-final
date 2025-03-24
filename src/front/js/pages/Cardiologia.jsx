@@ -46,7 +46,8 @@ const Cardiologia = () => {
 
     }, [store.doctors])
     return (
-        <div>  <h2 style={{
+        <div>
+        <h2 style={{
             fontSize: "24px",
             fontWeight: "bold",
             fontFamily: "Montserrat, sans-serif",
@@ -54,53 +55,78 @@ const Cardiologia = () => {
             marginBottom: "0px",
             textAlign: "center",
             textShadow: "0px 0px 10px rgba(0,0,0,0.2)",
-            background: "linear-gradient(to right,rgba(185, 44, 63, 0.6) ,rgb(245, 14, 26) )",
-            backgroundSize: "100% 100%",
+            background: "linear-gradient(to right,rgb(209, 39, 39) ,rgba(245, 14, 26, 0.73) )",
             padding: "10px",
             borderRadius: "0px",
+        
         }}>
         Cardiología</h2>
 
-            <div>
-                <ul>
-
-                    {Array.isArray(store.doctor) && store.doctor.filter((item) => item.specialty === "Cardiología").map((item) => (
+        <div>
+                <ul style={{
+                    display: 'flex',
+                    flexDirection: 'column',
+                    alignItems: 'center',
+                    padding: 0,
+                }}>
+                    {Array.isArray(store.doctor) && store.doctor.filter(item => item.specialty === "Cardiología").map(item => (
                         <li
+                            key={item.doctor_id}
                             style={{
                                 listStyleType: "none",
-                                padding: "50px",
-                                border: "1px solid #ddd",
-                                borderRadius: "5px",
-                                marginBottom: "10px",
-                            }} key={item.doctor_id}>{item.name} - {item.email}- {item.specialty}
+                                display: "flex",
+                                flexDirection: "column",
+                                alignItems: "center",
+                                justifyContent: "center",
+                                background: "linear-gradient(to right,rgb(29, 168, 233),rgba(243, 47, 47, 0.73))",
+                                border: "none",
+                                borderRadius: "40px",
+                                boxShadow: "0px 4px 15px rgba(0, 123, 255, 0.94)",
+                                margin: "15px",
+                                padding: "20px",
+                                maxWidth: "100%", // Asegura que no exceda el 90% del ancho en pantallas pequeñas
+                                width: "550px", // Tamaño predeterminado para pantallas grandes
+                                transition: "transform 0.2s",
+                            }}
+                        >
+                            <h4 style={{ fontSize: "1.2rem", fontWeight: "600", color: "#2c3e50" }}>
+                                <strong>{item.name}</strong>
+                                <div style={{ display: "flex", alignItems: "center", gap: "0.5rem", marginTop: "0.5rem" }}>
+                                    <i className="fa-solid fa-envelope text-blue-500"></i>
+                                    <span>{item.email}</span>
+                                </div>
+                                <div style={{ display: "flex", alignItems: "center", gap: "0.5rem", marginTop: "0.5rem" }}>
+                                    <i className="fa-solid fa-stethoscope text-cyan-500"></i>
+                                    <span style={{ borderRadius: "20px", background: "rgba(255, 255, 255, 0.2)", padding: "5px 10px", color: "#2c3e50" }}>
+                                        {item.specialty}
+                                    </span>
+                                </div>
+                            </h4>
 
-                            {role === 'admin' ? (
-
-                                <i className="fa-solid fa-trash" style={{ cursor: "pointer", marginLeft: "10px", color: "red" }}
-                                    onClick={() => {
-                                        if (item.doctor_id) {
-                                            deleteDoc(item.doctor_id);
-                                        } else {
-                                            console.error("Error: ID de usuario no definido", item);
-                                        }
-                                    }}
+                            {role === 'admin' && (
+                                <i className="fa-solid fa-trash" style={{ cursor: "pointer", marginTop: "10px", color: "red" }}
+                                    onClick={() => deleteDoc(item.doctor_id)}
                                 ></i>
-                            ) : null}
-                            {/* <button 
-                            onClick={() => navigate("/Calendar")} 
-                            style={{ marginLeft: "10px", padding: "5px 10px" }}>
-                            Agendar
+                            )}
 
-                        </button> */}
-
-                            {role === 'doctor' || role === 'user' ? (
+                            {(role === 'doctor' || role === 'user') && (
                                 <button
-                                    onClick={() => navigate(`/Calendar/${item.doctor_id}`)} // Pasar el ID del doctor en la URL
-                                    className="btn btn-primary">
-                                    Mi Agenda
+                                    onClick={() => navigate(`/Calendar/${item.doctor_id}`)}
+                                    style={{
+                                        padding: "10px 15px",
+                                        backgroundColor: "#005f73",
+                                        color: "#FFFFFF",
+                                        border: "none",
+                                        borderRadius: "20px",
+                                        cursor: "pointer",
+                                        marginTop: "10px",
+                                        width: "100%",
+                                        maxWidth: "200px"
+                                    }}
+                                >
+                                   <h6><i class="fa-solid fa-calendar-plus"></i> <span style={{paddingLeft:"3px"}}>Agendar Cita</span></h6> 
                                 </button>
-                            ) : null}
-
+                            )}
                         </li>
                     ))}
                 </ul>
@@ -108,5 +134,4 @@ const Cardiologia = () => {
         </div>
     );
 };
-
 export default Cardiologia;
