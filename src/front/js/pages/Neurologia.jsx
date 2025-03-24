@@ -52,67 +52,92 @@ const Neurologia = () => {
     }, [store.doctors])
     return (
         <div>
-
-          <h2 style={{
-            fontSize: "24px",
-            fontWeight: "bold",
-            fontFamily: "Montserrat, sans-serif",
-            color: "#FFFFFF",
-            marginBottom: "0px",
-            textAlign: "center",
-            textShadow: "0px 0px 10px rgba(0,0,0,0.2)",
-            background: "linear-gradient(to right,rgba(44, 89, 185, 0.99) ,rgb(2, 15, 58) )",
-            backgroundSize: "100% 100%",
+ <h2 style={{
+                fontSize: "24px",
+                fontWeight: "bold",
+                fontFamily: "Montserrat, sans-serif",
+                color: "#FFFFFF",
+                marginBottom: "0px",
+                textAlign: "center",
+                textShadow: "0px 0px 10px rgba(0,0,0,0.2)",
+            background: "linear-gradient(to right,rgba(20, 69, 173, 0.99) ,rgba(4, 129, 247, 0.62) )",
             padding: "10px",
             borderRadius: "0px",
         }}>
-        Neurología</h2>
-            <div> 
-            <ul>
-            {Array.isArray (store.doctor) && store.doctor.filter((item) => item.specialty === "Neurología").map((item) => (
-                <li style={{
-                    listStyleType: "none",
-                    padding: "50px",
-                    border: "1px solid #ddd",
-                    borderRadius: "5px",
-                    marginBottom: "10px",
-                }} key={item.doctor_id}>{item.name} - {item.email}- {item.specialty} 
-                
-                {role === 'admin' ? (
+            <i class="fa-solid fa-brain"></i> Neurología 
+        </h2>
 
-     
-                            
-                                <i className="fa-solid fa-trash" style={{ cursor: "pointer", marginLeft: "10px", color: "red" }}
-                                    onClick={() => {
-                                        if (item.doctor_id) {
-                                            deleteDoc(item.doctor_id);
-                                        } else {
-                                            console.error("Error: ID de usuario no definido", item);
-                                        }
-                                    }}
-                                ></i>
-                            ) : null}
-                            {/* <button
-                                onClick={() => navigate("/Calendar")}
-                                style={{ marginLeft: "10px", padding: "5px 10px" }}>
-                                Agendar
+        <div>
+            <ul style={{
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'center',
+                padding: 0,
+            }}>
+                {Array.isArray(store.doctor) && store.doctor.filter(item => item.specialty === "Neurología").map(item => (
+                    <li
+                        key={item.doctor_id}
+                        style={{
+                            listStyleType: "none",
+                            display: "flex",
+                            flexDirection: "column",
+                            alignItems: "center",
+                            justifyContent: "center",
+                            background: "linear-gradient(to right,rgb(29, 168, 233),rgba(10, 185, 238, 0.42))",
+                            border: "none",
+                            borderRadius: "40px",
+                            boxShadow: "0px 4px 15px rgba(0,123,255,0.2)",
+                            margin: "15px",
+                            padding: "20px",
+                            maxWidth: "100%", // Asegura que no exceda el 90% del ancho en pantallas pequeñas
+                            width: "550px", // Tamaño predeterminado para pantallas grandes
+                            transition: "transform 0.2s",
+                        }}
+                    >
+                        <h4 style={{ fontSize: "1.2rem", fontWeight: "600", color: "#2c3e50" }}>
+                            <strong>{item.name}</strong>
+                            <div style={{ display: "flex", alignItems: "center", gap: "0.5rem", marginTop: "0.5rem" }}>
+                                <i className="fa-solid fa-envelope text-blue-500"></i>
+                                <span>{item.email}</span>
+                            </div>
+                            <div style={{ display: "flex", alignItems: "center", gap: "0.5rem", marginTop: "0.5rem" }}>
+                                <i className="fa-solid fa-stethoscope text-cyan-500"></i>
+                                <span style={{ borderRadius: "20px", background: "rgba(204, 193, 90, 0.2)", padding: "5px 10px", color: "#2c3e50" }}>
+                                    {item.specialty}
+                                </span>
+                            </div>
+                        </h4>
 
-                            </button> */}
+                        {role === 'admin' && (
+                            <i className="fa-solid fa-trash" style={{ cursor: "pointer", marginTop: "10px", color: "red" }}
+                                onClick={() => deleteDoc(item.doctor_id)}
+                            ></i>
+                        )}
 
-                            {role === 'doctor' || role === 'user' ? (
-                                <button
-                                    onClick={() => navigate(`/Calendar/${item.doctor_id}`)} // Pasar el ID del doctor en la URL
-                                    className="btn btn-primary">
-                                    Mi Agenda
-                                </button>
-                            ) : null}
-
-                        </li>
-                    ))}
-                </ul>
-            </div>
+                        {(role === 'doctor' || role === 'user') && (
+                            <button
+                                onClick={() => navigate(`/Calendar/${item.doctor_id}`)}
+                                style={{
+                                    padding: "10px 15px",
+                                    backgroundColor: "#005f73",
+                                    color: "#FFFFFF",
+                                    border: "none",
+                                    borderRadius: "20px",
+                                    cursor: "pointer",
+                                    marginTop: "10px",
+                                    width: "100%",
+                                    maxWidth: "200px"
+                                }}
+                            >
+                                <h6><i class="fa-solid fa-calendar-plus"></i> <span style={{ paddingLeft: "3px" }}>Agendar Cita</span></h6>
+                            </button>
+                        )}
+                    </li>
+                ))}
+            </ul>
         </div>
-    );
+    </div>
+);
 };
 
 export default Neurologia;
