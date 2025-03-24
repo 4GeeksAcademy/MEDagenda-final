@@ -60,7 +60,7 @@ const Oftalmologia = () => {
 
             <div>
                 <ul>
-                    {Array.isArray(store.doctor) && store.doctor.filter((item) => item.specialty === "Oftalmologia").map((item) => (
+                    {Array.isArray(store.doctor) && store.doctor.filter((item) => item.specialty === "Oftalmología").map((item) => (
                         <li style={{
                             listStyleType: "none",
                             padding: "50px",

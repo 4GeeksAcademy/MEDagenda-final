@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 
 const Footer = () => {
   return (
-    <footer className="bg-black text-white py-4" style={{ position: 'fixed', bottom: 0, width: '100%', backgroundImage: 'linear-gradient(to right,rgb(18, 146, 116),rgb(30, 91, 148))', color: '#ffffff',
+    <footer className="bg-black text-white py-4" style={{ bottom: 0, width: '100%', backgroundImage: 'linear-gradient(to right,rgb(18, 146, 116),rgb(30, 91, 148))', color: '#ffffff',
       padding: '2rem', }}>
       <div className="container">
         <div className="d-flex" >
@@ -19,7 +19,7 @@ const Footer = () => {
               Email: contacto@medagenda.com
             </p>
           </div>
-          <div className="text-md-right" style={{marginLeft: "800px"}}>
+          <div className="text-md-right ms-auto" >
             <h5>Redes Sociales</h5>
             <a href="https://www.facebook.com/medagenda" className="text-white mr-3" target="_blank" rel="noopener noreferrer">
               <i className="fab fa-facebook-f"></i> Facebook
