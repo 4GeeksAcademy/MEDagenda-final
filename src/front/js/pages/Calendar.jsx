@@ -4,6 +4,8 @@ import dayGridPlugin from "@fullcalendar/daygrid";
 import interactionPlugin from "@fullcalendar/interaction";
 import { Context } from "../store/appContext";
 import { useParams } from "react-router-dom";
+
+import Pagos from "../component/Pagos.jsx";
 const Calendar = () => {
   const { doctor_id } = useParams();  // Obtener el doctor_id de la URL
 
@@ -94,6 +96,7 @@ const Calendar = () => {
               Eliminar Cita
             </button>
           )}
+          < Pagos />
         </div>
 
         {/* Sección del calendario */}
