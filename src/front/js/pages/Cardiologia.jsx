@@ -46,8 +46,20 @@ const Cardiologia = () => {
 
     }, [store.doctors])
     return (
-        <div>
-            <h2>Cardiología</h2>
+        <div>  <h2 style={{
+            fontSize: "24px",
+            fontWeight: "bold",
+            fontFamily: "Montserrat, sans-serif",
+            color: "#FFFFFF",
+            marginBottom: "0px",
+            textAlign: "center",
+            textShadow: "0px 0px 10px rgba(0,0,0,0.2)",
+            background: "linear-gradient(to right,rgba(185, 44, 63, 0.6) ,rgb(245, 14, 26) )",
+            backgroundSize: "100% 100%",
+            padding: "10px",
+            borderRadius: "0px",
+        }}>
+        Cardiología</h2>
 
             <div>
                 <ul>

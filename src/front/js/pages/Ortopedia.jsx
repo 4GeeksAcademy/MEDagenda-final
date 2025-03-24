@@ -51,24 +51,32 @@ const Ortopedia = () => {
     }, [store.doctors])
     return (
         <div>
-            <h2>Ortopedia</h2>
-            {/* <ul>
-                {doctores.map((doctor) => (
-                    <DoctorCard key={doctor.id} doctor={doctor} />
-                ))}
-            </ul>  */}
 
-            <div>
-                <ul>
-                    {Array.isArray(store.doctor) && store.doctor.filter((item) => item.specialty === "Ortopedia y Traumatología").map((item) => (
-                        <li style={{
-                            listStyleType: "none",
-                            padding: "50px",
-                            border: "1px solid #ddd",
-                            borderRadius: "5px",
-                            marginBottom: "10px",
-                        }} key={item.doctor_id}>{item.name} - {item.email}- {item.specialty}
-                            {role === 'admin' ? (
+            <h2 style={{
+            fontSize: "24px",
+            fontWeight: "bold",
+            fontFamily: "Montserrat, sans-serif",
+            color: "#FFFFFF",
+            marginBottom: "0px",
+            textAlign: "center",
+            textShadow: "0px 0px 10px rgba(0,0,0,0.2)",
+            background: "linear-gradient(to right,rgba(44, 89, 185, 0.99) ,rgb(14, 236, 70) )",
+            backgroundSize: "100% 100%",
+            padding: "10px",
+            borderRadius: "0px",
+        }}>
+        Ortopedia</h2>
+            <div> 
+            <ul>
+            {Array.isArray (store.doctor) && store.doctor.filter((item) => item.specialty === "Ortopedia y Traumatología").map((item) => (
+                <li style={{
+                    listStyleType: "none",
+                    padding: "50px",
+                    border: "1px solid #ddd",
+                    borderRadius: "5px",
+                    marginBottom: "10px",
+                }} key={item.doctor_id}>{item.name} - {item.email}- {item.specialty} 
+                 {role === 'admin' ? (
 
                                 <i className="fa-solid fa-trash" style={{ cursor: "pointer", marginLeft: "10px", color: "red" }}
                                     onClick={() => {

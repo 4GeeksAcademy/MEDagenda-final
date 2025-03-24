@@ -47,7 +47,20 @@ const Ginecologia = () => {
 
     return (
         <div>
-            <h2>Ginecología</h2>
+            <h2 style={{
+            fontSize: "24px",
+            fontWeight: "bold",
+            fontFamily: "Montserrat, sans-serif",
+            color: "#FFFFFF",
+            marginBottom: "0px",
+            textAlign: "center",
+            textShadow: "0px 0px 10px rgba(0,0,0,0.2)",
+            background: "linear-gradient(to right,rgba(238, 7, 188, 0.45) ,rgba(245, 14, 141, 0.79) )",
+            backgroundSize: "100% 100%",
+            padding: "10px",
+            borderRadius: "0px",
+        }}>
+        Ginecología</h2>
 
             <div>
                 <ul>

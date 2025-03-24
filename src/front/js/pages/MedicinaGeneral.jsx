@@ -56,7 +56,20 @@ const MedicinaGeneral = () => {
     
     return (
         <div>
-            <h2>Medicina General</h2>
+            <h2 style={{
+            fontSize: "24px",
+            fontWeight: "bold",
+            fontFamily: "Montserrat, sans-serif",
+            color: "#FFFFFF",
+            marginBottom: "0px",
+            textAlign: "center",
+            textShadow: "0px 0px 10px rgba(0,0,0,0.2)",
+            background: "linear-gradient(to right,rgba(8, 240, 85, 0.6) ,rgb(3, 65, 24) )",
+            backgroundSize: "100% 100%",
+            padding: "10px",
+            borderRadius: "0px",
+        }}>
+        Medicina General</h2>
             <div>
 
                 <ul>
