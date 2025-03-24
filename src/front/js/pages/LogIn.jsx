@@ -1,13 +1,14 @@
 import React, { useState, useContext, useEffect } from 'react';
-import { Context } from '../store/appContext'; 
+import { Context } from '../store/appContext';
 import { useNavigate } from "react-router-dom";
+
 
 const LogIn = () => {
     const [name, setName] = useState('');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [error, setError] = useState('');
-    const { actions, store } = useContext(Context); 
+    const { actions, store } = useContext(Context);
     const navigate = useNavigate();
 
     const handleSubmit = async (e) => {
@@ -18,7 +19,6 @@ const LogIn = () => {
         }
     };
 
-    // Redirigir cuando el usuario esté en el store
     useEffect(() => {
         if (store.user && store.user.role) {
             if (store.user.role === 'admin') {
@@ -29,36 +29,47 @@ const LogIn = () => {
                 navigate("/logIn");
             }
         }
-    }, [store.user, navigate]); // Se ejecuta cuando `store.user` cambia
+    }, [store.user, navigate]);
 
-    return ( 
-        <div className='container'>
-            <h1>Iniciar sesión</h1>
-            <form onSubmit={handleSubmit}>
-                <input
-                    type="text"
-                    placeholder="Nombre"
-                    value={name}
-                    onChange={(e) => setName(e.target.value)}
-                    required
-                /> <br />
-                <input
-                    type="email"
-                    placeholder="Email"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                    required
-                /> <br />
-                <input
-                    type="password"
-                    placeholder="Contraseña"
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
-                    required
-                /> <br />
-                <button className='btn btn-primary mt-3' type="submit">Iniciar Sesión</button>
-                {error && <p className="text-danger">{error}</p>} 
-            </form>
+    return (
+        <div className="d-flex justify-content-center align-items-center vh-100" style={{ background: "linear-gradient(135deg,rgb(3, 3, 94), #2196F3)" }}>
+            <div className="card p-4 shadow-lg" style={{ width: "22rem", borderRadius: "15px", backgroundColor: "#ffffff", boxShadow: "0px 4px 10px rgba(0, 0, 0, 0.2)" }}>
+                <h1 className="text-center text-primary">Iniciar sesión</h1>
+                <form onSubmit={handleSubmit}>
+                    <div className="mb-3">
+                        <input
+                            type="text"
+                            placeholder="Nombre"
+                            value={name}
+                            onChange={(e) => setName(e.target.value)}
+                            required
+                            className="form-control border-success"
+                        />
+                    </div>
+                    <div className="mb-3">
+                        <input
+                            type="email"
+                            placeholder="Email"
+                            value={email}
+                            onChange={(e) => setEmail(e.target.value)}
+                            required
+                            className="form-control border-success"
+                        />
+                    </div>
+                    <div className="mb-3">
+                        <input
+                            type="password"
+                            placeholder="Contraseña"
+                            value={password}
+                            onChange={(e) => setPassword(e.target.value)}
+                            required
+                            className="form-control border-success"
+                        />
+                    </div>
+                    <button type="submit" className="btn w-100" style={{ backgroundColor: "#2196F3", color: "white", border: "none" }}>Iniciar Sesión</button>
+                    {error && <p className="text-danger text-center mt-2">{error}</p>}
+                </form>
+            </div>
         </div>
     );
 };
