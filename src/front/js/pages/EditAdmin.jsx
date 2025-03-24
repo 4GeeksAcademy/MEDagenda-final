@@ -70,45 +70,66 @@ const EditAdmin = () => {
   let email = store.admin?.email || localStorage.getItem('email');
 
   return (
-    <div>
-      <i className="fa-solid fa-user"></i><h3>Mi Perfil</h3>
-      {
-        name ? (
-          <>
-            <div className='card card-body'>
-              <h2>Mi Perfil</h2>
-              <h2> <i className="fa-solid fa-user"></i> </h2>
-              <p className='name'>
-                User: {isEditing ? <input type='text' name='name' value={adminData.name} onChange={handleChange} /> : name}
-              </p>
-              <p className='email'>
-                Email: {isEditing ? <input type='email' name='email' value={adminData.email} onChange={handleChange} /> : email}
-              </p>
-              <p className='password'>
-                Password: {isEditing && <input type='password' name='password' value={adminData.password} onChange={handleChange} />}
-              </p>
+    <div style={{ paddingTop: '10px', display: 'flex', justifyContent: 'center' }}>
+        {name ? (
+            <div className='card card-body' style={{
+                display: "flex",
+                flexDirection: "row",
+                gap: "20px",
+                padding: "20px",
+                textAlign: "center",
+                background: "linear-gradient(to right,rgb(29, 168, 233),rgb(175, 230, 219))",
+                borderRadius: "20px",
+                boxShadow: "0px 4px 15px rgba(0,123,255,0.2)",
+                fontFamily: "'Quicksand', sans-serif",
+                fontSize: "17px",
+                fontWeight: "500",
+                color: "#2c3e50",
+                width: "40%", // Reduce el ancho de la tarjeta
+                minWidth: "350px", // Evita que sea demasiado pequeña
+                maxWidth: "500px",
+                margin: "0 auto", 
+                marginBottom:"190px"
+            }}>
+                {/* Columna de Información */}
+                <div style={{ flex: 1, textAlign: "left" }}>
+                    <h2><strong>Mi Perfil</strong></h2>
+                    <p className='name'>
+                        👤 <strong>User: </strong>
+                        {isEditing ? <input type='text' name='name' value={adminData.name} onChange={handleChange} /> : name}
+                    </p>
+                    <p className='email'>
+                        📧 <strong>Email: </strong>
+                        {isEditing ? <input type='email' name='email' value={adminData.email} onChange={handleChange} /> : email}
+                    </p>
+                </div>
 
-              {isEditing ? (
-                <>
-                  <button className='btn btn-primary btn-lg w-40 ' style={{ width: "50%" }} onClick={handleSave}>Guardar</button>
-                  <button className='btn btn-secondary btn-lg' onClick={handleEdit}>Cancelar</button>
-                </>
+                {/* Columna de Botones */}
+                <div style={{
+                    display: "flex",
+                    flexDirection: "column",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    gap: "10px"
+                }}>
+                    {isEditing ? (
+                        <>
+                            <button className='btn btn-primary' style={{ width: "150px" }} onClick={handleSave}>Guardar</button>
+                            <button className='btn btn-secondary' style={{ width: "150px" }} onClick={handleEdit}>Cancelar</button>
+                        </>
+                    ) : (
+                        <button className='btn btn-primary' style={{ width: "150px" }} onClick={handleEdit}>✏️ Edit User</button>
+                    )}
 
-              ) : (
-                <button className='btn btn-lg btn-primary' onClick={handleEdit} type="submit">Edit User</button>
-
-
-              )}
-
-
-              <button className='btn-danger btn-lg my-2' onClick={deleteUs} type="submit">Delete User</button> 
-
+                    <button className='btn btn-danger' style={{ width: "150px" }} onClick={deleteUs}>🗑️ Delete User</button>
+                </div>
             </div>
-          </>) : (
-          <p>no funciono.......</p>
+        ) : (
+            <p>No funcionó...</p>
         )}
     </div>
-  )
+);
+
 }
 
 export default EditAdmin          
