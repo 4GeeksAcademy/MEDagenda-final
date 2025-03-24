@@ -101,7 +101,7 @@ export const Navbar = () => {
 
                         {role && (
                             <li className="nav-item">
-                                <button className="btn text-white" onClick={handleLogout} style={{ backgroundColor: "transparent", border: "none" }}>
+                                <button className="nav-link text-white" onClick={handleLogout} style={{ backgroundColor: "transparent", border: "none" }}>
                                     🚪 <strong>Cerrar Sesión</strong>
                                 </button>
                             </li>

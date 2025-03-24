@@ -58,11 +58,11 @@ const Calendar = () => {
 };
 
   // Función para manejar edición o eliminación de citas
-  const handleEventClick = async (clickInfo) => {
-    if (window.confirm("¿Estás seguro de eliminar esta cita?")) {
-      await actions.deleteAppointment(clickInfo.event.id);
-    }
-  };
+  // const handleEventClick = async (clickInfo) => {
+  //   if (window.confirm("¿Estás seguro de eliminar esta cita?")) {
+  //     await actions.deleteAppointment(clickInfo.event.id);
+  //   }
+  // };
 
   // Botón visible para agregar cita manual
   const handleAddButton = async () => {
@@ -92,7 +92,7 @@ const Calendar = () => {
           )}
 
           {store.events.length > 0 && (
-            <button className="btn btn-danger btn-lg w-100" onClick={() => alert("Haz clic en una cita para eliminarla")}>
+            <button className="btn btn-danger btn-lg w-100" onClick={() => alert("Para ELIMINAR o REAGENDAR su cita debe enviar un mensaje al mail: contacto@medagenda.com")}>
               Eliminar Cita
             </button>
           )}
@@ -107,7 +107,7 @@ const Calendar = () => {
               initialView="dayGridMonth"
               events={store.events}
               dateClick={handleDateClick}
-              eventClick={handleEventClick}
+              // eventClick={handleEventClick}
               editable={true}
               selectable={true}
               height="auto"
