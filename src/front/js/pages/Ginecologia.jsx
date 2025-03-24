@@ -1,4 +1,4 @@
-import React, { useContext,useState, useEffect } from "react";
+import React, { useContext, useState, useEffect } from "react";
 import DoctorCard from "../component/DoctorCard.jsx";
 import { Context } from '../store/appContext'
 import { useNavigate } from "react-router-dom";
@@ -6,7 +6,7 @@ import { useNavigate } from "react-router-dom";
 const Ginecologia = () => {
     const { store, actions } = useContext(Context);
     const [doc, setDoctors] = useState([]);
-    const navigate = useNavigate()  
+    const navigate = useNavigate()
     let admin = (localStorage.getItem('role'))
     let user = JSON.parse(localStorage.getItem('user'))?.role
     let role = admin || user
@@ -44,7 +44,7 @@ const Ginecologia = () => {
         doctor()
 
     }, [store.doctors])
-   
+
     return (
         <div>
             <h2 style={{
@@ -84,16 +84,24 @@ const Ginecologia = () => {
                                     }}
                                 ></i>
                             ) : null}
-                            <button 
-                            onClick={() => navigate("/Calendar")} 
-                            style={{ marginLeft: "10px", padding: "5px 10px" }}>
-                            Agendar
+                            {/* <button
+                                onClick={() => navigate("/Calendar")}
+                                style={{ marginLeft: "10px", padding: "5px 10px" }}>
+                                Agendar
 
-                        </button>
+                            </button> */}
 
-
+                            {role === 'doctor' || role === 'user' ? (
+                                <button
+                                    onClick={() => navigate(`/Calendar/${item.doctor_id}`)} // Pasar el ID del doctor en la URL
+                                    className="btn btn-primary">
+                                    Mi Agenda
+                                </button>
+                            ) : null}
 
                         </li>
+
+
                     ))}
                 </ul>
             </div>

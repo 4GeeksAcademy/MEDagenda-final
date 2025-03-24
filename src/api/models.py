@@ -11,7 +11,8 @@ class User(db.Model):
     role=db.Column(db.String(100),nullable=False, default='user')
     # Relaciones
     posts = db.relationship('Post', backref='user', lazy=True)
-    appointments = db.relationship('Appointment', backref='user', lazy=True)
+    appointments = db.relationship("Appointment", back_populates="user")
+
 
     def __repr__(self):
         return f'<User {self.name}>'
@@ -33,8 +34,7 @@ class Doctor(db.Model):
     password = db.Column(db.String(100), nullable=False)
     role=db.Column(db.String(100),nullable=False, default='doctor')
     # Relaciones
-    appointments = db.relationship('Appointment', backref='doctor', lazy=True)
-    availabilities = db.relationship('Availability', backref='doctor', lazy=True)
+    availabilities = db.relationship("Availability", back_populates="doctor")
     appointments = db.relationship("Appointment", back_populates="doctor")
 
     def __repr__(self):
@@ -49,6 +49,36 @@ class Doctor(db.Model):
             "role":self.role
         }
 
+
+
+    
+
+class Appointment(db.Model):
+    __tablename__ = 'appointment'
+    appointment_id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.Integer, db.ForeignKey('User.user_id'), nullable=False)
+    doctor_id = db.Column(db.Integer, db.ForeignKey('doctor.doctor_id'), nullable=False)
+    date = db.Column(db.Date, nullable=False)
+    time = db.Column(db.Time, nullable=False)
+    status = db.Column(db.String(50), nullable=False)
+    doctor = db.relationship("Doctor", back_populates="appointments") 
+    user = db.relationship("User", back_populates="appointments")
+
+    def __repr__(self):
+        return f'<Appointment {self.appointment_id}>'
+
+    def serialize(self):
+        return {
+            "appointment_id": self.appointment_id,
+            "user_id": self.user_id,
+            "doctor_id": self.doctor_id,
+            "doctor_name": self.doctor.name if self.doctor else None, 
+            "user_name": self.user.name if self.user else None,
+            "date": self.date.isoformat() if self.date else None,
+            "time": self.time.strftime("%H:%M:%S") if self.time else None,
+            "status": self.status,
+        }
+    
 class Administrator(db.Model):
     __tablename__ = 'administrator'
     admin_id = db.Column(db.Integer, primary_key=True)
@@ -59,7 +89,7 @@ class Administrator(db.Model):
 
     def __repr__(self):
         return f'<Administrator {self.name}>'
-
+    
     def serialize(self):
         return {
             "admin_id": self.admin_id,
@@ -68,37 +98,14 @@ class Administrator(db.Model):
             "role":self.role,
         }
 
-class Appointment(db.Model):
-    __tablename__ = 'appointment'
-    appointment_id = db.Column(db.Integer, primary_key=True)
-    user_id = db.Column(db.Integer, db.ForeignKey('User.user_id'), nullable=False)
-    doctor_id = db.Column(db.Integer, db.ForeignKey('doctor.doctor_id'), nullable=False)
-    date = db.Column(db.Date, nullable=False)
-    time = db.Column(db.Time, nullable=False)
-    status = db.Column(db.String(50), nullable=False)
-    doctor = db.relationship("Doctor", back_populates="appointments")
-
-    def __repr__(self):
-        return f'<Appointment {self.appointment_id}>'
-
-    def serialize(self):
-        return {
-            "appointment_id": self.appointment_id,
-            "user_id": self.user_id,
-            "doctor_id": self.doctor_id,
-            "doctor_name": self.doctor.name if self.doctor else None,
-            "date": self.date.isoformat() if self.date else None,
-            "time": self.time.strftime("%H:%M:%S") if self.time else None,
-            "status": self.status,
-        }
-
 class Availability(db.Model):
     __tablename__ = 'availability'
     availability_id = db.Column(db.Integer, primary_key=True)
     doctor_id = db.Column(db.Integer, db.ForeignKey('doctor.doctor_id'), nullable=False)
     day = db.Column(db.String(50), nullable=False)
     start_time = db.Column(db.Time, nullable=False)
-    end_time = db.Column(db.Time, nullable=False)
+    end_time = db.Column(db.Time, nullable=False) 
+    doctor = db.relationship("Doctor", back_populates="availabilities")
 
     def __repr__(self):
         return f'<Availability {self.availability_id}>'
@@ -106,7 +113,8 @@ class Availability(db.Model):
     def serialize(self):
         return {
             "availability_id": self.availability_id,
-            "doctor_id": self.doctor_id,
+            "doctor_id": self.doctor_id, 
+            "doctor_name": self.doctor.name if self.doctor else None,
             "day": self.day,
             "start_time": self.start_time.strftime("%H:%M:%S") if self.start_time else None,
             "end_time": self.end_time.strftime("%H:%M:%S") if self.end_time else None,

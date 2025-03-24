@@ -23,16 +23,21 @@ const Pagos = () => {
 
 
   return (
-    <div className='container'>
-        <div className='card'>
-        <h1>Pagos</h1>
+    <div className="container d-flex justify-content-center mt-4">
+      <div className="card p-4 shadow-lg text-center" style={{ maxWidth: "400px" }}>
+        <h1 className="mb-3">Pagos</h1>
 
-        <h3>Consulta medica</h3>
-        <p>$50</p>
-        
-      <button className='btn btn-primary' onClick={handlePayment}>Mercado Pago</button>
-      {preferenceId && <Wallet initialization={{ preferenceId: preferenceId }} />}
-      
+        <h3 className="text-primary">Consulta Médica</h3>
+        <p className="fs-5 fw-bold">$50</p>
+
+        {/* Espacio adicional para más información */}
+        <p className="text-muted">Para agilizar los trámites, le sugerimos hacer un pago anticipado de la consulta médica. También tenemos disponible el pago en ventanilla.</p>
+
+        <button className="btn btn-primary btn-lg mt-3" onClick={handlePayment}>
+          Pagar con Mercado Pago
+        </button>
+
+        {preferenceId && <Wallet initialization={{ preferenceId: preferenceId }} className="m-3 " />}
       </div>
     </div>
   )

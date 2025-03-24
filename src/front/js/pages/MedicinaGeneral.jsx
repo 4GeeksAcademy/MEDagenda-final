@@ -1,7 +1,8 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { use, useContext, useEffect, useState } from "react";
 import DoctorCard from "../component/DoctorCard.jsx";
 import { Context } from '../store/appContext'
 import { useNavigate } from "react-router-dom";
+
 
 const MedicinaGeneral = () => {
     const doctores = [
@@ -9,17 +10,20 @@ const MedicinaGeneral = () => {
         { id: 2, name: "Doctora Yarely Martinez", especialidad: "Pediatra" },
     ];
     const { store, actions } = useContext(Context);
-    const [doc, setDoctors] = useState([]);
-    const navigate = useNavigate()
+
+    const [doc, setDoctors] = useState([]); 
+    const navigate=useNavigate()
+
 
     let admin = (localStorage.getItem('role'))
-    let user = JSON.parse(localStorage.getItem('user'))?.role
-    let role = admin || user
+    let user = JSON.parse(localStorage.getItem('user'))?.role 
+    let doctor = JSON.parse(localStorage.getItem('doctor'))?.role
+    let role = admin || user || doctor
 
 
 
 
-    const doctor = async () => {
+    const getdoctor = async () => {
         try {
             await actions.doctorsGet()
         } catch (error) {
@@ -46,7 +50,7 @@ const MedicinaGeneral = () => {
 
 
     useEffect(() => {
-        doctor()
+        getdoctor()
 
     }, [store.doctors])
     
@@ -79,7 +83,7 @@ const MedicinaGeneral = () => {
                         }}
                             key={item.doctor_id}> 
                             
-                            <h3> {item.name} </h3> {item.email}  {item.specialty}
+                            <h3><strong>{item.name}</strong>  </h3> {item.email} <br></br> {item.specialty} ID: <strong>{item.doctor_id}</strong>
 
                             {role === 'admin' ? (
                                 <i className="fa-solid fa-trash" style={{ cursor: "pointer", marginLeft: "10px", color: "red" }}
@@ -92,6 +96,11 @@ const MedicinaGeneral = () => {
                                     }}
                                 ></i>
                             ) : null}
+                            
+                            
+                            {/* {role === 'doctor' || role === 'user' ? ( 
+                            
+                            
                             <button 
                             onClick={() => navigate("/Calendar")} 
                             style={{ marginLeft: "10px", padding: "5px 10px" }}>
@@ -100,6 +109,14 @@ const MedicinaGeneral = () => {
                         </button>
 
 
+                            ):null} */}
+                            {role === 'doctor' || role === 'user' ? (
+                                <button
+                                    onClick={() => navigate(`/Calendar/${item.doctor_id}`)} // Pasar el ID del doctor en la URL
+                                    className="btn btn-primary">
+                                    Mi Agenda
+                                </button>
+                            ) : null}
                         </li>
 
                     ))}

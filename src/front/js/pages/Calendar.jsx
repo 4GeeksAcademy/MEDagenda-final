@@ -3,38 +3,66 @@ import FullCalendar from "@fullcalendar/react";
 import dayGridPlugin from "@fullcalendar/daygrid";
 import interactionPlugin from "@fullcalendar/interaction";
 import { Context } from "../store/appContext";
+import { useParams } from "react-router-dom";
 
+import Pagos from "../component/Pagos.jsx";
 const Calendar = () => {
+  const { doctor_id } = useParams();  // Obtener el doctor_id de la URL
+
   const { store, actions } = useContext(Context);
+  let admin = (localStorage.getItem('role'))
+  let user = JSON.parse(localStorage.getItem('user'))?.role
+  let doctor = JSON.parse(localStorage.getItem('doctor'))?.role
+  let role = admin || user || doctor
 
   useEffect(() => {
+    let admin = (localStorage.getItem('role'))
+    let user = JSON.parse(localStorage.getItem('user'))?.role
+    let doctor = JSON.parse(localStorage.getItem('doctor'))?.role
+    let role = admin || user || doctor
+
     if (store.token) {
-        actions.fetchAppointments();
+      if (role === "user") {
+        actions.fetchAppointments();  // Si es usuario, trae sus citas
+      } else if (role === "doctor") {
+        actions.fetchAppointments2(); // Si es doctor, trae otras citas
+      }
     }
-}, [store.token]); // Ejecutar solo cuando el token cambie
+  }, [store.token]); // Ejecutar solo cuando el token cambie
 
   // Función para agregar cita al hacer click en una fecha del calendario
   const handleDateClick = async (arg) => {
+    let admin = (localStorage.getItem('role'))
+    let user = JSON.parse(localStorage.getItem('user'))?.role
+    let doctor = JSON.parse(localStorage.getItem('doctor'))?.role
+    let role = admin || user || doctor
+
+    // Solo permitir la función si el rol es "user"
+    if (role !== "user") {
+        alert("Solo los usuarios pueden agendar citas.");
+        return;
+    }
+
     const title = prompt("Ingresa el título de la cita:");
     if (title) {
-      const userId = store.user?.id || localStorage.getItem("id"); // Obtener usuario autenticado
-      const doctorId = prompt("Ingresa el ID del doctor:");
+        const userId = store.user?.id || localStorage.getItem("id"); // Obtener usuario autenticado
+        const doctorId = doctor_id; // Se asume que doctor_id ya está definido en el contexto
 
-      if (!doctorId || !userId) {
-        alert("Falta información de usuario o doctor.");
-        return;
-      }
+        if (!doctorId || !userId) {
+            alert("Por favor, ve a Especialidades y escoge tu Doctor.");
+            return;
+        }
 
-      await actions.addAppointment(userId, doctorId, arg.dateStr, "09:00:00", "Pendiente");
+        await actions.addAppointment(userId, doctorId, arg.dateStr, "09:00:00", "Pendiente");
     }
-  };
+};
 
   // Función para manejar edición o eliminación de citas
   const handleEventClick = async (clickInfo) => {
     if (window.confirm("¿Estás seguro de eliminar esta cita?")) {
-        await actions.deleteAppointment(clickInfo.event.id);
+      await actions.deleteAppointment(clickInfo.event.id);
     }
-};
+  };
 
   // Botón visible para agregar cita manual
   const handleAddButton = async () => {
@@ -49,31 +77,44 @@ const Calendar = () => {
       alert("Faltan datos para crear la cita.");
     }
   };
-  
+
 
   return (
-    <div className="calendar-container">
-      <h2 className="calendar-title">📅 Mi Agenda :D</h2>
-      <button onClick={handleAddButton}>Agregar Cita</button>
-  
-      {/* Mostrar el botón de eliminar solo si hay citas */}
-      {store.events.length > 0 && (
-        <button onClick={() => alert("Haz clic en una cita para eliminarla")}>
-          Eliminar Cita
-        </button>
-      )}
-  
-      <div className="calendar-box">
-        <FullCalendar
-          plugins={[dayGridPlugin, interactionPlugin]}
-          initialView="dayGridMonth"
-          events={store.events}
-          dateClick={handleDateClick}
-          eventClick={handleEventClick}
-          editable={true}
-          selectable={true}
-          height="auto"
-        />
+    <div className="container my-4">
+      <div className="row g-3 d-flex flex-column flex-md-row">
+
+        {/* Sección de botones */}
+        <div className="col-12 col-md-3">
+          {role === "user" && (
+            <button className="btn btn-primary btn-lg w-100 mb-3" onClick={handleAddButton}>
+              Agregar Cita
+            </button>
+          )}
+
+          {store.events.length > 0 && (
+            <button className="btn btn-danger btn-lg w-100" onClick={() => alert("Haz clic en una cita para eliminarla")}>
+              Eliminar Cita
+            </button>
+          )}
+          < Pagos />
+        </div>
+
+        {/* Sección del calendario */}
+        <div className="col-12 col-md-9">
+          <div className="card shadow p-3">
+            <FullCalendar
+              plugins={[dayGridPlugin, interactionPlugin]}
+              initialView="dayGridMonth"
+              events={store.events}
+              dateClick={handleDateClick}
+              eventClick={handleEventClick}
+              editable={true}
+              selectable={true}
+              height="auto"
+            />
+          </div>
+        </div>
+
       </div>
     </div>
   );
