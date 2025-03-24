@@ -51,13 +51,13 @@ const Pediatria = () => {
                 fontWeight: "bold",
                 fontFamily: "Montserrat, sans-serif",
                 color: "#FFFFFF",
-                marginBottom: "10px",
+                marginBottom: "0px",
                 textAlign: "center",
                 textShadow: "0px 0px 10px rgba(0,0,0,0.2)",
-                background: "linear-gradient(to right,rgba(69, 103, 183, 0.4) ,rgb(14, 95, 245) )",
+                background: "linear-gradient(to right,rgba(248, 233, 27, 0.4) ,rgb(245, 222, 14) )",
                 backgroundSize: "100% 100%",
                 padding: "10px",
-                borderRadius: "10px",
+                borderRadius: "0px",
             }}>
                 Pediatria
             </h2>

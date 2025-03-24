@@ -51,12 +51,20 @@ const Oftalmologia = () => {
                 }, [store.doctors])
     return (
         <div>
-            <h2>Oftalmologia</h2>
-            {/* <ul>
-                {doctores.map((doctor) => (
-                    <DoctorCard key={doctor.id} doctor={doctor} />
-                ))}
-            </ul>  */}
+             <h2 style={{
+            fontSize: "24px",
+            fontWeight: "bold",
+            fontFamily: "Montserrat, sans-serif",
+            color: "#FFFFFF",
+            marginBottom: "0px",
+            textAlign: "center",
+            textShadow: "0px 0px 10px rgba(0,0,0,0.2)",
+            background: "linear-gradient(to right,rgba(94, 192, 238, 0.99) ,rgb(2, 15, 58) )",
+            backgroundSize: "100% 100%",
+            padding: "10px",
+            borderRadius: "0px",
+        }}>
+        Oftalmología</h2>
             <div> 
             <ul>
             {Array.isArray (store.doctor) && store.doctor.filter((item) => item.specialty === "Oftalmología").map((item) => (

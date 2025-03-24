@@ -51,12 +51,21 @@ const Endocrinologia = () => {
         }, [store.doctors])
     return (
         <div>
-            <h2>Endrocrinología</h2>
-            {/* <ul>
-                {doctores.map((doctor) => (
-                    <DoctorCard key={doctor.id} doctor={doctor} />
-                ))}
-            </ul>  */}
+            <h2 style={{
+            fontSize: "24px",
+            fontWeight: "bold",
+            fontFamily: "Montserrat, sans-serif",
+            color: "#FFFFFF",
+            marginBottom: "0px",
+            textAlign: "center",
+            textShadow: "0px 0px 10px rgba(0,0,0,0.2)",
+            background: "linear-gradient(to right,rgba(230, 18, 230, 0.37) ,rgb(88, 5, 68) )",
+            backgroundSize: "100% 100%",
+            padding: "10px",
+            borderRadius: "0px",
+        }}>
+        Endocrinología</h2>
+       
             <div> 
             <ul>
             {Array.isArray (store.doctor) && store.doctor.filter((item) => item.specialty === "Endocrinología").map((item) => (
