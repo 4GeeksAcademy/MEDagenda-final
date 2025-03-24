@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext, useState, useEffect } from 'react';
 import { Context } from '../store/appContext';
 import { FaTrashAlt } from 'react-icons/fa'; 
 import styles from '../../styles/PreguntasFrecuentes.module.css';
@@ -28,6 +28,11 @@ const PreguntasFrecuentes = () => {
   const handleBorrarRespuesta = (preguntaIndex, respuestaIndex) => {
     actions.borrarRespuesta(preguntaIndex, respuestaIndex);
   };
+
+  useEffect(() => {
+    window.scrollTo(0, document.body.scrollHeight);
+  }, [store.faqs]);
+  
 
   return (
     <div className={styles.container}>
