@@ -3,20 +3,23 @@ import { Context } from '../store/appContext';
 import swal from "sweetalert";
 
 const Pacientes = () => {
-  const { store, actions } = useContext(Context); 
-  const [patients, setPatients] = useState([]); 
 
-  let admin = localStorage.getItem('role');
-  let user = JSON.parse(localStorage.getItem('user'))?.role;
-  let role = admin || user;
+  const { store, actions } = useContext(Context)
+  const [patients, setPatients] = useState([]); // Estado local para manejar la lista de pacientes 
+  let admin = (localStorage.getItem('role'))
+  let user = JSON.parse(localStorage.getItem('user'))?.role
+  let role = admin || user
 
   const patient = async () => {
     try {
+
       await actions.pacientesGet(); 
       setPatients(store.user || []);
+
     } catch (error) {
       console.error("No se llamaron los Pacientes correctamente");
     }
+
   }; 
 
   const deleteUser3 = async (user_id) => {
@@ -45,26 +48,27 @@ const Pacientes = () => {
     }
   };
 
+
   useEffect(() => {
     patient();
   }, [store.users]);
 
   return (
-    <div>
+    <div className='vh-100' >
       <h1 style={{
-                fontSize: "24px",
-                fontWeight: "bold",
-                fontFamily: "Montserrat, sans-serif",
-                color: "#FFFFFF",
-                marginBottom: "10px",
-                textAlign: "center",
-                textShadow: "0px 0px 10px rgba(0,0,0,0.2)",
-                background: "linear-gradient(to right,rgba(69, 103, 183, 0.4) ,rgb(14, 95, 245) )",
-                backgroundSize: "100% 100%",
-                padding: "10px",
-                borderRadius: "10px",
-            }}>Lista de Pacientes</h1>
-  
+        fontSize: "24px",
+        fontWeight: "bold",
+        fontFamily: "Montserrat, sans-serif",
+        color: "#FFFFFF",
+        marginBottom: "10px",
+        textAlign: "center",
+        textShadow: "0px 0px 10px rgba(0,0,0,0.2)",
+        background: "linear-gradient(to right,rgba(69, 103, 183, 0.4) ,rgb(3, 32, 87) )",
+        backgroundSize: "100% 100%",
+        padding: "10px",
+        borderRadius: "0px",
+      }}>Lista de Pacientes</h1>
+
       <div className='pacientes de Get'>
         <ul>
           {Array.isArray(store.user) && store.user.map((item) => (
@@ -76,16 +80,16 @@ const Pacientes = () => {
               justifyContent: "center",
               textAlign: "center",
               marginBottom: "15px",
-              background: "linear-gradient(to right,rgb(29, 168, 233),rgb(175, 230, 219))",
+              background: "linear-gradient(to right,rgb(59, 170, 221),rgba(8, 18, 65, 0.28))",
               border: "none",
               borderRadius: "50px",
               boxShadow: "0px 4px 15px rgba(0,123,255,0.2)",
               position: "relative",
               fontFamily: "'Quicksand', sans-serif",
-              fontSize: "17px",       
+              fontSize: "17px",
               fontWeight: "500",
-              letterSpacing: "1.5px", 
-              lineHeight: "1.6",      
+              letterSpacing: "1.5px",
+              lineHeight: "1.6",
               color: "#2c3e50",
               overflow: "hidden",
               zIndex: "1",
@@ -113,6 +117,7 @@ const Pacientes = () => {
                             }
                         }}></i> 
                 </div> 
+
                 )}
               </div>
             </li>

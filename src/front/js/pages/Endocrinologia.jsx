@@ -70,7 +70,7 @@ const Endocrinologia = () => {
                 padding: "10px",
                 borderRadius: "0px",
             }}>
-                Endocrinología
+                Endocrinología ⚖️👨‍⚕️
             </h2>
 
             <div>

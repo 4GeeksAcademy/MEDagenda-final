@@ -70,7 +70,7 @@ const Cardiologia = () => {
             borderRadius: "0px",
         
         }}>
-        Cardiología</h2>
+        Cardiología ❤️👨‍⚕️</h2>
 
         <div>
                 <ul style={{

@@ -62,11 +62,13 @@ const MedicinaGeneral = () => {
                 marginBottom: "0px",
                 textAlign: "center",
                 textShadow: "0px 0px 10px rgba(0,0,0,0.2)",
+
                 background: "linear-gradient(to right,rgba(8, 240, 85, 0.6) ,rgb(3, 65, 24) )",
                 padding: "10px",
                 borderRadius: "0px",
+
             }}>
-                💊 Medicina General
+                💊👩‍⚕️ Medicina General 
             </h2>
 
             <div>

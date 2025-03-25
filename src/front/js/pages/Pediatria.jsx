@@ -63,7 +63,7 @@ const Pediatria = () => {
                 padding: "10px",
                 borderRadius: "0px",
             }}>
-                Pediatria
+                Pediatria 👶👩‍⚕️
             </h2>
 
             <div>
