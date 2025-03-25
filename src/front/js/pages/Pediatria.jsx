@@ -1,6 +1,7 @@
 import React, { useContext, useState, useEffect } from "react";
 import { Context } from '../store/appContext';
 import { useNavigate } from "react-router-dom";
+import swal from "sweetalert";
 
 const Pediatria = () => {
     const { store, actions } = useContext(Context);
@@ -24,12 +25,22 @@ const Pediatria = () => {
             return;
         }
 
-        const confirmDelete = window.confirm("¿Estás seguro de que deseas eliminar este usuario?");
+        const confirmDelete = await swal({
+            title: "¿Estás seguro?",
+            text: "El doctor será eliminado permanentemente",
+            icon: "warning",
+            buttons: true,
+            dangerMode: true,
+        });
+
         if (confirmDelete) {
             try {
                 await actions.deleteDoctor(doctor_id);
+                setDoctors(prevDoctors => prevDoctors.filter(item => item.doctor_id !== doctor_id));
+                swal("Eliminado", "El doctor ha sido eliminado", "success");
             } catch (error) {
-                console.error("No se pudo eliminar el usuario correctamente", error);
+                console.error("No se pudo eliminar el doctor correctamente", error);
+                swal("Error", "No se pudo eliminar el doctor", "error");
             }
         }
     };

@@ -107,6 +107,8 @@ const PreguntasFrecuentes = () => {
           </article>
         ))}
       </section>
+      <div style={{height: "25vh"}}>
+            </div>
     </div>
   );
 };

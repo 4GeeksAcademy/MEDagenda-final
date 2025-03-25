@@ -74,7 +74,7 @@ const AddDoctor = () => {
                             className="form-control border-success shadow"
                         />
                     </div>
-                    <button type="submit" className="btn btn-lg w-100 mt-3 shadow" style={{ backgroundColor: "#2196F3", color: "white", border: "none" }}>REGISTRARSE</button>
+                    <button type="submit" className="btn btn-lg w-100 mt-3 shadow" style={{ backgroundColor: "#2196F3", color: "white", border: "none" }}>REGISTRAR</button>
                 </form>
             </div>
         </div>

@@ -2,10 +2,7 @@ import React, { useContext, useState, useEffect } from "react";
 import DoctorCard from "../component/DoctorCard.jsx";
 import { Context } from '../store/appContext'
 import { useNavigate } from "react-router-dom";
-const doctores = [
-    { id: 1, name: "Doctor Diego Vazquez", especialidad: "Pediatra" },
-    { id: 2, name: "Doctora Yarely Martinez", especialidad: "Pediatra" },
-];
+import swal from "sweetalert";
 
 const Oftalmologia = () => {
     const { store, actions } = useContext(Context);
@@ -27,22 +24,31 @@ const Oftalmologia = () => {
         }
     }
     const deleteDoc = async (doctor_id) => {
-        if (!doctor_id || isNaN(doctor_id)) {  //Comprueba si user_id no es un número válido.
+        if (!doctor_id || isNaN(doctor_id)) {
             console.error("Error: ID de usuario inválido", doctor_id);
             return;
         }
 
-        const confirmDelete = window.confirm("¿Estás seguro de que deseas eliminar este usuario?");
+        const confirmDelete = await swal({
+            title: "¿Estás seguro?",
+            text: "El doctor será eliminado permanentemente",
+            icon: "warning",
+            buttons: true,
+            dangerMode: true,
+        });
 
         if (confirmDelete) {
             try {
                 await actions.deleteDoctor(doctor_id);
-                setDoctors(prevPatients => prevPatients.filter(item => item.doctor_id !== doctor_id));
+                setDoctors(prevDoctors => prevDoctors.filter(item => item.doctor_id !== doctor_id));
+                swal("Eliminado", "El doctor ha sido eliminado", "success");
             } catch (error) {
-                console.error("No se pudo eliminar el usuario correctamente", error);
+                console.error("No se pudo eliminar el doctor correctamente", error);
+                swal("Error", "No se pudo eliminar el doctor", "error");
             }
         }
     };
+
 
 
     useEffect(() => {
