@@ -125,7 +125,7 @@ const EditDoctor = () => {
                             <button className='btn btn-primary' style={{ width: "150px" }} onClick={handleEdit}>✏️ Edit User</button>
                         )}
     
-                        <button className='btn btn-danger' style={{ width: "150px" }} onClick={deleteUs}>🗑️ Delete User</button>
+                        {/* <button className='btn btn-danger' style={{ width: "150px" }} onClick={deleteUs}>🗑️ Delete User</button> */}
                     </div>
                 </div>
             ) : (

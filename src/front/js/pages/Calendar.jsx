@@ -57,12 +57,6 @@ const Calendar = () => {
     }
 };
 
-  // Función para manejar edición o eliminación de citas
-  // const handleEventClick = async (clickInfo) => {
-  //   if (window.confirm("¿Estás seguro de eliminar esta cita?")) {
-  //     await actions.deleteAppointment(clickInfo.event.id);
-  //   }
-  // };
 
   // Botón visible para agregar cita manual
   const handleAddButton = async () => {
@@ -96,7 +90,11 @@ const Calendar = () => {
               Eliminar Cita
             </button>
           )}
+          {role === "user" && (
+                            <>
           < Pagos />
+          </>
+          )}
         </div>
 
         {/* Sección del calendario */}

@@ -1,12 +1,14 @@
 import React, { useContext, useState, useEffect } from 'react';
 import { Context } from '../store/appContext';
-import { FaTrashAlt } from 'react-icons/fa'; 
+import { FaTrashAlt } from 'react-icons/fa';
 import styles from '../../styles/PreguntasFrecuentes.module.css';
 
 const PreguntasFrecuentes = () => {
   const { store, actions } = useContext(Context);
   const [nuevaPregunta, setNuevaPregunta] = useState('');
   const [respuestasInputs, setRespuestasInputs] = useState({});
+  const admin = localStorage.getItem('role');
+  const role = admin
 
   const handleAgregarPregunta = () => {
     if (nuevaPregunta.trim() === '') return;
@@ -32,19 +34,19 @@ const PreguntasFrecuentes = () => {
   useEffect(() => {
     window.scrollTo(0, document.body.scrollHeight);
   }, [store.faqs]);
-  
+
 
   return (
     <div className={styles.container}>
       <h1 className={styles.header}>Foro de Preguntas Frecuentes</h1>
       <section className={styles.section}>
-        <input 
+        <input
           className={styles.input}
-          value={nuevaPregunta} 
-          onChange={(e) => setNuevaPregunta(e.target.value)} 
-          placeholder="Haz una nueva pregunta..." 
+          value={nuevaPregunta}
+          onChange={(e) => setNuevaPregunta(e.target.value)}
+          placeholder="Haz una nueva pregunta..."
         />
-        <button 
+        <button
           className={styles.addButton}
           onClick={handleAgregarPregunta}
         >
@@ -56,25 +58,27 @@ const PreguntasFrecuentes = () => {
           <article key={index} className={styles.card}>
             <div className={styles.questionRow}>
               <h2 className={styles.questionTitle}>{faq.pregunta}</h2>
-              <button 
-                className={styles.deleteButton}
-                onClick={() => handleBorrarPregunta(index)}
-                title="Eliminar pregunta"
-              >
-                <FaTrashAlt />
-              </button>
+              {role === "admin" && (
+                <button
+                  className={styles.deleteButton}
+                  onClick={() => handleBorrarPregunta(index)}
+                  title="Eliminar pregunta"
+                >
+                  <FaTrashAlt />
+                </button>
+              )}
             </div>
             {faq.respuesta && <p className={styles.answerText}>{faq.respuesta}</p>}
             <div className={styles.responseInputRow}>
-              <input 
+              <input
                 className={styles.input}
                 value={respuestasInputs[index] || ''}
-                onChange={(e) => 
+                onChange={(e) =>
                   setRespuestasInputs({ ...respuestasInputs, [index]: e.target.value })
-                } 
-                placeholder="Responde esta pregunta..." 
+                }
+                placeholder="Responde esta pregunta..."
               />
-              <button 
+              <button
                 className={styles.addButton}
                 onClick={() => handleAgregarRespuesta(index)}
               >
@@ -87,13 +91,15 @@ const PreguntasFrecuentes = () => {
                 {faq.respuestas.map((respuesta, i) => (
                   <div key={i} className={styles.responseRow}>
                     <p className={styles.responseText}>- {respuesta}</p>
-                    <button 
-                      className={styles.deleteButton}
-                      onClick={() => handleBorrarRespuesta(index, i)}
-                      title="Eliminar respuesta"
-                    >
-                      <FaTrashAlt />
-                    </button>
+                    {role === "admin" && (
+                      <button
+                        className={styles.deleteButton}
+                        onClick={() => handleBorrarPregunta(index)}
+                        title="Eliminar pregunta"
+                      >
+                        <FaTrashAlt />
+                      </button>
+                    )}
                   </div>
                 ))}
               </div>
