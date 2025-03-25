@@ -15,9 +15,6 @@ const Home = () => {
                     <div className="col-md-6 p-4">
                         <h1 className="fw-bold text-primary">Cuidamos tu salud con profesionalismo</h1>
                         <p className="text-muted">Agenda tu cita médica de forma rápida y sencilla con los mejores especialistas.</p>
-                        <button className="btn btn-primary btn-lg mt-3" onClick={() => navigate("/registroPacientes")}>
-                            Agendar Cita
-                        </button>
                     </div>
 
                     {/* Imagen a la derecha */}

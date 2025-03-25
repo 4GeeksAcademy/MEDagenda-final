@@ -55,7 +55,7 @@ const MedicinaGeneral = () => {
     }, [store.doctors])
     
     return (
-        <div>
+        <div >
             <h2 style={{
                 fontSize: "24px",
                 fontWeight: "bold",
