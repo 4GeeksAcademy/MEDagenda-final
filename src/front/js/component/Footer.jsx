@@ -32,7 +32,7 @@ const Footer = () => {
               <i className="fab fa-instagram"></i> Instagram
             </a>
             <br />
-            <Link to="/preguntasfrecuentes" className="text-white" target="_blank"> PREGUNTAS</Link>
+            <Link to="/preguntasfrecuentes" className="text-white" target="_blank"> <i class="fa-regular fa-comments"></i> Foro Q&A</Link>
           </div>
         </div>
       </div>

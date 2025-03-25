@@ -63,7 +63,7 @@ const Oftalmologia = () => {
                 padding: "10px",
                 borderRadius: "0px",
             }}>
-                <i class="fa-regular fa-eye"></i> Oftalmología
+                <i class="fa-regular fa-eye"></i> Oftalmología 👁️👩‍⚕️
             </h2>
 
             <div>

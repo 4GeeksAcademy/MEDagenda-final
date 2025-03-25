@@ -59,7 +59,7 @@ const Ginecologia = () => {
             padding: "10px",
             borderRadius: "0px",
         }}>
-            Ginecología y Obstetricia
+            Ginecología y Obstetricia 👩‍⚕️💖
         </h2>
 
         <div>
