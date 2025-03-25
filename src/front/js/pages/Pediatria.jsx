@@ -116,6 +116,12 @@ const Pediatria = () => {
                                         width: "100%",
                                         maxWidth: "200px"
                                     }}
+                                    onMouseEnter={(e) =>
+                                        (e.target.style.background = "linear-gradient(to right, rgb(14, 181, 247), rgba(130, 194, 224, 0.57))") // Más intenso al pasar el mouse
+                                      }
+                                      onMouseLeave={(e) =>
+                                        (e.target.style.background = "linear-gradient(to right, rgb(211, 228, 243), rgba(66, 195, 238, 0.89))") // Vuelve al normal
+                                      }
                                 >
                                    <h6><i class="fa-solid fa-calendar-plus"></i> <span style={{paddingLeft:"3px"}}>Agendar Cita</span></h6> 
                                 </button>

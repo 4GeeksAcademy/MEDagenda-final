@@ -39,14 +39,14 @@ const Home = () => {
                         <div className="card border-white shadow-sm p-4 w-100">
                             <img src="https://img.freepik.com/foto-gratis/medico-enfermeras-equipos-especiales_23-2148980721.jpg?semt=ais_hybrid" alt="Especialistas" className="img-fluid rounded" />
                             <h5 className="mt-3">Médicos Especializados</h5>
-                            <p className="text-muted">Contamos con los mejores profesionales en cada área de la salud.</p>
+                            <p className="text-muted">Contamos con los mejores profesionales en cada área de la salud, precios accesibles pensando en tu bienestar y en el de tu familia.</p>
                         </div>
                     </div>
                     <div className="col-md-6 d-flex align-items-stretch shadow">
                         <div className="card border-white shadow-sm p-4 w-100">
                             <img src="https://www.shutterstock.com/image-vector/calendar-icon-abstract-month-calender-600nw-2508794073.jpg" alt="Citas Rápidas" className="img-fluid rounded" />
                             <h5 className="mt-3">Citas Rápidas y Seguras</h5>
-                            <p className="text-muted">Agenda tu cita en pocos clics, sin largas esperas.</p>
+                            <p className="text-muted">Agenda tu cita en sencillos pasos</p>
                         </div>
                     </div>
                 </div>

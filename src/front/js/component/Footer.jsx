@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 
 const Footer = () => {
   return (
-    <footer className="bg-black text-white py-4" style={{ bottom: 0, width: '100%', backgroundImage: 'linear-gradient(to right,rgb(18, 146, 116),rgb(30, 91, 148))', color: '#ffffff',
+    <footer className="bg-black text-white py-4" style={{ bottom: 0, width: '100%', background: "linear-gradient(135deg,rgb(5, 3, 114), #2196F3)",  color: '#ffffff',
       padding: '2rem', marginTop:"450px"}}>
 
       <div className="container">

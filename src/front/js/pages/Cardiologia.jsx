@@ -43,7 +43,7 @@ const Cardiologia = () => {
 
     useEffect(() => {
         doctor()
-
+        
     }, [store.doctors])
     return (
         <div>
@@ -114,7 +114,6 @@ const Cardiologia = () => {
                                     onClick={() => navigate(`/Calendar/${item.doctor_id}`)}
                                     style={{
                                         padding: "10px 15px",
-                                        backgroundColor: "#005f73",
                                         color: "#FFFFFF",
                                         border: "none",
                                         borderRadius: "20px",
@@ -122,7 +121,14 @@ const Cardiologia = () => {
                                         marginTop: "10px",
                                         width: "100%",
                                         maxWidth: "200px"
+                                        
                                     }}
+                                     onMouseEnter={(e) =>
+                                    (e.target.style.background = "linear-gradient(to right, rgb(14, 181, 247), rgba(130, 194, 224, 0.57))") // Más intenso al pasar el mouse
+                                  }
+                                  onMouseLeave={(e) =>
+                                    (e.target.style.background = "linear-gradient(to right, rgb(116, 174, 228), rgba(136, 225, 255, 0.89))") // Vuelve al normal
+                                  }
                                 >
                                    <h6><i class="fa-solid fa-calendar-plus"></i> <span style={{paddingLeft:"3px"}}>Agendar Cita</span></h6> 
                                 </button>

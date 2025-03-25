@@ -19,7 +19,7 @@ export const Navbar = () => {
     return (
         <nav className="navbar navbar-expand-lg shadow-lg"
             style={{
-                background: "linear-gradient(135deg,rgb(5, 3, 114), #2196F3)", // Degradado azul-verde
+                background: "linear-gradient(135deg,rgb(5, 3, 114), #2196F3)", 
                 padding: "1rem",
                 boxShadow: "0px 5px 15px rgba(0, 0, 0, 0.3)"
             }}>
@@ -95,6 +95,37 @@ export const Navbar = () => {
                                 </li>
                                 <li className="nav-item">
                                     <Link to="/calendar" className="nav-link text-white">🗓️ <strong>Agenda</strong></Link>
+                                </li>
+                                <li className="nav-item dropdown">
+                                    <a
+                                        className="nav-link text-white nav-link dropdown-toggle" 
+                                        href="#"
+                                        id="specialtiesDropdown"
+                                        role="button"
+                                        data-bs-toggle="dropdown"
+                                        aria-expanded="false"
+                                        
+                                    >
+                                       🩺 <strong>Especialides</strong>
+                                    </a>
+                                    <ul className="dropdown-menu" aria-labelledby="specialtiesDropdown">
+                                        {[
+                                            { name: "Medicina General", path: "/medicina-general" },
+                                            { name: "Pediatría", path: "/pediatria" },
+                                            { name: "Ginecología y Obstetricia", path: "/ginecologia" },
+                                            { name: "Cardiología", path: "/cardiologia" },
+                                            { name: "Dermatología", path: "/dermatologia" },
+                                            { name: "Ortopedia y Traumatología", path: "/ortopedia" },
+                                            { name: "Neurología", path: "/neurologia" },
+                                            { name: "Oftalmología", path: "/oftalmologia" },
+                                            { name: "Otorrinolaringología", path: "/otorrinolaringologia" },
+                                            { name: "Endocrinología", path: "/endocrinologia" }
+                                        ].map((item, index) => (
+                                            <li key={index}>
+                                                <Link className="dropdown-item" to={item.path}>{item.name}</Link>
+                                            </li>
+                                        ))}
+                                    </ul>
                                 </li>
                             </>
                         )}
