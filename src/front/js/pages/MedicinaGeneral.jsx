@@ -140,7 +140,7 @@ const MedicinaGeneral = () => {
                                     (e.target.style.background = "linear-gradient(to right, rgb(4, 62, 116), rgba(136, 225, 255, 0.89))") // Vuelve al normal
                                   }
                             >
-                                <h6><i class="fa-solid fa-calendar-plus"></i> <span style={{ paddingLeft: "3px" }}>Agendar Cita</span></h6>
+                                <h6><i class="fa-solid fa-calendar-plus, 4rem"> </i>Agendar Cita</h6>
                             </button>
                         )}
                     </li>
