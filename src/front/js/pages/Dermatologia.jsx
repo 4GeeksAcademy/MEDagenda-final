@@ -63,7 +63,7 @@ const Dermatologia = () => {
             padding: "10px",
             borderRadius: "0px",
         }}>
-            Dermatología
+            Dermatología🌟👩‍⚕️
         </h2>
 
         <div>

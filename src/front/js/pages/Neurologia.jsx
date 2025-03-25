@@ -64,7 +64,7 @@ const Neurologia = () => {
             padding: "10px",
             borderRadius: "0px",
         }}>
-            <i class="fa-solid fa-brain"></i> Neurología 
+            <i class="fa-solid fa-brain"></i> Neurología 🧠👨‍⚕️
         </h2>
 
         <div>

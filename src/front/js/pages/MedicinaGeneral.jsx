@@ -68,7 +68,7 @@ const MedicinaGeneral = () => {
             padding: "10px",
             borderRadius: "0px",
         }}>
-            💊 Medicina General
+            💊👩‍⚕️ Medicina General 
         </h2>
 
         <div>
