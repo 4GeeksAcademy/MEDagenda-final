@@ -35,8 +35,8 @@ const LogInAdmin = () => {
     }, [store.admin, navigate]);
 
     return (
-        <div className="d-flex justify-content-center align-items-center vh-100" style={{ background: "linear-gradient(135deg,rgb(3, 3, 94), #2196F3)" }}>
-            <div className="card p-4 shadow" style={{ width: "30rem", height: "30rem", borderRadius: "15px", backgroundColor: "#ffffff", boxShadow: "0px 4px 10px rgba(0, 0, 0, 0.2)" }}>
+        <div className="d-flex justify-content-center  vh-100" style={{ background: "linear-gradient(135deg,rgb(3, 3, 94), #2196F3)" }}>
+            <div className="card p-4 shadow mt-5" style={{ width: "30rem", height: "30rem", borderRadius: "15px", backgroundColor: "#ffffff", boxShadow: "0px 4px 10px rgba(0, 0, 0, 0.2)" }}>
                 <h1 className="text-center text-primary">Iniciar sesión</h1>
                 <h3 className="text-center">(ADMIN)</h3>
                 <form onSubmit={handleSubmit}>

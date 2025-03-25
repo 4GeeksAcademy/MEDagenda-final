@@ -34,10 +34,10 @@ const Pagos = () => {
         <p className="text-muted">Para agilizar los trámites, le sugerimos hacer un pago anticipado de la consulta médica. También tenemos disponible el pago en ventanilla.</p>
 
         <button className="btn btn-primary btn-lg mt-3" onClick={handlePayment}>
-          Pagar con Mercado Pago
+        Pagar con Mercado Pago
         </button>
 
-        {preferenceId && <Wallet initialization={{ preferenceId: preferenceId }} className="m-3 " />}
+        {preferenceId && <Wallet  initialization={{ preferenceId: preferenceId }} />}
       </div>
     </div>
   )

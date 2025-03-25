@@ -5,7 +5,7 @@ import { Link } from 'react-router-dom';
 const Footer = () => {
   return (
     <footer className="bg-black text-white " style={{ bottom: 0, width: '100%', background: "linear-gradient(135deg,rgb(5, 3, 114), #2196F3)",  color: '#ffffff',
-      padding: '2rem', position:'relative'}}>
+       position:'fixed'}}>
 
       <div className="container">
         <div className="d-flex" >
@@ -36,7 +36,7 @@ const Footer = () => {
           </div>
         </div>
       </div>
-      <div className="text-center mt-3">
+      <div className="text-center">
         <small>&copy; {new Date().getFullYear()} NovaMed. Todos los derechos reservados.</small>
       </div>
     </footer>

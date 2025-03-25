@@ -48,6 +48,8 @@ const Home = () => {
                     </div>
                 </div>
             </div>
+            <div style={{height: "25vh"}}>
+            </div>
         </div>
     );
 };
